@@ -31,7 +31,7 @@ public class TeaPageController {
 	// ---------------------------- 상품 목록 페이지 -------------------------------------
 	
 	@RequestMapping(value="/teaListPage.do")
-	public String teaListPage(TeaVO tVO, Model model, HttpServletRequest request) { // 상품 목록
+	public String teaListPage(TeaVO teaVO, Model model, HttpServletRequest request) { // 상품 목록
 		System.out.println("\tLog: controller => TeaListPageAction [START]");
 		
 		int currentPage = 1;
@@ -56,14 +56,14 @@ public class TeaPageController {
 		
 		
 		String teaCategory = request.getParameter("teaCategory");
-		tVO.setTeaCategory(teaCategory == null ? "" : teaCategory);
+		teaVO.setTeaCategory(teaCategory == null ? "" : teaCategory);
 		System.out.println(teaCategory);
 		String teaSearchWord = request.getParameter("teaSearchWord");
-		tVO.setTeaSearchWord(teaSearchWord == null ? "" : teaSearchWord);
+		teaVO.setTeaSearchWord(teaSearchWord == null ? "" : teaSearchWord);
 		System.out.println(teaSearchWord);
 		
-		List<TeaVO> rdatasTotal = teaService.selectAll(tVO); // 총 상품 개수	
-		totalCnt = rdatasTotal.size();
+		List<TeaVO> reviewDatasTotal = teaService.selectAll(teaVO); // 총 상품 개수	
+		totalCnt = reviewDatasTotal.size();
 		
 		int totalPageCnt = (totalCnt / pageSize) + (totalCnt % pageSize == 0 ? 0 : 1);
 		if (currentPage % pageBlock == 0) {
@@ -93,13 +93,13 @@ public class TeaPageController {
 		request.setAttribute("teaSearchWord", teaSearchWord);
 		request.setAttribute("teaCategory", teaCategory);
 		
-		tVO.setTeaCondition("페이징");
-		tVO.setStartRnum(startRnum);
+		teaVO.setTeaCondition("페이징");
+		teaVO.setStartRnum(startRnum);
 		
-		List<TeaVO> tdatas = teaService.selectAll(tVO);
-		model.addAttribute("tdatas", tdatas);
+		List<TeaVO> teaDatas = teaService.selectAll(teaVO);
+		model.addAttribute("teaDatas", teaDatas);
 		
-		System.out.println(tdatas);
+		System.out.println(teaDatas);
 		
 		System.out.println("\tLog: controller => TeaListPageAction [END]");
 		return "teaList.jsp";
@@ -109,47 +109,47 @@ public class TeaPageController {
 	// tVO 따로 사용하지 말고 상품 정보 RiviewSetVO에 담아서 오자!!!
 	
 	@RequestMapping(value="/teaDetailPage.do")
-	public String teaDetailPage(TeaVO tVO, FavorVO fVO, ReviewSet rsVO, ReviewVO rVO, HttpSession session, Model model) { // 상품 상세
+	public String teaDetailPage(TeaVO teaVO, FavorVO favorVO, ReviewSet reviewSetVO, ReviewVO reviewVO, HttpSession session, Model model) { // 상품 상세
 
 		int favor = 0;
 
 		// System.out.println(request.getParameter("teaNum"));
 
-		tVO = teaService.selectOne(tVO);
+		teaVO = teaService.selectOne(teaVO);
 
-		rVO.setSearchName("REVIEW");
-		rVO.setReviewSearch(tVO.getTeaName());
-		List<ReviewVO> rdatas = reviewService.selectAll(rVO);
-		int reviewCnt = rdatas.size();
+		reviewVO.setSearchName("REVIEW");
+		reviewVO.setReviewSearch(teaVO.getTeaName());
+		List<ReviewVO> reviewDatas = reviewService.selectAll(reviewVO);
+		int reviewCnt = reviewDatas.size();
 
-		fVO.setMemberId((String)session.getAttribute("ssMemberId"));
+		favorVO.setMemberId((String)session.getAttribute("sessionMemberId"));
 
-		if(favorService.selectOne(fVO) != null) {
+		if(favorService.selectOne(favorVO) != null) {
 			favor = 1;
 		}
 
-		System.out.println("로그 selctOne 결과:" + tVO);
+		System.out.println("로그 selctOne 결과:" + teaVO);
 
-		List<ReviewSet> rsdatas = null;
-		String count = tVO.getCount();
+		List<ReviewSet> reviewSetDatas = null;
+		String count = teaVO.getCount();
 
 		if (count == null || count.isEmpty() || count.isBlank() || count.equals("")) {
 			count = "4";
 		}
 		int cnt = Integer.parseInt(count);
 
-		tVO.setStartRnum(cnt);
+		teaVO.setStartRnum(cnt);
 
-		if (tVO != null) {
+		if (teaVO != null) {
 			// 리뷰 형태 결정 후
 			// 해당 상품 리뷰도 같이 추출
-			rsVO.setTea(tVO);
+			reviewSetVO.setTea(teaVO);
 			
-			rsdatas = reviewSetService.selectAll(rsVO);
+			reviewSetDatas = reviewSetService.selectAll(reviewSetVO);
 			
 			model.addAttribute(count);
-			model.addAttribute("tdata", tVO);
-			model.addAttribute("rsdatas", rsdatas);
+			model.addAttribute("teaData", teaVO);
+			model.addAttribute("reviewSetDatas", reviewSetDatas);
 			model.addAttribute("favor", favor);
 			model.addAttribute("count", count);
 			model.addAttribute("reviewCnt", reviewCnt);

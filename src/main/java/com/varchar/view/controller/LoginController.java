@@ -25,17 +25,17 @@ public class LoginController {
 	}
 
 	@RequestMapping(value="/login.do") // 로그인
-	public String login(MemberVO mVO, HttpSession session, Model model) {
+	public String login(MemberVO memberVO, HttpSession session, Model model) {
 		System.out.println("LoginController 로그");
 
-		mVO.setMemberSearch("로그인");
-		mVO = memberService.selectOne(mVO);
+		memberVO.setMemberSearch("로그인");
+		memberVO = memberService.selectOne(memberVO);
 		
-		if (mVO != null) {
-			session.setAttribute("ssMemberId", mVO.getMemberId());
+		if (memberVO != null) {
+			session.setAttribute("sessionMemberId", memberVO.getMemberId());
 		} else {
-			AlertVO saVO = new AlertVO("로그인실패", "로그인실패", null, "error", null);
-			model.addAttribute("sa", saVO);
+			AlertVO sweetAlertVO = new AlertVO("로그인실패", "로그인실패", null, "error", null);
+			model.addAttribute("sweetAlertVO", sweetAlertVO);
 			return "alertFalse.jsp";
 		}
 		return "redirect:main.do";
@@ -46,8 +46,8 @@ public class LoginController {
 	@RequestMapping(value="/logoutPage.do")
 	public String logoutPage(Model model) { // 로그아웃 알럿
 		
-		AlertVO saVO = new AlertVO("로그아웃", "로그아웃 하시겠습니까?", null, "question", "logout.do");
-		model.addAttribute("sa", saVO);
+		AlertVO sweetAlertVO = new AlertVO("로그아웃", "로그아웃 하시겠습니까?", null, "question", "logout.do");
+		model.addAttribute("sweetAlert", sweetAlertVO);
 		return "alertChoose.jsp";
 	}
 
@@ -55,10 +55,10 @@ public class LoginController {
 	public String logout(HttpSession session, Model model) { // 로그아웃
 
 		System.out.println("LogoutController 로그");
-		session.removeAttribute("ssMemberId");
+		session.removeAttribute("sessionMemberId");
 		
-		AlertVO saVO = new AlertVO("로그아웃", "메인으로 이동합니다.", null, "success", "main.do");
-		model.addAttribute("sa", saVO);
+		AlertVO sweetAlertVO = new AlertVO("로그아웃", "메인으로 이동합니다.", null, "success", "main.do");
+		model.addAttribute("sweetAlert", sweetAlertVO);
 		
 		return "alertTrue.jsp";
 	}
@@ -71,20 +71,20 @@ public class LoginController {
 	}
 
 	@RequestMapping(value="/signup.do")
-	public String signup(MemberVO mVO, Model model) { // 회원가입
+	public String signup(MemberVO memberVO, Model model) { // 회원가입
 
-//		mVO.setMemberId(request.getParameter("memberId"));
-//		mVO.setMemberPw(request.getParameter("memberPw"));
-//		mVO.setMemberName(request.getParameter("memberName"));
-//		mVO.setMemberAddress(request.getParameter("memberAddress").equals("") ? null : request.getParameter("memberAddress"));
-//		mVO.setMemberPhone(request.getParameter("memberPhone").equals("") ? 0 : Long.parseLong(request.getParameter("memberPhone")));
-//		mVO.setMemberEmail(request.getParameter("memberEmail").equals("") ? null : request.getParameter("memberEmail"));
+//		memberVO.setMemberId(request.getParameter("memberId"));
+//		memberVO.setMemberPw(request.getParameter("memberPw"));
+//		memberVO.setMemberName(request.getParameter("memberName"));
+//		memberVO.setMemberAddress(request.getParameter("memberAddress").equals("") ? null : request.getParameter("memberAddress"));
+//		memberVO.setMemberPhone(request.getParameter("memberPhone").equals("") ? 0 : Long.parseLong(request.getParameter("memberPhone")));
+//		memberVO.setMemberEmail(request.getParameter("memberEmail").equals("") ? null : request.getParameter("memberEmail"));
 	
-//		System.out.println(mVO);
+//		System.out.println(memberVO);
 		
-		if (memberService.insert(mVO)) {
-			AlertVO saVO = new AlertVO("회원가입", "회원가입 성공!", null, "success", "main.do");
-			model.addAttribute("sa", saVO);
+		if (memberService.insert(memberVO)) {
+			AlertVO sweetAlertVO = new AlertVO("회원가입", "회원가입 성공!", null, "success", "main.do");
+			model.addAttribute("sweetAlert", sweetAlertVO);
 		}
 		return "alertTrue.jsp";
 	}
@@ -92,40 +92,40 @@ public class LoginController {
 	//----------------------------------------- 회원 정보 수정 --------------------------------------------------
 	
 	@RequestMapping(value="/updateInfoPage.do")
-	public String updateInfoPage(MemberVO mVO, HttpSession session, Model model) { 
+	public String updateInfoPage(MemberVO memberVO, HttpSession session, Model model) { 
 		
-		mVO.setMemberId((String)session.getAttribute("ssMemberId"));
-		mVO.setMemberSearch("회원정보변경");
-		mVO = memberService.selectOne(mVO);
+		memberVO.setMemberId((String)session.getAttribute("sessionMemberId"));
+		memberVO.setMemberSearch("회원정보변경");
+		memberVO = memberService.selectOne(memberVO);
 		
-		System.out.println("UpdateInfoPageController mVO : " + mVO);
-		model.addAttribute("mdata", mVO);
+		System.out.println("UpdateInfoPageController memberVO : " + memberVO);
+		model.addAttribute("memberData", memberVO);
 		
 		return "updateInfo.jsp";
 		
 	}
 
 	@RequestMapping(value="/updateInfo.do")
-	public String updateInfo(MemberVO mVO, Model model) {
+	public String updateInfo(MemberVO memberVO, Model model) {
 		
-		mVO.setMemberSearch("회원정보변경");
-//		mVO.setMemberId(request.getParameter("memberId"));
-//		mVO.setMemberName(request.getParameter("memberName"));
-//		mVO.setMemberAddress(request.getParameter("memberAddress").equals("") ? null : request.getParameter("memberAddress"));
-//		mVO.setMemberPhone(request.getParameter("memberPhone").equals("") ? 0 : Long.parseLong(request.getParameter("memberPhone")));
-//		mVO.setMemberEmail(request.getParameter("memberEmail").equals("") ? null : request.getParameter("memberEmail"));
-//		System.out.println(mVO);
+		memberVO.setMemberSearch("회원정보변경");
+//		memberVO.setMemberId(request.getParameter("memberId"));
+//		memberVO.setMemberName(request.getParameter("memberName"));
+//		memberVO.setMemberAddress(request.getParameter("memberAddress").equals("") ? null : request.getParameter("memberAddress"));
+//		memberVO.setMemberPhone(request.getParameter("memberPhone").equals("") ? 0 : Long.parseLong(request.getParameter("memberPhone")));
+//		memberVO.setMemberEmail(request.getParameter("memberEmail").equals("") ? null : request.getParameter("memberEmail"));
+//		System.out.println(memberVO);
 		
-		if (memberService.update(mVO)) {
-			AlertVO saVO = new AlertVO("회원정보 변경", "회원정보 변경", null, "success", "main.do");
-			model.addAttribute("sa", saVO);
+		if (memberService.update(memberVO)) {
+			AlertVO sweetAlertVO = new AlertVO("회원정보 변경", "회원정보 변경", null, "success", "main.do");
+			model.addAttribute("sweetAelrt", sweetAlertVO);
 		}
 		return "alertTrue.jsp";
 	}
 	
 	@RequestMapping(value="/updateInfoPageConfirm.do")
-	public String execute() {
-		AlertVO saVO = new AlertVO("회원정보변경", "변경하시겠습니까?", "회원정보변경이 완료되었습니다!", "question", "updateInfo.do");
+	public String updateInfoPageConfirm() {
+		AlertVO sweetAlertVO = new AlertVO("회원정보변경", "변경하시겠습니까?", "회원정보변경이 완료되었습니다!", "question", "updateInfo.do");
 		return "main.jsp";
 	}
 	
@@ -137,12 +137,12 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/updatePw.do")
-	public String updatePw(MemberVO mVO, Model model) {
+	public String updatePw(MemberVO memberVO, Model model) {
 
-		mVO.setMemberSearch("비밀번호변경");
-		if(memberService.update(mVO)) {
-			AlertVO saVO = new AlertVO("비밀번호변경", "비밀번호 변경 성공!", null, "success", "logout.do");
-			model.addAttribute("sa",saVO);
+		memberVO.setMemberSearch("비밀번호변경");
+		if(memberService.update(memberVO)) {
+			AlertVO sweetAlertVO = new AlertVO("비밀번호변경", "비밀번호 변경 성공!", null, "success", "logout.do");
+			model.addAttribute("sweetAlert",sweetAlertVO);
 		}
 		return "alertTrue.jsp";
 	}

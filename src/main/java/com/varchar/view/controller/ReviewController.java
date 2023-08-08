@@ -28,8 +28,8 @@ public class ReviewController {
 	
 	// ------------------------- 리뷰 목록 페이지 ---------------------------------
 	
-	@RequestMapping(value="/reviewsListPage.do")
-	public String reviewListPage(ReviewVO rVO, HttpServletRequest request) {
+	@RequestMapping(value="/reviewListPage.do")
+	public String reviewListPage(ReviewVO reviewVO, HttpServletRequest request) {
 		
 		int currentPage = 1;
 		
@@ -50,15 +50,16 @@ public class ReviewController {
 		int endRnum = 0; // 끝 후기 rnum
 		int totalCnt = 0; // 총 후기 수
 		
+		// pMemberId가 뭐임??????
 		String pMemberId = request.getParameter("pMemberId");
-		rVO.setMemberId(pMemberId == null ? "" : pMemberId);
+		reviewVO.setMemberId(pMemberId == null ? "" : pMemberId);
 		String searchName = request.getParameter("searchName");
-		rVO.setSearchName(searchName == null ? "" : searchName);
+		reviewVO.setSearchName(searchName == null ? "" : searchName);
 		String reviewSearch = request.getParameter("reviewSearch");
-		rVO.setReviewSearch(reviewSearch == null ? "" : reviewSearch);
+		reviewVO.setReviewSearch(reviewSearch == null ? "" : reviewSearch);
 		
-		List<ReviewVO> rdatasTotal = reviewService.selectAll(rVO); // 총 리뷰 개수
-		totalCnt = rdatasTotal.size();
+		List<ReviewVO> reviewDatasTotal = reviewService.selectAll(reviewVO); // 총 리뷰 개수
+		totalCnt = reviewDatasTotal.size();
 		
 		int totalPageCnt = (totalCnt / pageSize) + (totalCnt % pageSize == 0 ? 0 : 1);
 		if (currentPage % pageBlock == 0) {
@@ -70,7 +71,7 @@ public class ReviewController {
 		if (endPage > totalPageCnt) {
 			endPage = totalPageCnt;
 		}
-		System.out.println("\tLog: controller => ReviewsListPageAction: [page: startPage: " + startPage + ", endPage: " + endPage + "]");
+		System.out.println("\tLog: controller => ReviewListPageAction: [page: startPage: " + startPage + ", endPage: " + endPage + "]");
 		
 //		startRnum = (currentPage - 1) * pageSize + 1;
 //		endRnum = startRnum + pageSize - 1;
@@ -79,7 +80,7 @@ public class ReviewController {
 		if (endRnum > totalCnt) {
 			endRnum = totalCnt;
 		}
-		System.out.println("\tLog: controller => ReviewsListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
+		System.out.println("\tLog: controller => ReviewListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
 		
 		request.setAttribute("startPage", startPage);
 		request.setAttribute("endPage", endPage);
@@ -89,108 +90,108 @@ public class ReviewController {
 		request.setAttribute("reviewSearch", reviewSearch);
 		request.setAttribute("pMemberId", pMemberId);
 		
-		rVO.setSearchName(searchName + "_PAGING");
-		rVO.setStartRnum(startRnum);
-		List<ReviewVO> rdatas = reviewService.selectAll(rVO); // startRnum 부터 endRnum 까지의 리뷰
-		request.setAttribute("rdatas", rdatas);
+		reviewVO.setSearchName(searchName + "_PAGING");
+		reviewVO.setStartRnum(startRnum);
+		List<ReviewVO> reviewDatas = reviewService.selectAll(reviewVO); // startRnum 부터 endRnum 까지의 리뷰
+		request.setAttribute("reviewDatas", reviewDatas);
 		
-		return "reviewsListPage.jsp";
+		return "reviewListPage.jsp";
 	}
 	
 	// ------------------------- 리뷰 상세 페이지 ---------------------------------
 	
-	@RequestMapping(value="/reviewsDetailPage.do")
-	public String reviewDetailPage(ReviewVO rVO, Model model) {
+	@RequestMapping(value="/reviewDetailPage.do")
+	public String reviewDetailPage(ReviewVO reviewVO, Model model) {
 		
-		rVO.setReviewSearch("리뷰상세");
-		rVO = reviewService.selectOne(rVO);
-		System.out.println("로그: reviewDetailAction: " + rVO);
+		reviewVO.setReviewSearch("리뷰상세");
+		reviewVO = reviewService.selectOne(reviewVO);
+		System.out.println("로그: reviewDetailAction: " + reviewVO);
 		
-		if (rVO != null) {
-			model.addAttribute("rdata", rVO);
+		if (reviewVO != null) {
+			model.addAttribute("reviewData", reviewVO);
 		}
-		System.out.println(rVO);
-		return "reviewsDetailPage.jsp";
+		System.out.println(reviewVO);
+		return "reviewDetailPage.jsp";
 	}
 
 	// ------------------------- 리뷰 작성 페이지 ---------------------------------
 	
-	@RequestMapping(value="/insertReviewsPage.do")
-	public String insertReviewsPage(ReviewVO rVO, BuyDetailVO bdVO, TeaVO tVO, HttpSession session, Model model) {
+	@RequestMapping(value="/insertReviewPage.do")
+	public String insertReviewsPage(ReviewVO reviewVO, BuyDetailVO buyDetailVO, TeaVO teaVO, HttpSession session, Model model) {
 		
-		rVO.setMemberId((String)session.getAttribute("ssMemberId"));
+		reviewVO.setMemberId((String)session.getAttribute("sessionMemberId"));
 		
-		bdVO.setBuySearch("주문상세");
-		bdVO = buyDetailService.selectOne(bdVO);
+		buyDetailVO.setBuySearch("주문상세");
+		buyDetailVO = buyDetailService.selectOne(buyDetailVO);
 		
-		tVO = teaService.selectOne(tVO);
-		model.addAttribute("rdata", rVO);
-		model.addAttribute("tdatas", tVO);
-		model.addAttribute("bddatas", bdVO);
+		teaVO = teaService.selectOne(teaVO);
+		model.addAttribute("reviewData", reviewVO);
+		model.addAttribute("teaDatas", teaVO);
+		model.addAttribute("buyDetalDatas", buyDetailVO);
 		
-		System.out.println("InsertReviewsPageAction buySerial 로그: " + bdVO);
-		System.out.println("InsertReviewsPageAction buySerial 로그: " + tVO);
-		System.out.println("InsertReviewsPageAction buySerial 로그: " + bdVO.getBuySerial());
-		System.out.println("InsertReviewsPageAction buySerial 로그: " + rVO);
+		System.out.println("InsertReviewsPageAction buySerial 로그: " + buyDetailVO);
+		System.out.println("InsertReviewsPageAction buySerial 로그: " + teaVO);
+		System.out.println("InsertReviewsPageAction buySerial 로그: " + buyDetailVO.getBuySerial());
+		System.out.println("InsertReviewsPageAction buySerial 로그: " + reviewVO);
 		
-		return "insertReviewsPage.jsp";
+		return "insertReviewPage.jsp";
 	}
 	
-	@RequestMapping(value="/insertReviews.do")
-	public String insertReviews(ReviewVO rVO, HttpSession session, Model model) {
+	@RequestMapping(value="/insertReview.do")
+	public String insertReviews(ReviewVO reviewVO, HttpSession session, Model model) {
 		
-		rVO.setMemberId((String)session.getAttribute("ssMemberId"));
+		reviewVO.setMemberId((String)session.getAttribute("sessionMemberId"));
 		
-		if(reviewService.insert(rVO)) {
-			AlertVO saVO = new AlertVO("후기작성", "후기작성완료!", null, "success", "reviewsListPage.do?searchName=ALL");
-			model.addAttribute("sa", saVO);
+		if(reviewService.insert(reviewVO)) {
+			AlertVO sweetAlertVO = new AlertVO("후기작성", "후기작성완료!", null, "success", "reviewListPage.do?searchName=ALL");
+			model.addAttribute("sweetAlert", sweetAlertVO);
 		}
 		return "alertTrue.jsp";
 	}
 	
 	// ------------------------- 리뷰 수정 페이지 ---------------------------------
 	
-	@RequestMapping(value="/updateReviews.do")
-	public String updateReviews(ReviewVO rVO, Model model) {
-		reviewService.update(rVO);
-		model.addAttribute("rdata", reviewService.selectOne(rVO));
-		return "reviewsDetailPage.do";
+	@RequestMapping(value="/updateReview.do")
+	public String updateReviews(ReviewVO reviewVO, Model model) {
+		reviewService.update(reviewVO);
+		model.addAttribute("reviewData", reviewService.selectOne(reviewVO));
+		return "reviewDetailPage.do";
 	}
 	
 	@RequestMapping(value="/updateReviewsPage.do")
-	public String updateReviewsPage(ReviewVO rVO, Model model) {
+	public String updateReviewsPage(ReviewVO reviewVO, Model model) {
 		
-		rVO = reviewService.selectOne(rVO);
-		System.out.println("로그: UrpAction: " + rVO);
+		reviewVO = reviewService.selectOne(reviewVO);
+		System.out.println("로그: UrpAction: " + reviewVO);
 		
-		if (rVO != null) {
-			model.addAttribute("rdata", rVO);
+		if (reviewVO != null) {
+			model.addAttribute("reviewData", reviewVO);
 		}
-		System.out.println(rVO);
+		System.out.println(reviewVO);
 		return "reviewUpdatePage.jsp";
 	}
 	
 	// ------------------------- 리뷰 삭제 페이지 ---------------------------------
 	
-	@RequestMapping(value="/deleteReviewsPage.do")
-	public String deleteReviewsPage(Model model, ReviewVO rVO) {
+	@RequestMapping(value="/deleteReviewPage.do")
+	public String deleteReviewsPage(Model model, ReviewVO reviewVO) {
 		
 		// int reviewNum = Integer.parseInt(request.getParameter("reviewNum")); 
 		
-		AlertVO saVO = new AlertVO("후기삭제", "후기를 삭제하시겠습니까?", null, "question", "deleteReviews.do?reviewNum=" + rVO.getReviewNum());
-		model.addAttribute("sa", saVO);
+		AlertVO sweetAlertVO = new AlertVO("후기삭제", "후기를 삭제하시겠습니까?", null, "question", "deleteReview.do?reviewNum=" + reviewVO.getReviewNum());
+		model.addAttribute("sweetAlert", sweetAlertVO);
 		
 		return "alertChoose.jsp";
 	}
 
-	@RequestMapping(value="/deleteReviews.do")
-	public String deleteReviews(ReviewVO rVO, HttpSession session, Model model) {
+	@RequestMapping(value="/deleteReview.do")
+	public String deleteReviews(ReviewVO reviewVO, HttpSession session, Model model) {
 		
-		rVO.setMemberId((String)session.getAttribute("ssMemberId"));
+		reviewVO.setMemberId((String)session.getAttribute("sessionMemberId"));
 		
-		if(reviewService.delete(rVO)) {
-			AlertVO saVO = new AlertVO("후기삭제", "후기 삭제 성공!", null, "success", "myReviewsListPage.do?searchName=MEMBER");
-			model.addAttribute("sa", saVO);
+		if(reviewService.delete(reviewVO)) {
+			AlertVO sweetAlertVO = new AlertVO("후기삭제", "후기 삭제 성공!", null, "success", "myReviewListPage.do?searchName=MEMBER");
+			model.addAttribute("sweetAlert", sweetAlertVO);
 		}
 		
 		return "alertTrue.jsp";

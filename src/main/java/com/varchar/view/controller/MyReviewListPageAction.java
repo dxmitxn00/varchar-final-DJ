@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import model.ReviewDAO;
 import model.ReviewVO;
 
-public class MyReviewsListPageAction implements Action {
+public class MyReviewListPageAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response)

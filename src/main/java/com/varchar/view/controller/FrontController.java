@@ -86,7 +86,7 @@ public class FrontController extends HttpServlet {
     	
     	// 내 후기 목록 페이지
     	else if (command.equals("/myReviewsListPage.do")) {
-    		forward = new MyReviewsListPageAction().execute(request, response);
+    		forward = new MyReviewListPageAction().execute(request, response);
     	}
     	// 후기 목록 페이지
     	
