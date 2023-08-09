@@ -75,7 +75,7 @@ public class TeaPageController {
 		if (endPage > totalPageCnt) {
 			endPage = totalPageCnt;
 		}
-		System.out.println("\tLog: controller => TeaListPageAction [page: startPage: " + startPage + ", endPage: " + endPage + "]");
+		System.out.println("\teaLog: controller => TeaListPageAction [page: startPage: " + startPage + ", endPage: " + endPage + "]");
 		
 		startRnum = (currentPage - 1) * pageSize + 1;
 		endRnum = startRnum + pageSize - 1;
@@ -84,7 +84,7 @@ public class TeaPageController {
 		if (endRnum > totalCnt) {
 			endRnum = totalCnt;
 		}
-		System.out.println("\tLog: controller => TeaListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
+		System.out.println("\teaLog: controller => TeaListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
 		
 		request.setAttribute("startPage", startPage);
 		request.setAttribute("endPage", endPage);
@@ -101,7 +101,7 @@ public class TeaPageController {
 		
 		System.out.println(teaDatas);
 		
-		System.out.println("\tLog: controller => TeaListPageAction [END]");
+		System.out.println("\teaLog: controller => TeaListPageAction [END]");
 		return "teaList.jsp";
 	}
 	

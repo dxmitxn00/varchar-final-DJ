@@ -17,6 +17,7 @@ import com.varchar.biz.buy.BuyService;
 import com.varchar.biz.buy.BuyVO;
 import com.varchar.biz.member.MemberService;
 import com.varchar.biz.member.MemberVO;
+import com.varchar.biz.payment.PaymentService;
 import com.varchar.biz.payment.PaymentVO;
 import com.varchar.biz.review.ReviewService;
 import com.varchar.biz.review.ReviewVO;
@@ -49,12 +50,12 @@ public class BuyController {
 	@RequestMapping(value="/buyListPage.do")
 	public String buyListPage(HttpSession session, Model model,BuyVO buyVO) {
 
-		buyVO.setMemberId((String)session.getAttribute("ssMemberId"));
+		buyVO.setMemberId((String)session.getAttribute("sessionMemberId"));
 
 		List<BuyVO> buyDatas = buyService.selectAll(buyVO);
 
 		model.addAttribute("buyDatas", buyDatas);
-		System.out.println(" log: BuyListPageAction: bdatas: " + buyDatas);
+		System.out.println(" log: BuyListPageAction: buyDatas: " + buyDatas);
 
 
 		return "buyList.jsp";
@@ -80,11 +81,11 @@ public class BuyController {
 		session.setAttribute("buyList", cart);
 		session.setAttribute("total", total);
 
-		memberVO.setMemberId((String)session.getAttribute("ssMemberId"));
+		memberVO.setMemberId((String)session.getAttribute("sessionMemberId"));
 		memberVO.setMemberSearch("회원정보변경");
 		memberVO = memberService.selectOne(memberVO);
 
-		System.out.println("BuyPageAction mVO log:" +memberVO);
+		System.out.println("BuyPageAction memberVO log:" +memberVO);
 		model.addAttribute("memberVO", memberVO);
 
 		System.out.println("BuyPageAction buyList log:" +cart);
@@ -110,10 +111,10 @@ public class BuyController {
 				reviewVO.setBuySerial(bddata.getBuySerial());
 				if (reviewService.selectOne(reviewVO) == null) {
 					bddata.setReviewDone(true);
-					System.out.println("BuyDetailPageAction rVO null 로그 : "+reviewService.selectOne(reviewVO));
+					System.out.println("BuyDetailPageAction reviewVO null 로그 : "+reviewService.selectOne(reviewVO));
 				}
 				else {
-					System.out.println("BuyDetailPageAction rVO Not null  로그 : "+reviewService.selectOne(reviewVO));
+					System.out.println("BuyDetailPageAction reviewVO Not null  로그 : "+reviewService.selectOne(reviewVO));
 					
 				}
 			}
@@ -125,14 +126,14 @@ public class BuyController {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////
-	// 결제 성공 페이지 이동
+	// 결제 성공 후 메인 이동
 	// buyService, buyDetailService, teaService, paymentService
 		@RequestMapping(value="/paySuccess.do")
 		public String paySuccess(HttpSession session, BuyVO buyVO, BuyDetailVO buyDetailVO, TeaVO teaVO, PaymentVO paymentVO) {
 			
 			List<TeaVO> buyList = (List<TeaVO>) session.getAttribute("buyList");
 			
-			String memberId = (String)session.getAttribute("ssMemberId");
+			String memberId = (String)session.getAttribute("sessionMemberId");
 			buyVO.setMemberId(memberId);
 			
 			if(buyService.insert(buyVO)) {

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class MapPageAction{
+public class MainController{
 
-	@RequestMapping(value="/mapPage.do")
-	public String mapPage(){
-		
-		return "redirect:map.jsp";
+	// 오시는 길 페이지
+	@RequestMapping(value="/main.do")
+	public String main(){
+		return "redirect:main.jsp";
 	}
 	
 }

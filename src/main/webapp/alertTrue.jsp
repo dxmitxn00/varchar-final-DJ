@@ -12,14 +12,14 @@
 <script>
 	window.onload = function() {
 	    Swal.fire({
-	      title: '${ sa.title }', // 제목 text
-	      text: '${ sa.text }', // 내용 text
-	      icon: '${ sa.icon }', // warning, success, info, error, question
+	      title: '${ sweetAlert.title }', // 제목 text
+	      text: '${ sweetAlert.text }', // 내용 text
+	      icon: '${ sweetAlert.icon }', // warning, success, info, error, question
 	      confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
 	      confirmButtonText: '확인' // confirm 버튼 text
 	    }).then((result) => {
 	        if (result.isConfirmed) {
-	        	location.href = '${ sa.path }';
+	        	location.href = '${ sweetAlert.path }';
 	        }
 	    });
 	}

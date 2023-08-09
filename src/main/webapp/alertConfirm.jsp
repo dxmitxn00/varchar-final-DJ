@@ -12,9 +12,9 @@
 <script>
 	window.onload = function() {
 	    Swal.fire({
-	      title: '${ sa.title }', // 제목 text
-	      text: '${ sa.text }', // 내용 text
-	      icon: '${ sa.icon }', // warning, success, info, error, question
+	      title: '${ sweetAlert.title }', // 제목 text
+	      text: '${ sweetAlert.text }', // 내용 text
+	      icon: '${ sweetAlert.icon }', // warning, success, info, error, question
 	      confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
 	      cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
 	      showCancelButton: true, // cancle 버튼 보이기
@@ -23,12 +23,12 @@
 	    }).then((result) => {
 	        if (result.isConfirmed) {
 	        	Swal.fire({
-	        		title: '${ sa.title }',
-	        		text: '${ sa.nText }',
+	        		title: '${ sweetAlert.title }',
+	        		text: '${ sweetAlert.nText }',
 	        		icon: 'success',
 	        		confirmButtonText: '확인'
 	        	}).then((result) => {
-	        		location.href = '${ sa.path }';	        		
+	        		location.href = '${ sweetAlert.path }';	        		
 	        	});
 	        }
 	        else {

@@ -33,9 +33,7 @@ public class FrontController extends HttpServlet {
     	ActionForward forward = null;
     	
     	// 메인페이지
-    	if (command.equals("/main.do")) {
-    		forward = new MainAction().execute(request, response);
-    	}
+
     	// 로그인 페이지
     	
     	// 로그인
@@ -57,21 +55,13 @@ public class FrontController extends HttpServlet {
     	// 비밀번호 변경
     	
     	// 장바구니 페이지
-    	else if (command.equals("/cartPage.do")) {
-    		forward = new CartPageAction().execute(request, response);    		
-    	}
+
     	// 장바구니 다시담기 페이지
-    	else if (command.equals("/cartRetry.do")) {
-    		forward = new CartRetryAction().execute(request, response);    		
-    	}
+
     	// 장바구니 추가
-    	else if (command.equals("/insertCart.do")) {
-    		forward = new InsertCartAction().execute(request, response);    		
-    	}
+
     	// 장바구니 삭제
-    	else if (command.equals("/deleteCart.do")) {
-    		forward = new DeleteCartAction().execute(request, response);    		
-    	}
+
     	// 차 목록 페이지
     	
     	// 차 상세 페이지
@@ -85,9 +75,7 @@ public class FrontController extends HttpServlet {
     	// 주문
     	
     	// 내 후기 목록 페이지
-    	else if (command.equals("/myReviewsListPage.do")) {
-    		forward = new MyReviewListPageAction().execute(request, response);
-    	}
+    	
     	// 후기 목록 페이지
     	
     	// 후기 상세 페이지
@@ -117,9 +105,7 @@ public class FrontController extends HttpServlet {
     		forward = new DeleteFavorAction().execute(request, response);    		
     	}
     	// 오시는 길 페이지
-    	else if (command.equals("/mapPage.do")) {
-    		forward = new MapPageAction().execute(request, response);    		
-    	}
+
     	// 결제 성공
     	
     	// 3. 사용자에게 응답. View로 이동

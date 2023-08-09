@@ -124,31 +124,31 @@
 	          		<div class="col-md-6" style="margin-top: 30px;">
 	                <div class="form-group">
 	                	<label for="firstname" >아이디</label>
-	                  <input type="text" class="form-control" value="${ mdata.memberId }" readonly>
+	                  <input type="text" class="form-control" value="${ memberData.memberId }" readonly>
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">이름 <span style="color: red;">*</span></label>
-	                  <input type="text" class="form-control" value="${ mdata.memberName }" required>
+	                  <input type="text" class="form-control" value="${ memberData.memberName }" required>
 	                </div>
                 </div>
                 <div class="w-100"></div>
 				<div class="col-md-6">
 	                <div class="form-group">
                 		<label for="lastname">연락처</label>
-	                	 <c:if test="${ mdata.memberPhone == 0 }">
+	                	 <c:if test="${ memberData.memberPhone == 0 }">
 	                  		<input type="text" id="memberPhone" class="form-control" placeholder="하이픈(-), 공백없이 입력하세요. ex) 00012345678">
 	                	</c:if>
-	                	<c:if test="${ mdata.memberPhone != 0 }">
-	                  		<input type="text" id="memberPhone" class="form-control" value="0${ mdata.memberPhone }">
+	                	<c:if test="${ memberData.memberPhone != 0 }">
+	                  		<input type="text" id="memberPhone" class="form-control" value="0${ memberData.memberPhone }">
 	               		</c:if>
 	                </div>
                 </div>
 				<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">이메일</label>
-	                  <input type="text" class="form-control" value="${ mdata.memberEmail }" placeholder="@포함 이메일 형식에 맞춰서 입력하세요.">
+	                  <input type="text" class="form-control" value="${ memberData.memberEmail }" placeholder="@포함 이메일 형식에 맞춰서 입력하세요.">
 	                </div>
                 </div>
                 <div class="w-100"></div>

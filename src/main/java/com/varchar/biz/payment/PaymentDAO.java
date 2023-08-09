@@ -16,21 +16,21 @@ public class PaymentDAO {
 
 	static final private String SQL_INSERT = "INSERT INTO PAYMENT(PAYMENT_NAME, PAYMENT_CUSTOMER) VALUES(?, ?);";
 	
-	public ArrayList<PaymentVO> selectAll(PaymentVO pVO) {
+	public ArrayList<PaymentVO> selectAll(PaymentVO paymentVO) {
 		return null;
 	}
 
-	public BuyVO selectOne(PaymentVO pVO) {
+	public PaymentVO selectOne(PaymentVO paymentVO) {
 		return null;
 	}
 
-	public boolean insert(PaymentVO pVO) {
+	public boolean insert(PaymentVO paymentVO) {
 		JDBCUtil.getConnection();
 
 		try {
 			pstmt=conn.prepareStatement(SQL_INSERT);
-			pstmt.setString(1, pVO.getPaymentName());
-			pstmt.setString(2, pVO.getPaymentCustomer());
+			pstmt.setString(1, paymentVO.getPaymentName());
+			pstmt.setString(2, paymentVO.getPaymentCustomer());
 			
 			int rs=pstmt.executeUpdate();
 			if(rs<=0) {
@@ -46,11 +46,11 @@ public class PaymentDAO {
 		return true;
 	}
 
-	public boolean update(PaymentVO pVO) {
+	public boolean update(PaymentVO paymentVO) {
 		return false;
 	}
 
-	public boolean delete(PaymentVO pVO) {
+	public boolean delete(PaymentVO paymentVO) {
 		return false;
 	}
 

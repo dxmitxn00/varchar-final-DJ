@@ -1,5 +1,6 @@
 package com.varchar.view.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,8 +52,8 @@ public class ReviewController {
 		int totalCnt = 0; // 총 후기 수
 		
 		// pMemberId가 뭐임??????
-		String pMemberId = request.getParameter("pMemberId");
-		reviewVO.setMemberId(pMemberId == null ? "" : pMemberId);
+		String memberId = request.getParameter("memberId");
+		reviewVO.setMemberId(memberId == null ? "" : memberId);
 		String searchName = request.getParameter("searchName");
 		reviewVO.setSearchName(searchName == null ? "" : searchName);
 		String reviewSearch = request.getParameter("reviewSearch");
@@ -71,7 +72,7 @@ public class ReviewController {
 		if (endPage > totalPageCnt) {
 			endPage = totalPageCnt;
 		}
-		System.out.println("\tLog: controller => ReviewListPageAction: [page: startPage: " + startPage + ", endPage: " + endPage + "]");
+		System.out.println("\teaLog: controller => ReviewListPageAction: [page: startPage: " + startPage + ", endPage: " + endPage + "]");
 		
 //		startRnum = (currentPage - 1) * pageSize + 1;
 //		endRnum = startRnum + pageSize - 1;
@@ -80,7 +81,7 @@ public class ReviewController {
 		if (endRnum > totalCnt) {
 			endRnum = totalCnt;
 		}
-		System.out.println("\tLog: controller => ReviewListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
+		System.out.println("\teaLog: controller => ReviewListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
 		
 		request.setAttribute("startPage", startPage);
 		request.setAttribute("endPage", endPage);
@@ -88,7 +89,7 @@ public class ReviewController {
 		request.setAttribute("totalPageCnt", totalPageCnt);
 		request.setAttribute("searchName", searchName);
 		request.setAttribute("reviewSearch", reviewSearch);
-		request.setAttribute("pMemberId", pMemberId);
+		request.setAttribute("pMemberId", memberId);
 		
 		reviewVO.setSearchName(searchName + "_PAGING");
 		reviewVO.setStartRnum(startRnum);
@@ -158,7 +159,7 @@ public class ReviewController {
 		return "reviewDetailPage.do";
 	}
 	
-	@RequestMapping(value="/updateReviewsPage.do")
+	@RequestMapping(value="/updateReviewPage.do")
 	public String updateReviewsPage(ReviewVO reviewVO, Model model) {
 		
 		reviewVO = reviewService.selectOne(reviewVO);
@@ -197,5 +198,77 @@ public class ReviewController {
 		return "alertTrue.jsp";
 	}
 	
+	// ------------------------- 내 후기 페이지 ---------------------------------
+	
+	@RequestMapping(value="/myReviewsListPage.do")
+	public String myReviewListPage(ReviewVO reviewVO, HttpSession session, HttpServletRequest request) {
+		
+		int currentPage = 1;
+		
+		String currentPageStr = request.getParameter("page");
+		
+		try {
+			if (currentPageStr != null && !currentPageStr.equals("")) {
+				currentPage = Integer.parseInt(currentPageStr);				
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		
+		final int pageSize = 6; // 한페이지에 보여줄 행
+		final int pageBlock = 2; // 페이징에 나타날 페이지수
+		int startPage = 0; // 시작 페이지
+		int endPage = 0; // 끝 페이지
+		int startRnum = 0; // 시작 후기 rnum
+		int endRnum = 0; // 끝 후기 rnum
+		int totalCnt = 0; // 총 후기 수
+
+		String memberId = (String)session.getAttribute("sessionMemberId");
+		reviewVO.setMemberId(memberId);
+		reviewVO.setSearchName(request.getParameter("searchName"));
+		String searchName = request.getParameter("searchName");
+		reviewVO.setSearchName(searchName == null ? "" : searchName);
+		String reviewSearch = request.getParameter("reviewSearch");
+		reviewVO.setReviewSearch(reviewSearch == null ? "" : reviewSearch);
+		
+		List<ReviewVO> reviewDatasTotal = reviewService.selectAll(reviewVO); // 총 리뷰 개수
+		totalCnt = reviewDatasTotal.size();
+		
+		int totalPageCnt = (totalCnt / pageSize) + (totalCnt % pageSize == 0 ? 0 : 1);
+		if (currentPage % pageBlock == 0) {
+			startPage = ((currentPage / pageBlock) - 1) * pageBlock + 1;
+		} else {
+			startPage = (currentPage / pageBlock) * pageBlock + 1;
+		}
+		endPage = startPage + pageBlock - 1;
+		if (endPage > totalPageCnt) {
+			endPage = totalPageCnt;
+		}
+		System.out.println("\teaLog: controller: MyReviewListPageAction: page: startPage: " + startPage + " endPage: " + endPage);
+		
+//		startRnum = (currentPage - 1) * pageSize + 1;
+//		endRnum = startRnum + pageSize - 1;
+		startRnum = (currentPage - 1) * pageSize;
+		endRnum = startRnum + pageSize;
+		if (endRnum > totalCnt) {
+			endRnum = totalCnt;
+		}
+		System.out.println("\teaLog: controller: MyReviewListPageAction: page: startRnum: " + startRnum + " endRnum: " + endRnum);
+		
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("totalPageCnt", totalPageCnt);
+		request.setAttribute("searchName", searchName);
+		request.setAttribute("reviewSearch", reviewSearch);
+		request.setAttribute("memberId", memberId);
+		
+		reviewVO.setSearchName(searchName + "_PAGING");
+		reviewVO.setStartRnum(startRnum);
+		List<ReviewVO> reviewDatas = reviewService.selectAll(reviewVO); // startRnum 부터 endRnum 까지의 리뷰
+		request.setAttribute("reviewDatas", reviewDatas);
+		
+		return "reviewListPage.jsp";
+	}
 	
 }

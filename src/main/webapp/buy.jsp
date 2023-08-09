@@ -117,13 +117,13 @@
 	          		<div class="col-md-6" style="margin-top: 30px;">
 	                <div class="form-group">
 	                	<label for="firstname" >아이디</label>
-	                  <input type="text" name="memberID" class="form-control" value="${ mVO.memberId }" readonly>
+	                  <input type="text" name="memberID" class="form-control" value="${ memberVO.memberId }" readonly>
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">이름 <span style="color: red;">*</span></label>
-	                  <input type="text" name="memberName" class="form-control" value="${ mVO.memberName }" required>
+	                  <input type="text" name="memberName" class="form-control" value="${ memberVO.memberName }" required>
 	                </div>
                 </div>
                 <div class="w-100"></div>
@@ -136,7 +136,7 @@
 				<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">이메일</label>
-	                  <input type="text" class="form-control" value="${ mdata.memberEmail }" placeholder="@포함 이메일 형식에 맞춰서 입력하세요." value="0${ mVO.memberPhone }" required>
+	                  <input type="text" class="form-control" value="${ memberData.memberEmail }" placeholder="@포함 이메일 형식에 맞춰서 입력하세요." value="0${ memberVO.memberPhone }" required>
 	                </div>
                 </div>
                 <div class="w-100"></div>
@@ -155,7 +155,7 @@
 	          <!-- 주문 폼 태그 끝 -->
 			</div>
 	<!-- 결제 섹션 -->
-	<c:set var="memberId" value="${ ssMemberId }"/>
+	<c:set var="memberId" value="${ sessionMemberId }"/>
 	
 	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 
