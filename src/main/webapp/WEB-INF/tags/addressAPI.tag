@@ -3,16 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <style type="text/css">
-   #address > input {
-      width: 210%;
-       height: 46px;
-       border: 1px solid #ebebeb;
-       padding-left: 20px;
-       font-size: 16px;
-       color: #b2b2b2;
-       border-radius: 4px;
-       text-align: center;
-       margin: auto;
+   #addressBtn {
+   		background-color: #F0F0F0 !important;
    }
    #detailAddress {
       margin-bottom: 100px;
@@ -84,11 +76,7 @@
         }).open({autoClose: true});
     }
 </script>
-<div id=address>
-   <input type="button" id="addressBtn" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-   <input type="text" id="postcode" placeholder="우편번호" readonly>
-   <input type="text" id="roadAddress" placeholder="도로명주소" name="memberAddress" value="${ mdata.memberAddress }" readonly>
-   <input type="text" id="jibunAddress" placeholder="지번주소" readonly>
-   <input type="text" id="extraAddress" placeholder="참고항목" readonly>
-   <input type="text" id="detailAddress" placeholder="상세주소">
-</div>
+<input type="button" id="addressBtn" class="form-control" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+<input type="text" id="postcode" class="form-control" placeholder="우편번호" readonly>
+<input type="text" id="roadAddress" class="form-control" placeholder="도로명주소" name="memberAddress" value="${ mdata.memberAddress }" readonly>
+<input type="text" id="detailAddress" class="form-control" placeholder="상세주소">

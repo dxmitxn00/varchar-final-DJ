@@ -1,20 +1,20 @@
 package com.varchar.biz.payment;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.varchar.biz.buy.BuyVO;
-import com.varchar.biz.common.JDBCUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
+
+@Repository("paymentDAO")
 public class PaymentDAO {
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
-	static final private String SQL_INSERT = "INSERT INTO PAYMENT(PAYMENT_NAME, PAYMENT_CUSTOMER) VALUES(?, ?);";
+	static final private String SQL_INSERT = "INSERT INTO PAYMENT(PAYMENT_NUM, PAYMENT_NAME, PAYMENT_CUSTOMER) "
+									+ "VALUES((SELECT NVL(MAX(PAYMENT_NUM), 0) + 1 FROM PAYMENT), ?, ?)";
 	
 	public ArrayList<PaymentVO> selectAll(PaymentVO paymentVO) {
 		return null;
@@ -25,24 +25,12 @@ public class PaymentDAO {
 	}
 
 	public boolean insert(PaymentVO paymentVO) {
-		JDBCUtil.getConnection();
 
-		try {
-			pstmt=conn.prepareStatement(SQL_INSERT);
-			pstmt.setString(1, paymentVO.getPaymentName());
-			pstmt.setString(2, paymentVO.getPaymentCustomer());
-			
-			int rs=pstmt.executeUpdate();
-			if(rs<=0) {
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		int result = jdbcTemplate.update(SQL_INSERT, paymentVO.getPaymentName(), paymentVO.getPaymentCustomer());
+		
+		if(result <= 0) {
 			return false;
 		}
-
-		JDBCUtil.close(conn, pstmt);
-
 		return true;
 	}
 

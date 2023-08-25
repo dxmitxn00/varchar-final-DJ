@@ -1,18 +1,18 @@
 package com.varchar.biz.tea;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.varchar.biz.review.ReviewVO;
 
 public class ReviewSet {
 	private TeaVO tea;					// 상품 : 1
-	private ArrayList<ReviewVO> rdatas;	// 후기 : N
+	private List<ReviewVO> rdatas;	// 후기 : N
 	
 	public ReviewSet() {
 		this(null, null);
 	}
 	
-	public ReviewSet(TeaVO tea, ArrayList<ReviewVO> rdatas) {
+	public ReviewSet(TeaVO tea, List<ReviewVO> rdatas) {
 		this.tea = tea;
 		this.rdatas = rdatas;
 	}
@@ -23,10 +23,10 @@ public class ReviewSet {
 	public void setTea(TeaVO tea) {
 		this.tea = tea;
 	}
-	public ArrayList<ReviewVO> getRdatas() {
+	public List<ReviewVO> getRdatas() {
 		return rdatas;
 	}
-	public void setRdatas(ArrayList<ReviewVO> rdatas) {
+	public void setRdatas(List<ReviewVO> rdatas) {
 		this.rdatas = rdatas;
 	}
 

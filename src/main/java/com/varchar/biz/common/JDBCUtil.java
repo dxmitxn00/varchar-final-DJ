@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 public class JDBCUtil {
 	private static String driverName = "oracle.jdbc.driver.OracleDriver";
-	private static String url = "jdbc:oracle:thin:@localhost:1521:";
-	private static String userName = "RYU";
+	private static String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	private static String userName = "JUN";
 	private static String password = "1234";
 	
 	public static Connection getConnection() {

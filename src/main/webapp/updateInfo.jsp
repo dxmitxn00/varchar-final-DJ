@@ -8,91 +8,17 @@
     <title>Var茶 | 회원정보수정</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-
-    <link rel="stylesheet" href="css/aos.css">
-
-    <link rel="stylesheet" href="css/ionicons.min.css">
-
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
-
-    
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+    <!-- 파비콘 태그 -->
+    <try:favicon/>
+    <!-- 링크 부분 태그 -->
+    <try:link/>
   </head>
-  
-  
   <!-- 주소 API 커스텀 태그로 빼서 넣어주셈 -->
   <!-- 상단, 하단은 커스텀 태그로 넣어주셈 -->
   <!-- 전화번호, 이메일 유효성 검사 정규식으로 바꿔주셈 -->
-  
-  
-  
   <body class="goto-here">
-		<div class="py-1 bg-primary">
-    	<div class="container">
-    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-	    		<div class="col-lg-12 d-block">
-		    		<div class="row d-flex">
-		    			<div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+ 1235 2355 98</span>
-					    </div>
-					    <div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">youremail@email.com</span>
-					    </div>
-					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
-						    <span class="text">3-5 Business days delivery &amp; Free Returns</span>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-		  </div>
-    </div>
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html">Vegefoods</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item active dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Shop</a>
-              	<a class="dropdown-item" href="wishlist.html">Wishlist</a>
-                <a class="dropdown-item" href="product-single.html">Single Product</a>
-                <a class="dropdown-item" href="cart.html">Cart</a>
-                <a class="dropdown-item" href="checkout.html">Checkout</a>
-              </div>
-            </li>
-	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <!-- END nav -->
-
+	<!-- 헤더 부분 태그 -->
+	<try:nav/>
 	<!-- 페이지 제목 div -->
     <div class="hero-wrap hero-bread" style="background-image: url('images/bg_1.jpg');">
       <div class="container">
@@ -118,7 +44,7 @@
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
           <!-- 정보 수정 폼 태그 -->
-			<form action="updateInfo.do" method="post" class="billing-form" onsubmit="return checkPh();">
+			<form action="updateInfo.do" method="post" class="billing-form" onsubmit="return test()">
 	          	<h3 class="mb-4 billing-heading" style="padding-bottom: 15px; border-bottom: 1px solid #e1e1e1">회원 정보 수정</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6" style="margin-top: 30px;">
@@ -130,7 +56,7 @@
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">이름 <span style="color: red;">*</span></label>
-	                  <input type="text" class="form-control" value="${ memberData.memberName }" required>
+	                  <input type="text" name="memberName" class="form-control" value="${ memberData.memberName }" required>
 	                </div>
                 </div>
                 <div class="w-100"></div>
@@ -138,17 +64,17 @@
 	                <div class="form-group">
                 		<label for="lastname">연락처</label>
 	                	 <c:if test="${ memberData.memberPhone == 0 }">
-	                  		<input type="text" id="memberPhone" class="form-control" placeholder="하이픈(-), 공백없이 입력하세요. ex) 00012345678">
+	                  		<input type="text" name="memberPhone" id="memberPhone" class="form-control" placeholder="하이픈(-), 공백없이 입력하세요. ex) 00012345678">
 	                	</c:if>
 	                	<c:if test="${ memberData.memberPhone != 0 }">
-	                  		<input type="text" id="memberPhone" class="form-control" value="0${ memberData.memberPhone }">
+	                  		<input type="text" name="memberPhone" id="memberPhone" class="form-control" value="0${ memberData.memberPhone }">
 	               		</c:if>
 	                </div>
                 </div>
 				<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">이메일</label>
-	                  <input type="text" class="form-control" value="${ memberData.memberEmail }" placeholder="@포함 이메일 형식에 맞춰서 입력하세요.">
+	                  <input type="text" name="memberEmail" id="memberEmail" class="form-control" value="${ memberData.memberEmail }" placeholder="@포함 이메일 형식에 맞춰서 입력하세요.">
 	                </div>
                 </div>
                 <div class="w-100"></div>
@@ -327,22 +253,35 @@
 	
 	 <script type="text/javascript">
 	 	// 전화번호, 이메일 유효성 검사
-    	function checkPh() {
- 	  		var ph = document.getElementById('memberPhone').value;
- 	  	    var mail = document.getElementById('memberEmail').value;
- 	        const test= "@";    		
-       		if((ph.length == 11 && mail == '') || (ph == '' && mail == '') || (ph == '' && mail.indexOf(test) !== -1) || (ph.length == 11 && mail.indexOf(test) !== -1)){
-       			return true;
-       		}
-       		else if(ph.length !== 11){
-   			alert('전화번호는 하이픈(-) 공백없이 11자리 입력해주세요.');
-       		return false;
-       		}
-       		else if(mail.indexOf(test) == -1){
-       		alert('이메일은 @포함 정확하게 입력하세요');
-            return false;
-       		}            			
-      	}
+    	function test() {
+    		var ph = document.getElementById('memberPhone').value; // 연락처
+    		var mail = document.getElementById('memberEmail').value; // 이메일
+    		const phoneRegex = /^\d{11}$/; // 11자리의 숫자만 허용 (하이픈 없음)
+    		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 정규표현식을 통한 이메일 유효성 검사
+    		const isPhoneValid = ph.length === 0 || ph.match(phoneRegex);
+   			const isEmailValid = mail.length === 0 || mail.match(emailRegex);
+
+    		if (isPhoneValid && isEmailValid) {
+        		// 연락처와 이메일 모두 유효성 검사를 통과한 경우
+       		 	return true;
+    		}
+    		else if (!isPhoneValid && !isEmailValid) {
+        		// 둘 다 입력되지 않은 경우 유효성 검사를 제외하고 회원가입 진행
+        		return true;
+    		}
+    		else {
+        		// 유효성 검사를 통과하지 못한 경우
+        		if (!isPhoneValid) {
+            		alert('연락처를 11자리 숫자로 입력해주세요.');
+            		
+        		if (!isEmailValid) {
+            		alert('이메일을 정확하게 입력하세요.');
+            		
+        		}
+    		}
+           return false;
+		}
+	 }
     </script>
     
   </body>

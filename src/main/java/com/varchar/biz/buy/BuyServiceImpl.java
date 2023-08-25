@@ -3,7 +3,9 @@ package com.varchar.biz.buy;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service("buyService")
 public class BuyServiceImpl implements BuyService {
 	
 	@Autowired

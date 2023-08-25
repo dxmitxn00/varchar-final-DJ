@@ -1,115 +1,81 @@
 package com.varchar.biz.buy;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import com.varchar.biz.common.JDBCUtil;
 
 @Repository("buyDAO")
 public class BuyDAO {
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
 
-	static final private String SQL_SELECTALL = "SELECT b.BUY_NUM, SUM(t.TEA_PRICE) AS TEA_PRICE, SUM(bd.BUY_CNT) AS BUY_CNT\r\n"
-			+ "FROM BUY b\r\n"
-			+ "JOIN BUY_DETAIL bd USING(BUY_NUM)\r\n"
-			+ "JOIN TEA t USING(TEA_NUM)\r\n"
-			+ "WHERE MEMBER_ID = ? \r\n"
-			+ "GROUP BY BUY_NUM\r\n";
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+
+	static final private String SQL_SELECTALL = "SELECT b.BUY_NUM, SUM(t.TEA_PRICE) AS TEA_PRICE, SUM(bd.BUY_CNT) AS BUY_CNT "
+			+ "FROM BUY b "
+			+ "JOIN BUY_DETAIL bd ON b.BUY_NUM = bd.BUY_NUM "
+			+ "JOIN TEA t ON bd.TEA_NUM = t.TEA_NUM "
+			+ "WHERE MEMBER_ID = ? "
+			+ "GROUP BY b.BUY_NUM "
+			+ "ORDER BY b.BUY_NUM DESC";
 	static final private String SQL_SELECTONE = "SELECT b.BUY_NUM, t.TEA_PRICE, bd.BUY_CNT "
 			+ "FROM BUY b "
-			+ "JOIN BUY_DETAIL bd USING(BUY_NUM) "
-			+ "JOIN TEA t USING(TEA_NUM) "
-			+ "WHERE BUY_NUM = ?;";
-	static final private String SQL_INSERT = "INSERT INTO BUY(MEMBER_ID) VALUES(?);";
+			+ "JOIN BUY_DETAIL bd ON b.BUY_NUM = bd.BUY_NUM "
+			+ "JOIN TEA t ON bd.TEA_NUM = t.TEA_NUM "
+			+ "WHERE b.BUY_NUM = ?";
+	static final private String SQL_INSERT = "INSERT INTO BUY(BUY_NUM, MEMBER_ID) "
+			+ " VALUES((SELECT NVL(MAX(BUY_NUM), 0) + 1 FROM BUY), ?)";
 
-	public ArrayList<BuyVO> selectAll(BuyVO bVO) {
 
-		conn = JDBCUtil.getConnection();
+	public List<BuyVO> selectAll(BuyVO buyVO) {
 
-		ArrayList<BuyVO> datas = new ArrayList<BuyVO>();
-
-		try {
-			pstmt = conn.prepareStatement(SQL_SELECTALL);
-			pstmt.setString(1, bVO.getMemberId());
-
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				BuyVO data = new BuyVO();
-				data.setBuyNum(rs.getInt("BUY_NUM"));
-				data.setTeaPrice(rs.getInt("TEA_PRICE"));
-				data.setBuyCnt(rs.getInt("BUY_CNT"));
-				datas.add(data);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		JDBCUtil.close(conn, pstmt);
-
-		return datas;
+		Object[] args = { buyVO.getMemberId() };
+		return jdbcTemplate.query(SQL_SELECTALL, args, new BuyRowMapper());
 	}
 
-	public BuyVO selectOne(BuyVO bVO) {
-		conn = JDBCUtil.getConnection();
-		BuyVO data = null;
-		
+	public BuyVO selectOne(BuyVO buyVO) {
 		try {
-
-			pstmt = conn.prepareStatement(SQL_SELECTONE);
-			pstmt.setInt(1, bVO.getBuyNum());
-
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				data = new BuyVO();
-				data.setBuyNum(rs.getInt("BUY_NUM"));
-				data.setTeaPrice(rs.getInt("TEA_PRICE"));
-				data.setBuyCnt(rs.getInt("BUY_CNT"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			Object[] args = { buyVO.getBuyNum() };
+			return jdbcTemplate.queryForObject(SQL_SELECTONE, args, new BuyRowMapper());
 		}
-
-		JDBCUtil.close(conn, pstmt);
-
-		return data;
-
+		catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
-	public boolean insert(BuyVO bVO) {
-		conn = JDBCUtil.getConnection();
+	public boolean insert(BuyVO buyVO) {
+		int result = jdbcTemplate.update(SQL_INSERT, buyVO.getMemberId());
 
-		try {
-			pstmt=conn.prepareStatement(SQL_INSERT);
-			pstmt.setString(1, bVO.getMemberId());
-			
-			int rs=pstmt.executeUpdate();
-			if(rs<=0) {
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(result <= 0) {
 			return false;
 		}
-
-		JDBCUtil.close(conn, pstmt);
-
 		return true;
 	}
 
-	public boolean update(BuyVO bVO) {
+	public boolean update(BuyVO buyVO) {
 		return false;
 	}
 
-	public boolean delete(BuyVO bVO) {
+	public boolean delete(BuyVO buyVO) {
 		return false;
 	}
+}
+
+// [ SelectAll, SelectOne ]
+class BuyRowMapper implements RowMapper<BuyVO> { 
+
+	@Override
+	public BuyVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		BuyVO data = new BuyVO();
+		data.setBuyNum(rs.getInt("BUY_NUM"));
+		data.setTeaPrice(rs.getInt("TEA_PRICE"));
+		data.setBuyCnt(rs.getInt("BUY_CNT"));
+		return data;
+	}
+
 }

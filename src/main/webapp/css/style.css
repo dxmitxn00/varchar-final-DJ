@@ -4,6 +4,106 @@
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+/* edit */
+
+.map {
+  height: 500px;
+  position: relative;
+}
+
+.map iframe {
+  width: 100%;
+}
+
+.map .map-inside {
+  position: absolute;
+  left: 50%;
+  top: 160px;
+  -webkit-transform: translateX(-175px);
+  -ms-transform: translateX(-175px);
+  transform: translateX(-175px);
+}
+
+.map .map-inside i {
+  font-size: 48px;
+  color: #23512e;
+  position: absolute;
+  bottom: -75px;
+  left: 50%;
+  -webkit-transform: translateX(-18px);
+  -ms-transform: translateX(-18px);
+  transform: translateX(-18px);
+}
+
+.icon_pin:before {
+    content: "\e081";
+}
+
+.map .map-inside .inside-widget:after {
+  position: absolute;
+  left: 50%;
+  bottom: -30px;
+  -webkit-transform: translateX(-6px);
+  -ms-transform: translateX(-6px);
+  transform: translateX(-6px);
+  border: 12px solid transparent;
+  border-top: 30px solid #ffffff;
+  content: "";
+  z-index: -1;
+}
+
+.map .map-inside .inside-widget {
+  width: 350px;
+  background: #ffffff;
+  text-align: center;
+  padding: 23px 0;
+  position: relative;
+  z-index: 1;
+  -webkit-box-shadow: 0 0 20px 5px rgba(12, 7, 26, 0.15);
+  box-shadow: 0 0 20px 5px rgba(12, 7, 26, 0.15);
+}
+
+.map .map-inside .inside-widget h4 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin-bottom: 4px;
+}
+
+.map .map-inside .inside-widget ul li {
+  list-style: none;
+  font-size: 16px;
+  color: #666666;
+  line-height: 26px;
+}
+
+ol, ul, dl {
+  padding: 0;
+  margin: 0;
+}
+
+.nav-line {
+  border-left: 1px solid #82ae46;
+  height: 50px;
+  margin: 8.9px 0px;
+}
+
+.scrolled.awake .nav-line {
+  border: none;
+  height: auto;
+}
+
+@media (max-width: 991.98px) {
+  .nav-line {
+    border-left: none;
+    height: 0px;
+    border-bottom: 1px solid #82ae46;
+  }
+}
+
+/* edit */
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;

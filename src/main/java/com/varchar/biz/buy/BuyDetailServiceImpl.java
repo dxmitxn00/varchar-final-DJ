@@ -3,8 +3,10 @@ package com.varchar.biz.buy;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class BuyDetailServiceImpl implements BuyDetailService{
+@Service("buyDetailService")
+public class BuyDetailServiceImpl implements BuyDetailService {
 
 	@Autowired
 	BuyDetailDAO buyDetailDAO;

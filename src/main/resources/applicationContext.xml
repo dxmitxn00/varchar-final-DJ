@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:context="http://www.springframework.org/schema/context"
-   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
-	<context:component-scan base-package="com.spring.biz" />
-
+	<context:component-scan base-package="com.varchar.biz" />
+	
+	<!-- DataSource 객체 생성 -->
+	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+		<property name="username" value="TAN"></property>
+		<property name="password" value="1234"></property>
+	</bean>
+	
+	<!-- JdbcTemplate에 의존 주입할 객체 생성 -->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	
+	<aop:aspectj-autoproxy />
+	<!-- 
+	<bean id="logAdvice" class="com.varchar.biz.common.LogAdvice" />
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* com.varchar.biz..*Impl.*(..))" id="aPointCut" />
+		<aop:aspect ref="logAdvice">
+			<aop:before method="printLog" pointcut-ref="aPointCut" />
+		</aop:aspect>
+	</aop:config>
+ -->
 </beans>

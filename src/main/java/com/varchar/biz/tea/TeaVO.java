@@ -1,6 +1,5 @@
 package com.varchar.biz.tea;
 
-// 지현 수정
 public class TeaVO {
 	private int teaNum;
 	private String teaName;
@@ -14,9 +13,12 @@ public class TeaVO {
 	private String teaCondition;
 	private String imageUrl;
 	private int startRnum;
+	private int endRnum;
 	private int teaCheckCnt;
 	private int teaTotal;
 	private String count;
+	
+	private int favorResult;
 	
 	public TeaVO() {
 		this(0, "", 0, 0, "", "");
@@ -33,7 +35,14 @@ public class TeaVO {
 		this.teaCondition = "";
 	}
 	
-	
+
+	public int getFavorResult() {
+		return favorResult;
+	}
+
+	public void setFavorResult(int favorResult) {
+		this.favorResult = favorResult;
+	}
 
 	public String getCount() {
 		return count;
@@ -115,6 +124,14 @@ public class TeaVO {
 		this.startRnum = startRnum;
 	}
 	
+	public int getEndRnum() {
+		return endRnum;
+	}
+
+	public void setEndRnum(int endRnum) {
+		this.endRnum = endRnum;
+	}
+
 	public String getTeaCondition() {
 		return teaCondition;
 	}
@@ -144,7 +161,7 @@ public class TeaVO {
 		return "TeaVO [teaNum=" + teaNum + ", teaName=" + teaName + ", teaPrice=" + teaPrice + ", teaCnt=" + teaCnt
 				+ ", teaCategory=" + teaCategory + ", teaContent=" + teaContent + ", teaSearchWord=" + teaSearchWord
 				+ ", teaCondition=" + teaCondition + ", imageUrl=" + imageUrl + ", startRnum=" + startRnum
-				+ ", teaTotal=" + teaTotal + "]";
+				+ ", teaTotal=" + teaTotal + ", favorResult="+ favorResult + "]";
 	}
 	
 	

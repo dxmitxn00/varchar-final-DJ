@@ -1,151 +1,155 @@
 package com.varchar.biz.tea;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
-import com.varchar.biz.common.JDBCUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
+
+@Repository("teaDAO")
 public class TeaDAO {
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
 
-	static final private String SQL_SELECTALL = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL\r\n"
-			+ "FROM TEA t JOIN IMAGE i USING (TEA_NUM)\r\n"
-			+ "WHERE t.TEA_CATEGORY LIKE CONCAT('%', ?, '%') "
-			+ "AND t.TEA_NAME LIKE CONCAT('%', ?, '%') "
-			+ "AND i.IMAGE_DIVISION = 1;";
-	static final private String SQL_SELECTALL_PAGING = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL\r\n"
-			+ "FROM TEA t JOIN IMAGE i USING (TEA_NUM)\r\n"
-			+ "WHERE t.TEA_CATEGORY LIKE CONCAT('%', ?, '%') "
-			+ "AND t.TEA_NAME LIKE CONCAT('%', ?, '%') "
-			+ "AND i.IMAGE_DIVISION = 1 "
-			+ "LIMIT ?, 6";
-	static final private String SQL_SELECTONE = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL\r\n"
-			+ "FROM TEA t JOIN IMAGE i USING (TEA_NUM) "
-			+ "WHERE i.IMAGE_DIVISION = 1 AND t.TEA_NUM = ?;";
-	static final private String SQL_UPDATE = "UPDATE TEA SET TEA_CNT = (TEA_CNT - ?) WHERE TEA_NUM = ?";
-//	static final private String SQL_INSERT = "";
-//	static final private String SQL_DELETE = "";
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
-	public ArrayList<TeaVO> selectAll(TeaVO tVO) {
-		conn = JDBCUtil.getConnection();
+	//	static final private String SQL_SELECTALL = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL\r\n"
+	//			+ "FROM TEA t JOIN IMAGE i USING (TEA_NUM)\r\n"
+	//			+ "WHERE t.TEA_CATEGORY LIKE CONCAT('%', ?, '%') "
+	//			+ "AND t.TEA_NAME LIKE CONCAT('%', ?, '%') "
+	//			+ "AND i.IMAGE_DIVISION = 1;";
 
-		ArrayList<TeaVO> datas = new ArrayList<TeaVO>();
+	static final private String SQL_SELECTALL = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL "
+			+ "FROM TEA t JOIN IMAGE i ON t.TEA_NUM = i.TEA_NUM "
+			+ "WHERE t.TEA_CATEGORY LIKE '%' || ? || '%' "
+			+ "AND t.TEA_NAME LIKE '%' || ? || '%' "
+			+ "AND i.IMAGE_DIVISION = 1";
+	
+	
 
-		try {
-			if (tVO.getTeaCondition().equals("페이징")) {
-				pstmt = conn.prepareStatement(SQL_SELECTALL_PAGING);
-				pstmt.setString(1, tVO.getTeaCategory());
-				pstmt.setString(2, tVO.getTeaSearchWord());
-				pstmt.setInt(3, tVO.getStartRnum());
-				rs = pstmt.executeQuery();
-				
-				while (rs.next()) {
-					TeaVO data = new TeaVO();
-					data.setTeaNum(rs.getInt("TEA_NUM"));
-					data.setTeaName(rs.getString("TEA_Name"));
-					data.setTeaPrice(rs.getInt("TEA_PRICE"));
-					data.setTeaCnt(rs.getInt("TEA_CNT"));
-					data.setTeaCategory(rs.getString("TEA_CATEGORY"));
-					data.setTeaContent(rs.getString("TEA_CONTENT"));
-					data.setImageUrl(rs.getString("IMAGE_URL"));
-					datas.add(data);
-				}
-			}
-			else {
-				pstmt = conn.prepareStatement(SQL_SELECTALL);
-				pstmt.setString(1, tVO.getTeaCategory());
-				pstmt.setString(2, tVO.getTeaSearchWord());
-				rs = pstmt.executeQuery();
-				
-				while (rs.next()) {
-					TeaVO data = new TeaVO();
-					data.setTeaNum(rs.getInt("TEA_NUM"));
-					data.setTeaName(rs.getString("TEA_Name"));
-					data.setTeaPrice(rs.getInt("TEA_PRICE"));
-					data.setTeaCnt(rs.getInt("TEA_CNT"));
-					data.setTeaCategory(rs.getString("TEA_CATEGORY"));
-					data.setTeaContent(rs.getString("TEA_CONTENT"));
-					data.setImageUrl(rs.getString("IMAGE_URL"));
-					datas.add(data);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+	//	static final private String SQL_SELECTALL_PAGING = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL\r\n"
+	//			+ "FROM TEA t JOIN IMAGE i USING (TEA_NUM)\r\n"
+	//			+ "WHERE t.TEA_CATEGORY LIKE CONCAT('%', ?, '%') "
+	//			+ "AND t.TEA_NAME LIKE CONCAT('%', ?, '%') "
+	//			+ "AND i.IMAGE_DIVISION = 1 "
+	//			+ "LIMIT ?, 6";
+
+	static final private String SQL_SELECTALL_PAGING = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, t.IMAGE_URL "
+			+ "FROM ("
+			+ "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL, ROWNUM AS rnum "
+			+ "FROM TEA t JOIN IMAGE i ON t.TEA_NUM = i.TEA_NUM "
+			+ "WHERE t.TEA_CATEGORY LIKE '%' || ? || '%' AND t.TEA_NAME LIKE '%' || ? || '%' AND i.IMAGE_DIVISION = 1 "
+			+ ") t "
+			+ "WHERE t.rnum BETWEEN ? AND ?";
+	
+	static final private String SQL_SELECTALL_PAGING_LIKE = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, t.IMAGE_URL, t.FAVOR_NUM "
+			+ "FROM ( "
+			+ "	SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL, f.FAVOR_NUM, ROWNUM AS rnum "
+			+ "	FROM TEA t JOIN IMAGE i ON t.TEA_NUM = i.TEA_NUM "
+			+ "		LEFT JOIN ( "
+			+ "		SELECT * "
+			+ "		FROM FAVOR "
+			+ "		WHERE MEMBER_ID = ? "
+			+ "	) "
+			+ "	f ON t.TEA_NUM =  f.TEA_NUM "
+			+ "	WHERE t.TEA_CATEGORY LIKE '%' || ? || '%' AND t.TEA_NAME LIKE '%' || ? || '%' AND i.IMAGE_DIVISION = 1 "
+			+ ") t "
+			+ "WHERE t.rnum BETWEEN ? AND ?";
+
+	//	static final private String SQL_SELECTONE = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL\r\n"
+	//			+ "FROM TEA t JOIN IMAGE i USING (TEA_NUM) "
+	//			+ "WHERE i.IMAGE_DIVISION = 1 AND t.TEA_NUM = ?;";
+
+	static final private String SQL_SELECTONE = "SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CATEGORY, t.TEA_CONTENT, i.IMAGE_URL "
+			+ "FROM TEA t JOIN IMAGE i ON t.TEA_NUM = i.TEA_NUM "
+			+ "WHERE i.IMAGE_DIVISION = 1 AND t.TEA_NUM = ?";
+
+	static final private String SQL_UPDATE = "UPDATE TEA SET TEA_CNT = (TEA_CNT - ?) WHERE TEA_NUM = ? ";
+	//	static final private String SQL_INSERT = "";
+	//	static final private String SQL_DELETE = "";
+
+	public List<TeaVO> selectAll(TeaVO teaVO) {
+
+		if(teaVO.getTeaCondition().equals("페이징")) {
+			Object[] args = {teaVO.getTeaName(), teaVO.getTeaCategory(), teaVO.getTeaSearchWord(), teaVO.getStartRnum(), teaVO.getEndRnum()};
+			return jdbcTemplate.query(SQL_SELECTALL_PAGING_LIKE, args, new TeaPagingRowMapper());
 		}
-
-		JDBCUtil.close(conn, pstmt);
-
-		System.out.println(datas);
-		return datas;
+		else {
+			Object[] args = {teaVO.getTeaCategory(), teaVO.getTeaSearchWord() };
+			return jdbcTemplate.query(SQL_SELECTALL, args, new TeaSelectRowMapper());
+		}
 	}
 
-	public TeaVO selectOne(TeaVO tVO) {
-		conn = JDBCUtil.getConnection();
-
-		TeaVO data = new TeaVO();
-		//TeaVO data=null;
-		System.out.println("TeaVO selectOne 로그 tVO: "+tVO.getTeaNum());
-
+	public TeaVO selectOne(TeaVO teaVO) {
 		try {
-			pstmt = conn.prepareStatement(SQL_SELECTONE);
-			pstmt.setInt(1, tVO.getTeaNum());
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				data.setTeaNum(rs.getInt("TEA_NUM"));
-				data.setTeaName(rs.getString("TEA_NAME"));
-				data.setTeaPrice(rs.getInt("TEA_PRICE"));
-				data.setTeaCnt(rs.getInt("TEA_CNT"));
-				data.setTeaCategory(rs.getString("TEA_CATEGORY"));
-				data.setTeaContent(rs.getString("TEA_CONTENT"));
-				data.setImageUrl(rs.getString("IMAGE_URL"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			Object[] args = { teaVO.getTeaNum() };
+			return jdbcTemplate.queryForObject(SQL_SELECTONE, args, new TeaSelectRowMapper());
 		}
-
-		JDBCUtil.close(conn, pstmt);
-
-		return data;
+		catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
-	public boolean insert(TeaVO tVO) {
+	public boolean insert(TeaVO teaVO) {
 		return false;
 	}
 
-	public boolean update(TeaVO tVO) {
-		conn = JDBCUtil.getConnection();
-		try {
+	public boolean update(TeaVO teaVO) {
 
-			pstmt = conn.prepareStatement(SQL_UPDATE);
-			pstmt.setInt(1, tVO.getTeaCnt());
-			pstmt.setInt(2, tVO.getTeaNum());
+		int result = jdbcTemplate.update(SQL_UPDATE, teaVO.getTeaCnt(), teaVO.getTeaNum());
 
-			int result = pstmt.executeUpdate();
-			if (result <= 0) {
-				return false;
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+		if(result <= 0) {
 			return false;
 		}
-
-		JDBCUtil.close(conn, pstmt);
 		return true;
 	}
 
-	public boolean delete(TeaVO tVO) {
+	public boolean delete(TeaVO teaVO) {
 		return false;
 	}
+}
+
+
+// ---------------------------------------------------------------------------
+
+// 페이징 [ selectAll ]
+class TeaPagingRowMapper implements RowMapper<TeaVO> {
+
+	@Override
+	public TeaVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+		TeaVO data = new TeaVO();
+		data.setTeaNum(rs.getInt("TEA_NUM"));
+		data.setTeaName(rs.getString("TEA_NAME"));
+		data.setTeaPrice(rs.getInt("TEA_PRICE"));
+		data.setTeaCnt(rs.getInt("TEA_CNT"));
+		data.setTeaCategory(rs.getString("TEA_CATEGORY"));
+		data.setTeaContent(rs.getString("TEA_CONTENT"));
+		data.setImageUrl(rs.getString("IMAGE_URL"));
+		data.setFavorResult(rs.getInt("FAVOR_NUM"));
+		return data;
+	}
+}
+
+// [ selectAll, selectOne ]
+class TeaSelectRowMapper implements RowMapper<TeaVO> {
+
+	@Override
+	public TeaVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+		TeaVO data = new TeaVO();
+		data.setTeaNum(rs.getInt("TEA_NUM"));
+		data.setTeaName(rs.getString("TEA_NAME"));
+		data.setTeaPrice(rs.getInt("TEA_PRICE"));
+		data.setTeaCnt(rs.getInt("TEA_CNT"));
+		data.setTeaCategory(rs.getString("TEA_CATEGORY"));
+		data.setTeaContent(rs.getString("TEA_CONTENT"));
+		data.setImageUrl(rs.getString("IMAGE_URL"));
+		return data;
+	}
+
 }

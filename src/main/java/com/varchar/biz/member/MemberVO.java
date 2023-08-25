@@ -5,17 +5,17 @@ public class MemberVO {
 	private String memberPw;
 	private String memberName;
 	private String memberAddress;
-	private long memberPhone;
+	private String memberPhone;
 	private String memberEmail;
 	
 	// 임시변수
 	private String memberSearch;
 	
 	public MemberVO() {
-		this("","","","",0,"");
+		this("","","","","","");
 	}
 	
-	public MemberVO(String memberId, String memberPw, String memberName, String memberAddress, long memberPhone, String memberEmail) {
+	public MemberVO(String memberId, String memberPw, String memberName, String memberAddress, String memberPhone, String memberEmail) {
 		this.memberId = memberId;
 		this.memberPw = memberPw;
 		this.memberName = memberName;
@@ -55,12 +55,12 @@ public class MemberVO {
 	public void setMemberAddress(String memberAddress) {
 		this.memberAddress = memberAddress;
 	}
-
-	public long getMemberPhone() {
+	
+	public String getMemberPhone() {
 		return memberPhone;
 	}
 
-	public void setMemberPhone(long memberPhone) {
+	public void setMemberPhone(String memberPhone) {
 		this.memberPhone = memberPhone;
 	}
 

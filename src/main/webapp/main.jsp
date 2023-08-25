@@ -1,132 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="try"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Var茶 | 메인</title>
+    <title>Var茶 | 홈</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-
-    <link rel="stylesheet" href="css/aos.css">
-
-    <link rel="stylesheet" href="css/ionicons.min.css">
-
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
-
-    
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+    <!-- 파비콘 태그 -->
+    <try:favicon/>
+    <!-- 링크 부분 태그 -->
+    <try:link/>
   </head>
   <body class="goto-here">
-
-
-
-	<!-- 메인페이지에 primary / navbar / subscibe / footer는 커스텀 태그 처리 -->
-	<!-- 섹션, div 시작하는 구간에 주석으로 해야할 거 대강 적어놓음, 하셈. -->
-	<!-- 파비콘 적용해야됨 : 이전에 한 거 복붙 ㄱㄱ -->
-
-
-
-	<!-- primary: 맨 위에 번호 이메일 등등 적힌 거 -->
-	<div class="py-1 bg-primary">
-    	<div class="container">
-    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-	    		<div class="col-lg-12 d-block">
-		    		<div class="row d-flex">
-		    			<div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+82 2 1588 5890</span>
-					    </div>
-					    <div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">tryCatchers@gmail.com</span>
-					    </div>
-					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
-						    <span class="text">Healing and Fresh all day with varchar</span>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-		  </div>
-    </div>
-	<!-- primary 끝 -->
-
-	<!-- navbar: 상단 바 -->
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html">Var &nbsp; 茶</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span>
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="index.html" class="nav-link">메인</a></li>
-	          <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="teaListPage.do" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품
-			  </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="teaListPage.do?teaCategory=녹차">녹차</a>
-                <a class="dropdown-item" href="teaListPage.do?teaCategory=홍차">홍차</a>
-                <a class="dropdown-item" href="teaListPage.do?teaCategory=루이보스">루이보스</a>
-                <a class="dropdown-item" href="teaListPage.do?teaCategory=우롱차">우롱차</a>
-				<a class="dropdown-item" href="teaListPage.do?teaCategory=허브차">허브차</a>
-              </div>
-            </li>
-			  <!-- 비로그인 시 : 마이페이로 이동 -->
-			  <c:if test="${ empty sessionMemberId }">
-			  <li class="nav-item dropdown">
-			  <a class="nav-link dropdown-toggle" href="loginPage.do" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지
-			  </a>
-			  <div class="dropdown-menu" aria-labelledby="dropdown04">
-				<a class="dropdown-item" href="cartPage.do">장바구니</a>
-				<a class="dropdown-item" href="loginPage.do">찜</a>
-			  	<a class="dropdown-item" href="loginPage.do">주문내역</a>
-			  	<a class="dropdown-item" href="loginPage.do">내 후기</a>
-			  	<a class="dropdown-item" href="loginPage.do">회원정보변경</a>
-			  </div>
-			</li>
-			</c:if>
-			<!-- 로그인 시 : 각 메뉴 페이지로 이동 -->
-			<c:if test="${ not empty sessionMemberId }">
-			  <li class="nav-item dropdown">
-			  <a class="nav-link dropdown-toggle" href="updateInfoPage.do" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이페이지
-			  </a>
-			  <div class="dropdown-menu" aria-labelledby="dropdown04">
-				<a class="dropdown-item" href="cartPage.do">장바구니</a>
-				<a class="dropdown-item" href="favorPage.do">찜</a>
-			  	<a class="dropdown-item" href="buyListPage.do">주문내역</a>
-			  	<a class="dropdown-item" href="myReviewListPage.do">내 후기</a>
-			  	<a class="dropdown-item" href="updateInfoPage.do">회원정보변경</a>
-			  </div>
-			</li>
-			</c:if>
-			  <li class="nav-item"><a href="reviewListPage.do?searchName=ALL" class="nav-link">후기</a></li>
-	          <li class="nav-item"><a href="mapPage.do" class="nav-link">픽업 장소</a></li>
-			  <!-- 장바구니 카운트 할 수 있으면 하셈 -->
-	          <li class="nav-item cta cta-colored"><a href="cartPage.do" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <!-- navbar 끝 -->
-
+     <!-- 헤더 부분 태그 -->
+    <try:nav/>
 	<!-- 히어로 섹션 : 메인 사진 및 애니메이션 텍스트 -->
     <section id="home-section" class="hero">
 		  <div class="home-slider owl-carousel">
@@ -155,7 +44,7 @@
 				  <h1>Healing and Fresh with  <span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="varchar:var茶" data-colors="green"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
 				  <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
 	              <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-	              <p><a href=teaListPage.do" class="btn btn-primary">Feel Healing</a></p>
+	              <p><a href="teaListPage.do" class="btn btn-primary">Feel Healing</a></p>
 	            </div>
 
 	          </div>
@@ -586,53 +475,7 @@
 	<!-- footer 섹션 끝 -->
 	
 	<!-- 채팅 API -->
-	<script>
-	(function() {
-		var w=window;
-		if(w.ChannelIO) {
-			return w.console.error("ChannelIO script included twice.");
-		}
-		
-		var ch=function() {
-			ch.c(arguments);
-		};
-		
-		ch.q=[];
-		ch.c=function(args) {
-			ch.q.push(args);
-		};
-		
-		w.ChannelIO=ch;
-		function l() {
-			if(w.ChannelIOInitialized) {
-				return;
-			}
-			
-			w.ChannelIOInitialized=true;
-			var s=document.createElement("script");
-			s.type="text/javascript";
-			s.async=true;
-			s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";
-			
-			var x=document.getElementsByTagName("script")[0];
-			if(x.parentNode) {
-				x.parentNode.insertBefore(s,x);
-			}
-		}
-		
-		if(document.readyState==="complete") {
-			l();
-		}
-		else {
-			w.addEventListener("DOMContentLoaded",l);
-			w.addEventListener("load",l);
-		}
-	})();
-
-	  ChannelIO('boot', {
-	    "pluginKey": "97b8022a-ef33-4816-bb7a-d517e934329c"
-	  });
-	</script>
+	<try:chatAPI/>
     
   
 
