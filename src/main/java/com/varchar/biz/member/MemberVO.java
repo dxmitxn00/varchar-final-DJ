@@ -114,6 +114,8 @@ public class MemberVO {
 	public String toString() {
 		return "MemberVO [memberId=" + memberId + ", memberPw=" + memberPw + ", memberName=" + memberName
 				+ ", memberAddress=" + memberAddress + ", memberPhone=" + memberPhone + ", memberEmail=" + memberEmail
+				+ ", memberGrade=" + memberGrade + ", memberPlatform=" + memberPlatform + ", memberSalt=" + memberSalt
 				+ ", memberSearch=" + memberSearch + "]";
 	}
+	
 }

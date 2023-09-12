@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,8 @@ public class TeaHashtagDAO {
 			+ "JOIN HASHTAG_DETAIL hd ON th.TEA_HASHTAG_NUM = hd.HASGTAG_NUM "
 			+ "WHERE ITEM_NUM = ?";
 	
+	static final private String SQL_SELECTONE = "SELECT TEA_HASHTAG_NUM, TEA_HASHTAG_CONTENT FROM TEA_HASHTAG WHERE TEA_HASHTAG_CONTENT = ? ";
+	
 	static final private String SQL_INSERT = "INSERT INTO TEA_HASHTAG(TEA_HASHTAG_NUM, TEA_HASHTAG_CONTENT) "
 			+ "VALUES ((SELECT NVL(MAX(TEA_HASHTAG_NUM), 1000)+1 FROM TEA_HASHTAG), ?)";
 
@@ -33,7 +36,12 @@ public class TeaHashtagDAO {
 	}
 
 	public TeaHashtagVO selectOne(TeaHashtagVO teaHashtagVO) {
-		return null;
+		try {		
+			Object[] args = {teaHashtagVO.getTeaHashtagContent()};
+			return jdbcTemplate.queryForObject(SQL_SELECTONE, args, new TeaHashtagSelectRowMapper());		
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	public boolean insert(TeaHashtagVO teaHashtagVO) {

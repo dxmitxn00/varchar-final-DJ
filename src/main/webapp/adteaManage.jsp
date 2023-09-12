@@ -30,6 +30,11 @@
 <link rel="stylesheet" href="Ad/css/vertical-layout-light/style.css">
 <!-- endinject -->
 <link rel="shortcut icon" href="Ad/images/favicon.png" />
+
+<!-- 스윗알랏 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+	
 <style type="text/css">
 
   a {
@@ -47,6 +52,7 @@
   .fixgroup{
   	display: flex;
   }
+
 </style>  
 </head>
 
@@ -70,110 +76,53 @@
 								<div class="card-body">
 									<h4 class="card-title">상품 추가</h4>
 									<p class="card-description">양식에 맞게 기재하세요.</p>
-									<form class="forms-sample">
+									<!-- 상품 추가 form 시작 -->
+									<form action="insertTea.do" method="post" class="forms-sample" enctype="multipart/form-data">
 										<div class="form-group">
-											<label for="exampleInputUsername1">상품명</label> <input
-												type="text" class="form-control" id="exampleInputUsername1"
-												placeholder="$-{teaData.teaName}">
+											<label for="exampleInputUsername1">상품명</label>
+											<input type="text" class="form-control" name="teaName" id="exampleInputUsername1" placeholder="$-{teaData.teaName}" />
 										</div>
 										<div class="form-group">
-											<label for="exampleInputEmail1">상품 가격</label> <input
-												type="text" class="form-control" id="exampleInputEmail1"
-												placeholder="$-{teaData.teaPrice} 숫자만 입력하세요!!">
+											<label for="exampleInputEmail1">상품 가격</label>
+											<input type="number" class="form-control" name="teaPrice" id="cntForAdd" placeholder="$-{teaData.teaPrice} 숫자만 입력하세요!!" oninput="checkInput(this)" />
 										</div>
 										<div class="form-group">
-											<label for="exampleInputPassword1">상품 총 재고</label> <input
-												type="text" class="form-control"
-												id="exampleInputPassword1" placeholder="$-{teaData.teaCnt}">
+											<label for="exampleInputPassword1">상품 총 재고</label>
+											<input type="number" class="form-control" id="priceForAdd" name="teaCnt" placeholder="$-{teaData.teaCnt}" oninput="checkInput(this)" />
 										</div>
 										<div class="form-group">
-											<label>상품 카테고리</label> <select
-											class="js-example-basic-single w-100">
-											<option value="녹차">녹차</option>
-											<option value="홍차">홍차</option>
-											<option value="우롱차">우롱차</option>
-											<option value="루이보스">루이보스</option>
-											<option value="허브차">허브차</option>
-										</select>
+											<label>상품 카테고리</label>
+											<select id="categorySelect" class="form-control" name="categoryName">
+												<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
+												<c:forEach var="categoryData" items="${categoryDatas}">
+													<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
+												</c:forEach>
+											</select>
+											<input type="hidden" id="categoryHidden" name="categoryNum" value="" />
+											<input type="hidden" id="categoryHidden" name="categoryName" value="" />
 										</div>
 										<div class="form-group">
-											<label>상품 사진</label> <input type="file" name="img[]"
-												class="file-upload-default">
+											<label>상품 사진</label>
+											<input type="file" name="imgUrl" class="file-upload-default" id="fileInput" />
 											<div class="input-group col-xs-12">
-												<input type="text" class="form-control file-upload-info"
-													disabled placeholder="$-{teaData.imageUrl}"> <span
-													class="input-group-append">
+												<input type="text" class="form-control file-upload-info" disabled placeholder="$-{teaData.imageUrl}" id="fileInputText" />
+												<span class="input-group-append" id="uploadSpan" >
 													<button class="file-upload-browse btn btn-success btn-icon-text"
-														type="button"><i class="ti-upload btn-icon-prepend"></i>사진 업로드</button>
+														type="button" id="uploadButton"><i class="ti-upload btn-icon-prepend"></i>사진 업로드</button>
 												</span>
 											</div>
+											 <div class="image-preview mt-2">
+                                               <img src="#" alt="미리보기" id="imagePreview" style="display: none; max-width: 200px;">
+                                             </div>
 										  </div>	
 										<div class="form-group">
-											<label for="exampleInputPassword1">상품 설명</label> <input
-												type="text" class="form-control form-control-lg"
-												id="teaContent" placeholder="$-{teaData.teaContent}">
-										</div>
-										<button id="scrolltodelete" type="submit" class="btn btn-primary me-2">Submit</button>
-										<button class="btn btn-light">Cancel</button>
-									</form>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">여기는 뭘로 쓰냐</h4>
-									<p class="card-description">ㄹㅇ ㅋㅋ</p>
-									<form class="forms-sample">
-										<div class="form-group row">
-											<label for="exampleInputUsername2"
-												class="col-sm-3 col-form-label">Email</label>
-											<div class="col-sm-9">
-												<input type="text" class="form-control"
-													id="exampleInputUsername2" placeholder="Username">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label for="exampleInputEmail2"
-												class="col-sm-3 col-form-label">Email</label>
-											<div class="col-sm-9">
-												<input type="email" class="form-control"
-													id="exampleInputEmail2" placeholder="Email">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label for="exampleInputMobile"
-												class="col-sm-3 col-form-label">Mobile</label>
-											<div class="col-sm-9">
-												<input type="text" class="form-control"
-													id="exampleInputMobile" placeholder="Mobile number">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label for="exampleInputPassword2"
-												class="col-sm-3 col-form-label">Password</label>
-											<div class="col-sm-9">
-												<input type="password" class="form-control"
-													id="exampleInputPassword2" placeholder="Password">
-											</div>
-										</div>
-										<div class="form-group row">
-											<label for="exampleInputConfirmPassword2"
-												class="col-sm-3 col-form-label">Re Password</label>
-											<div class="col-sm-9">
-												<input type="password" class="form-control"
-													id="exampleInputConfirmPassword2" placeholder="Password">
-											</div>
-										</div>
-										<div class="form-check form-check-flat form-check-primary">
-											<label class="form-check-label"> <input
-												type="checkbox" class="form-check-input"> Remember
-												me
-											</label>
+											<label for="exampleInputPassword1">상품 설명</label>
+											<input type="text" class="form-control form-control-lg" name="teaContent" placeholder="$-{teaData.teaContent}" />
 										</div>
 										<button type="submit" class="btn btn-primary me-2">Submit</button>
 										<button class="btn btn-light">Cancel</button>
 									</form>
+									<!-- 상품 추가 form 끝 -->
 								</div>
 							</div>
 						</div>
@@ -182,62 +131,51 @@
 								<div class="card-body">
 									<h4 class="card-title">상품 삭제</h4>
 									<p class="card-description">상품의 정보를 확인하신 후 삭제하세요.</p>
-									<form class="forms-sample">
+									<!-- 상품 삭제 form 시작 -->
+									<form action="deleteTea.do" method="post" class="forms-sample">
 									  <div class="form-group">
-										<h5><strong>상품 카테고리 선택 [1) 카테코리를 먼저 지정한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
+										<h5><strong>상품 카테고리 선택 [1) 카테고리를 먼저 지정한다.]</strong></h5>
+										<select class="form-control" id="categoryToDel">
+										<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
+											<c:forEach var="categoryData" items="${categoryDatas}">
+											<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
+											</c:forEach>
 										</select>
 									</div>
 										<div class="form-group">
 										<h5><strong>상품 선택 [2) 위에서 나눈 카테고리 별로 상품이 출력되게 한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
+										<select class="form-control" id="teaToDel">
 										</select>
 									</div>
 										<hr>
 										<div class="form-group">
 											<label for="exampleInputName1">상품번호(PK)</label> <input
-												type="text" class="form-control" id="exampleInputName1"
-												placeholder="$-{teaData.teaNum}" disabled readonly>
+												type="text" class="form-control" id="teaNum" name="teaNum"
+												placeholder="$-{teaData.teaNum}" readonly>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputEmail3">상품명</label> <input
-												type="text" class="form-control" id="exampleInputEmail3"
-												placeholder="$-{teaData.teaName}" disabled readonly>
+												type="text" class="form-control" id="teaName" name="teaName"
+												placeholder="$-{teaData.teaName}" readonly>
 										</div>
 										<div class="form-group">
-											<label for="exampleInputPassword4">상품 가격</label> <input
-												type="text" class="form-control"
-												id="exampleInputPassword4" placeholder="$-{teaData.teaPrice}" disabled readonly>
+											<label for="exampleInputPrice">상품 가격</label> <input
+												type="text" class="form-control" name="teaPrice"
+												id="teaPrice" placeholder="$-{teaData.teaPrice}" readonly>
 										</div>
 										<div class="form-group">
-											<label for="exampleInputPassword4">상품 총 재고</label> <input
-												type="text" class="form-control"
-												id="exampleInputPassword4" placeholder="$-{teaData.teaCnt}" disabled readonly>
-										</div>
-										<div class="form-group">
-											<label>상품 사진</label>
-											<div class="input-group col-xs-12">
-												<img alt="$-{teaData.imageUrl}" src="$-{teaData.imageUrl}">
-											</div>
+											<label for="exampleInputCnt">상품 총 재고</label> <input
+												type="text" class="form-control" name="teaCnt"
+												id="teaCnt" placeholder="$-{teaData.teaCnt}" readonly>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputCity1">상품 설명</label> <input
-												type="text" class="form-control form-control-lg" id="exampleInputCity1"
-												placeholder="$-{teaData.teaContent}" disabled readonly>
+												type="text" name="teaContent" class="form-control" id="teaContent" placeholder="$-{teaData.teaContent}" readonly>
 										</div>
 										<button id="scrolltofix"  type="submit" class="btn btn-primary me-2">Submit</button>
 										<button class="btn btn-light">Cancel</button>
 									</form>
+									<!-- 상품 삭제 form 끝 -->
 								</div>
 							</div>
 						</div>
@@ -245,18 +183,19 @@
 							<div class="card">
 								<div class="card-body">
 									<h4 class="card-title">상품 수정 (재고/가격)</h4>
-									<form class="form-sample">
+									<!-- 상품 수정 form 시작 -->
+									<form action="updateTea.do" method="post" class="form-sample" enctype="multipart/form-data">
 										<p class="card-description">해당 상품의 재고/가격 변경 가능</p>
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group row">
 													<label class="col-sm-3 col-form-label">카테고리 선택</label>
 													<div class="col-sm-9">
-														<select class="form-control">
-															<option value="1${teaData.teaCategory}">$-{teaData.teaCategory}</option>
-															<option value="2">$-{teaData.teaCategory}</option>
-															<option>$-{teaData.teaCategory}</option>
-															<option>$-{teaData.teaCategory}</option>
+														<select class="form-control" id="categoryToFix">
+														<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
+															<c:forEach var="categoryData" items="${categoryDatas}">
+											<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
+											</c:forEach>
 														</select>
 													</div>
 												</div>
@@ -265,11 +204,7 @@
 												<div class="form-group row">
 													<label class="col-sm-3 col-form-label">상품 선택</label>
 													<div class="col-sm-9">
-														<select class="form-control">
-															<option>$-{teaData.teaNum}</option>
-															<option>$-{teaData.teaNum}</option>
-															<option>$-{teaData.teaNum}</option>
-															<option>$-{teaData.teaNum}</option>
+														<select class="form-control" id="teaToFix">
 														</select>
 													</div>
 												</div>
@@ -278,7 +213,7 @@
 												<div class="form-group row">
 													<label class="col-sm-3 col-form-label">상품번호(PK)</label>
 													<div class="col-sm-9">
-														<input type="text" class="form-control" placeholder="$-{teaData.teaNum}" disabled readonly/>
+														<input type="text" name="teaNum" id="fixteaNum"class="form-control" placeholder="$-{teaData.teaNum}" readonly/>
 													</div>
 												</div>
 											</div>
@@ -286,7 +221,7 @@
 												<div class="form-group row">
 													<label class="col-sm-3 col-form-label">상품명</label>
 													<div class="col-sm-9">
-														<input type="text" class="form-control" placeholder="$-{teaData.teaName}" disabled readonly/>
+														<input type="text" name="teaName" id="fixteaName" class="form-control" placeholder="$-{teaData.teaName}"/>
 													</div>
 												</div>
 											</div>
@@ -297,8 +232,8 @@
 													<div class="col-sm-4">
 														<div class="form-check">
 															<label class="form-check-label"> <input
-																type="radio" class="form-check-input"
-																name="membershipRadios" id="both" value="모두(재고+가격)"
+																type="radio" class="form-check-input" name="hidden"
+															    id="both" 
 																checked> 모두(재고+가격)
 															</label>
 														</div>
@@ -306,8 +241,8 @@
 													<div class="col-sm-4">
 														<div class="form-check">
 															<label class="form-check-label"> <input
-																type="radio" class="form-check-input"
-																name="membershipRadios" id="selectcnt" value="재고"
+																type="radio" class="form-check-input" name="hidden"
+																 id="radiocnt" 
 																checked> 재고
 															</label>
 														</div>
@@ -315,9 +250,9 @@
 													<div class="col-sm-4">
 														<div class="form-check">
 															<label class="form-check-label"> <input
-																type="radio" class="form-check-input"
-																name="membershipRadios" id="selectprice"
-																value="가격"> 가격
+																type="radio" class="form-check-input" name="hidden"
+																 id="radioprice" 
+																> 가격
 															</label>
 														</div>
 													</div>
@@ -328,7 +263,7 @@
 												<div  class="form-group row">
 													<label class="col-sm-3 col-form-label">재고 수량 입력</label>
 													<div class="col-sm-9">
-														<input id="fixcnt" type="text" class="form-control" />
+														<input id="fixradicnt" type="number" name="teaCnt" class="form-control" oninput="checkInput(this)" />
 													</div>
 												</div>
 											</div>
@@ -336,417 +271,21 @@
 											<div  class="form-group row">
 												<label class="col-sm-3 col-form-label">가격 입력</label>
 													<div class="col-sm-9">
-														<input id="fixprice" type="text" class="form-control" />
+														<input id="fixradiprice" type="number" name="teaPrice" class="form-control" oninput="checkInput(this)"/>
 													</div>
 												</div>
 											</div>
 										 <div id="msg">
-										 <p>※ $-{teaData.teaName} 상품의 기존 <strong>재고</strong>는 <strong>$-{teaData.teaCnt}</strong>개, 기존 <strong>가격</strong>은 <strong>$-{teaData.teaPrice}</strong>원 입니다.</p>
+										 <p>해당 상품의 기존 <strong>재고</strong>는 <strong id="existteaCnt">$-{teaData.teaCnt}</strong>개, 기존 <strong>가격</strong>은 <strong id="existteaPrice">$-{teaData.teaPrice}</strong>원 입니다.</p>
 										 </div>
 									   </div>
 									   <button type="submit" class="btn btn-primary me-2">Submit</button>
 									   <button class="btn btn-light">Cancel</button>
 									</form>
+									<!-- 상품 수정 form 끝 -->
 								</div>
 							</div>
 						</div>	
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">상품 수정</h4>
-									<p class="card-description">
-										Add classes like
-										<code>.form-control-lg</code>
-										and
-										<code>.form-control-sm</code>
-										
-									</p>
-									<div class="form-group">
-										<label>Large input</label> <input type="text"
-											class="form-control form-control-lg" placeholder="Username"
-											aria-label="Username">
-									</div>
-									<div class="form-group">
-										<label>Default input</label> <input type="text"
-											class="form-control" placeholder="Username"
-											aria-label="Username">
-									</div>
-									<div class="form-group">
-										<label>Small input</label> <input type="text"
-											class="form-control form-control-sm" placeholder="Username"
-											aria-label="Username">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Select size</h4>
-									<p class="card-description">
-										Add classes like
-										<code>.form-control-lg</code>
-										and
-										<code>.form-control-sm</code>
-										.
-									</p>
-									<div class="form-group">
-										<label for="exampleFormControlSelect1">Large select</label> <select
-											class="form-control form-control-lg"
-											id="exampleFormControlSelect1">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<label for="exampleFormControlSelect2">Default select</label>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<label for="exampleFormControlSelect3">Small select</label> <select
-											class="form-control form-control-sm"
-											id="exampleFormControlSelect3">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-										</select>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Basic input groups</h4>
-									<p class="card-description">Basic bootstrap input groups</p>
-									<div class="form-group">
-										<div class="input-group">
-											<div class="input-group-prepend">
-												<span class="input-group-text">@</span>
-											</div>
-											<input type="text" class="form-control"
-												placeholder="Username" aria-label="Username">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group">
-											<div class="input-group-prepend">
-												<span class="input-group-text bg-primary text-white">$</span>
-											</div>
-											<input type="text" class="form-control"
-												aria-label="Amount (to the nearest dollar)">
-											<div class="input-group-append">
-												<span class="input-group-text">.00</span>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group">
-											<div class="input-group-prepend">
-												<span class="input-group-text">$</span>
-											</div>
-											<div class="input-group-prepend">
-												<span class="input-group-text">0.00</span>
-											</div>
-											<input type="text" class="form-control"
-												aria-label="Amount (to the nearest dollar)">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group">
-											<input type="text" class="form-control"
-												placeholder="Recipient's username"
-												aria-label="Recipient's username">
-											<div class="input-group-append">
-												<button class="btn btn-sm btn-primary" type="button">Search</button>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group">
-											<div class="input-group-prepend">
-												<button
-													class="btn btn-sm btn-outline-primary dropdown-toggle"
-													type="button" data-bs-toggle="dropdown"
-													aria-haspopup="true" aria-expanded="false">Dropdown</button>
-												<div class="dropdown-menu">
-													<a class="dropdown-item" href="#">Action</a> <a
-														class="dropdown-item" href="#">Another action</a> <a
-														class="dropdown-item" href="#">Something else here</a>
-													<div role="separator" class="dropdown-divider"></div>
-													<a class="dropdown-item" href="#">Separated link</a>
-												</div>
-											</div>
-											<input type="text" class="form-control"
-												aria-label="Text input with dropdown button">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group">
-											<input type="text" class="form-control"
-												placeholder="Find in facebook"
-												aria-label="Recipient's username">
-											<div class="input-group-append">
-												<button class="btn btn-sm btn-facebook" type="button">
-													<i class="ti-facebook"></i>
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Checkbox Controls</h4>
-									<p class="card-description">Checkbox and radio controls
-										(default appearance is in primary color)</p>
-									<form>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input"> Default
-														</label>
-													</div>
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" checked>
-															Checked
-														</label>
-													</div>
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" disabled>
-															Disabled
-														</label>
-													</div>
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" disabled checked>
-															Disabled checked
-														</label>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="optionsRadios" id="optionsRadios1" value="">
-															Default
-														</label>
-													</div>
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="optionsRadios" id="optionsRadios2" value="option2"
-															checked> Selected
-														</label>
-													</div>
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="optionsRadios2" id="optionsRadios3" value="option3"
-															disabled> Disabled
-														</label>
-													</div>
-													<div class="form-check">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="optionsRadio2" id="optionsRadios4" value="option4"
-															disabled checked> Selected and disabled
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</form>
-								</div>
-								<div class="card-body">
-									<p class="card-description">
-										Add class
-										<code>.form-check-{color}</code>
-										for checkbox and radio controls in theme colors
-									</p>
-									<form>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<div class="form-check form-check-primary">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" checked>
-															Primary
-														</label>
-													</div>
-													<div class="form-check form-check-success">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" checked>
-															Success
-														</label>
-													</div>
-													<div class="form-check form-check-info">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" checked>
-															Info
-														</label>
-													</div>
-													<div class="form-check form-check-danger">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" checked>
-															Danger
-														</label>
-													</div>
-													<div class="form-check form-check-warning">
-														<label class="form-check-label"> <input
-															type="checkbox" class="form-check-input" checked>
-															Warning
-														</label>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<div class="form-check form-check-primary">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="ExampleRadio1" id="ExampleRadio1" checked>
-															Primary
-														</label>
-													</div>
-													<div class="form-check form-check-success">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="ExampleRadio2" id="ExampleRadio2" checked>
-															Success
-														</label>
-													</div>
-													<div class="form-check form-check-info">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="ExampleRadio3" id="ExampleRadio3" checked>
-															Info
-														</label>
-													</div>
-													<div class="form-check form-check-danger">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="ExampleRadio4" id="ExampleRadio4" checked>
-															Danger
-														</label>
-													</div>
-													<div class="form-check form-check-warning">
-														<label class="form-check-label"> <input
-															type="radio" class="form-check-input"
-															name="ExampleRadio5" id="ExampleRadio5" checked>
-															Warning
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-						<div class="col-12 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Inline forms</h4>
-									<p class="card-description">
-										Use the
-										<code>.form-inline</code>
-										class to display a series of labels, form controls, and
-										buttons on a single horizontal row
-									</p>
-									<form class="form-inline">
-										<label class="sr-only" for="inlineFormInputName2">Name</label>
-										<input type="text" class="form-control mb-2 mr-sm-2"
-											id="inlineFormInputName2" placeholder="Jane Doe"> <label
-											class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
-										<div class="input-group mb-2 mr-sm-2">
-											<div class="input-group-prepend">
-												<div class="input-group-text">@</div>
-											</div>
-											<input type="text" class="form-control"
-												id="inlineFormInputGroupUsername2" placeholder="Username">
-										</div>
-										<div class="form-check mx-sm-2">
-											<label class="form-check-label"> <input
-												type="checkbox" class="form-check-input" checked>
-												Remember me
-											</label>
-										</div>
-										<button type="submit" class="btn btn-primary mb-2">Submit</button>
-									</form>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Select 2</h4>
-									<div class="form-group">
-										<label>Single select box using select 2</label> <select
-											class="js-example-basic-single w-100">
-											<option value="AL">Alabama</option>
-											<option value="WY">Wyoming</option>
-											<option value="AM">America</option>
-											<option value="CA">Canada</option>
-											<option value="RU">Russia</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<label>Multiple select using select 2</label> <select
-											class="js-example-basic-multiple w-100" multiple="multiple">
-											<option value="AL">Alabama</option>
-											<option value="WY">Wyoming</option>
-											<option value="AM">America</option>
-											<option value="CA">Canada</option>
-											<option value="RU">Russia</option>
-										</select>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">Typeahead</h4>
-									<p class="card-description">A simple suggestion engine</p>
-									<div class="form-group row">
-										<div class="col">
-											<label>Basic</label>
-											<div id="the-basics">
-												<input class="typeahead" type="text"
-													placeholder="States of USA">
-											</div>
-										</div>
-										<div class="col">
-											<label>Bloodhound</label>
-											<div id="bloodhound">
-												<input class="typeahead" type="text"
-													placeholder="States of USA">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<!-- content-wrapper ends -->
@@ -791,48 +330,292 @@
 	<script src="Ad/js/typeahead.js"></script>
 	<script src="Ad/js/select2.js"></script>
 	<!-- End custom js for this page-->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$("#categoryToDel").change(function() {
+	var categoryNum = $("#categoryToDel").val();
+	console.log('첫번째');
+	
+	$.ajax({
+		url: "selectTea.do",
+		data: {
+			category: categoryNum
+		},
+		type: "post",
+	    dataType: "json",
+		success: function(result){
+		   console.log(result);
+		   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
+		   // 기존의 <option>을 모두 제거합니다.
+		  // console.log(result[1].teaNum);
+         $('#teaToDel').empty();
+		   var teaInfo = result;
+		   //var selteaNum='';
+		   //var selteaName='';
+		   //var selteaCnt='';
+		   //var selteaPrice='';
+		   //var selteaContent='';
+		   var firstItem = result[0];
+		    $('#teaNum').attr("value",firstItem.teaNum);
+		    $('#teaName').attr("value",firstItem.teaName);
+		    $('#teaCnt').attr("value",firstItem.teaCnt);
+		    $('#teaPrice').attr("value",firstItem.teaPrice);
+		    $('#teaContent').attr("value",firstItem.teaContent);
+		   for (var i=0;i<teaInfo.length;i++){
+		   var optteaNum=teaInfo[i].teaNum;
+		   var optteaName = teaInfo[i].teaName;
+		   var optteaCnt = teaInfo[i].teaCnt;
+		   var optteaPrice = teaInfo[i].teaPrice;
+		   var optteaContent = teaInfo[i].teaContent;
+		   console.log(optteaName);
+		//     console.log(optteaNum);
+		     // 각 <option>에 데이터를 속성으로 추가
+                var optionElement = $('<option>' + optteaName + '</option>')
+                    .attr('data-tea-num', optteaNum)
+                    .attr('data-tea-name', optteaName)
+                    .attr('data-tea-cnt', optteaCnt)
+                    .attr('data-tea-price', optteaPrice)
+                    .attr('data-tea-content', optteaContent);
+
+                // <option>을 #teaToDel에 추가
+                $('#teaToDel').append(optionElement);
+		 //  console.log(selteaName);
+		      }
+		   
+           // 새로운 <option>을 추가합니다.
+      //     $('#teaToDel').append(selteaName);
+		   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
+		 //  if($('#teaToDel'))
+        //    $('#teaNum').attr("value",optteaNum);
+       //     $('#teaName').attr("value",optteaName);
+       //     $('#teaCnt').attr("value",optteaCnt);
+       //     $('#teaPrice').attr("value",optteaPrice);
+       //     $('#teaContent').attr("value",optteaContent);
+		   },
+		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
+		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
+		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
+		   // 오늘 집가서 이거 제대로 끝낸다 스바...
+		error: function(error){
+		    console.log(error);
+	    }
+	});
+  });
+//<select>에서 옵션을 선택했을 때 실행될 코드
+$("#teaToDel").change(function () {
+    var selectedOption = $("#teaToDel option:selected");
+    var teaNum = selectedOption.attr('data-tea-num');
+    var teaName = selectedOption.attr('data-tea-name');
+    var teaCnt = selectedOption.attr('data-tea-cnt');
+    var teaPrice = selectedOption.attr('data-tea-price');
+    var teaContent = selectedOption.attr('data-tea-content');
+    console.log('여기오냐1');
+
+    // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
+    $('#teaNum').attr("value",teaNum);
+    $('#teaName').attr("value",teaName);
+    $('#teaCnt').attr("value",teaCnt);
+    $('#teaPrice').attr("value",teaPrice);
+    $('#teaContent').attr("value",teaContent);
+    console.log('여기오냐2');
+});
+
+</script>	
+<script type="text/javascript">
+$("#categoryToFix").change(function() {
+	var categoryNum = $("#categoryToFix").val();
+	console.log('첫번째');
+	
+	$.ajax({
+		url: "selectTea.do",
+		data: {
+			category: categoryNum
+		},
+		type: "post",
+	    dataType: "json",
+		success: function(result){
+		   console.log(result);
+		   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
+		   // 기존의 <option>을 모두 제거합니다.
+		  // console.log(result[1].teaNum);
+         $('#teaToFix').empty();
+		   var teaInfo = result;
+		   //var selteaNum='';
+		   //var selteaName='';
+		   //var selteaCnt='';
+		   //var selteaPrice='';
+		   //var selteaContent='';
+		   var firstItem = result[0];
+		    $('#fixteaNum').attr("value",firstItem.teaNum);
+		    $('#fixteaName').attr("value",firstItem.teaName);
+		    $('#existteaCnt').text(firstItem.teaCnt);
+		    $('#existteaPrice').text(firstItem.teaPrice);
+		   for (var i=0;i<teaInfo.length;i++){
+		   var optteaNum=teaInfo[i].teaNum;
+		   var optteaName = teaInfo[i].teaName;
+		   var optteaCnt = teaInfo[i].teaCnt;
+		   var optteaPrice = teaInfo[i].teaPrice;
+		   var optteaContent = teaInfo[i].teaContent;
+		   console.log(optteaName);
+		//     console.log(optteaNum);
+		     // 각 <option>에 데이터를 속성으로 추가
+                var optionElement = $('<option>' + optteaName + '</option>')
+                    .attr('data-tea-num', optteaNum)
+                    .attr('data-tea-name', optteaName)
+                    .attr('data-tea-cnt', optteaCnt)
+                    .attr('data-tea-price', optteaPrice)
+
+                // <option>을 #teaToDel에 추가
+                $('#teaToFix').append(optionElement);
+		 //  console.log(selteaName);
+		      }
+		   
+           // 새로운 <option>을 추가합니다.
+      //     $('#teaToDel').append(selteaName);
+		   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
+		 //  if($('#teaToDel'))
+        //    $('#teaNum').attr("value",optteaNum);
+       //     $('#teaName').attr("value",optteaName);
+       //     $('#teaCnt').attr("value",optteaCnt);
+       //     $('#teaPrice').attr("value",optteaPrice);
+       //     $('#teaContent').attr("value",optteaContent);
+		   },
+		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
+		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
+		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
+		   // 오늘 집가서 이거 제대로 끝낸다 스바...
+		error: function(error){
+		    console.log(error);
+	    }
+	});
+  });
+//<select>에서 옵션을 선택했을 때 실행될 코드
+$("#teaToFix").change(function () {
+    var selectedOption = $("#teaToFix option:selected");
+    var teaNum = selectedOption.attr('data-tea-num');
+    var teaName = selectedOption.attr('data-tea-name');
+    var teaCnt = selectedOption.attr('data-tea-cnt');
+    var teaPrice = selectedOption.attr('data-tea-price');
+    console.log('여기오냐1');
+
+    // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
+    $('#fixteaNum').attr("value",teaNum);
+    $('#fixteaName').attr("value",teaName);
+    $('#existteaCnt').text(teaCnt);
+    $('#existteaPrice').text(teaPrice);
+    console.log('여기오냐2');
+});
+
+</script>
 <script type="text/javascript">
 window.addEventListener("load", function() {
 	  // 페이지 로드 시, 모두(재고+가격)에 디폴트로 선택될 수 있도록
 	  const both = document.getElementById("both");
-	  both.checked = true;
+	  both.checked = true;  
 });
 </script>	
 <script type="text/javascript">
 // radio (select처럼 생긴거) 변수 선언
 const both=document.getElementById("both");
-const selectcnt = document.getElementById("selectcnt");
-const selectprice = document.getElementById("selectprice");
+const radiocnt = document.getElementById("radiocnt");
+const radioprice = document.getElementById("radioprice");
 
 // div (입력란 부분) 변수 선언
-const fixcnt=document.getElementById("fixcnt");
-const fixprice=document.getElementById("fixprice");
+const fixradicnt=document.getElementById("fixradicnt");
+const fixradiprice=document.getElementById("fixradiprice");
 
 //라디오 버튼 상태 변화를 감지하는 이벤트 리스너 추가
 // 1) 모두에 체크되었을때
 both.addEventListener("change", function(){
 	if(both.checked){
-		fixcnt.disabled = false;
-		fixprice.disabled = false;
+		fixradicnt.readOnly = false;
+		fixradiprice.readOnly = false;
 	}
 });
 
 // 2) 재고에 체크되었을때
-selectcnt.addEventListener("change", function() {
-  if (selectcnt.checked) {
-    fixcnt.disabled = false;
-    fixprice.disabled = true;
+radiocnt.addEventListener("change", function() {
+  if (radiocnt.checked) {
+	  fixradiprice.readOnly = true;
+      fixradicnt.readOnly = false;
   }
 });
 
 // 3) 가격에 체크되었을때
-selectprice.addEventListener("change", function(){
-	if(selectprice.checked){
-		fixprice.disabled = false;
-		fixcnt.disabled = true;
+radioprice.addEventListener("change", function(){
+	if(radioprice.checked){
+		fixradiprice.readOnly = false;
+		fixradicnt.readOnly = true;
 	}
 });
 </script>
+<script type="text/javascript">
+// 상품 추가/수정 시 재고/가격에 숫자만 입력 + 음수, 소수 입력 안되게
+function checkInput(input) {
+	  if (input.value < 0) {
+	    input.value = 0;
+	  }
+}
+</script>	
+<script type="text/javascript">
+document.getElementById("categorySelect").addEventListener("change", function () {
+    var selectedValue = this.value;
+    document.getElementById("categoryHidden").value = selectedValue;
+});
+</script>
+
+<script type="text/javascript">
+$('#uploadSpan').on("click", async function(){
+	console.log('이미지 업로드 버튼 클릭됨');
+	
+	const { value: file } = await Swal.fire({
+		  title: '상품 이미지 선택',
+		  input: 'file',
+		  inputAttributes: {
+		    'accept': 'image/*',
+		    'aria-label': '업로드할 이미지를 선택해주세요'
+		  }
+		})
+
+		if (file) {
+		  const reader = new FileReader()
+		  reader.onload = async(e) => {
+		    Swal.fire({
+		      title: '선택된 상품 이미지',
+		      imageUrl: e.target.result,
+		      imageAlt: 'The uploaded picture'
+		    })
+		  }
+		  console.log('이미지 로그1 '+file);
+		  //$('input[type=file]').attr('value', file);
+		  console.log('이미지 로그2 '+reader.readAsDataURL(file));
+		  reader.readAsDataURL(file)
+		}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 

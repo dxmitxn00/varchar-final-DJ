@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%><%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib tagdir="/WEB-INF/tags" prefix="try"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,8 +20,9 @@
   		}
   		.edit-btn {
   			width: 83px;
-  			border-width: 1px;
   			border-radius: 3px;
+  			background: none;
+  			border: 1px solid rgba(0, 0, 0, 0.1) !important;
   		}
   		.edit-red {
   			color: red;
@@ -89,21 +90,21 @@
 	            <div class="col-md-12">
 	                <label for="name">이름<span id="spanName" class="edit-red"> *</span></label>
 	                <div class="form-group">
-	                  <input type="text" id="inputName" name="memberName" class="form-control" placeholder="이름을 입력하세요." required>
+	                  <input type="text" id="inputName" name="memberName" value="${ memberData.memberName }" class="form-control" placeholder="이름을 입력하세요." required>
 	                </div>
                 </div>
                 <div class="w-100"></div>
 				<div class="col-md-12">
 	                <label for="phone">연락처<span id="spanPhone" class="edit-red"> *</span></label>
 	                <div class="form-group edit-d-f">
-	                  	<input type="text" id="inputPhone" name="memberPhone" class="form-control" placeholder="연락처를 입력해주세요.">
+	                  	<input type="text" id="inputPhone" name="memberPhone" value="${ memberData.memberPhone }" class="form-control" placeholder="연락처를 입력해주세요.">
 	                </div>
                 </div>
                 <div class="w-100"></div>
 				<div class="col-md-12">
                 	<label for="email">이메일<span id="spanEmail" class="edit-red"> *</span></label>
 	                <div class="form-group edit-d-f">
-	                  <input type="text" id="inputEmail" name="memberEmail" class="form-control" placeholder="이메일을 입력해주세요.">
+	                  <input type="text" id="inputEmail" name="memberEmail" value="${ memberData.memberEmail }" class="form-control" placeholder="이메일을 입력해주세요.">
 	                </div>
                 </div>
                 <div class="w-100"></div>
@@ -111,7 +112,7 @@
                 	<label for="address">주소<span id="spanAddress" class="edit-red"> *</span></label>
 	                <div class="form-group">
 	                	<input type="button" id="inputBtnAddress" class="form-control" onclick="daumPost()" value="우편번호 찾기"><br>
-	                	<input type="text" id="inputAddress" name="memberAddress" class="form-control" placeholder="주소를 입력해주세요." readonly>
+	                	<input type="text" id="inputAddress" name="memberAddress" value="${ memberData.memberAddress }" class="form-control" placeholder="주소를 입력해주세요." readonly>
 	                </div>
 	            </div>
 	            <div class="col-md-12">
@@ -194,129 +195,16 @@
 	<!-- 회원가입 섹션 끝-->
 
 	<script type="text/javascript">
-		$(document).ready(function () {
-			var inputId = null;
-    		var inputPassword1 = null;
-    		var inputPassword2 = null;
     		var inputName = null;
     		var inputEmail = null;
     		var inputPhone = null;
     		var inputAddress = null;
     		var inputAddressDetail = null;
 
-    		var flagId = false;
-    		var flagPassword1 = false;
-    		var flagPassword2 = false;
     		var flagName = false;
     		var flagEmail = false;
     		var flagPhone = false;
     		var flagAddressDetail = false;
-    		
-			// 아이디 입력
-			$("#inputId").on("input", function(){
-				checkInputId();
-    		})
-			
-			// 아이디 함수
-    		function checkInputId() {
-    			var regexId = /^[0-9a-zA-Z]{7,20}$/;
-    			inputId = $("#inputId").val();
-    			
-    			if (!regexId.test(inputId)) {
-    				if (inputId == '') {
-    					$("#spanId").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
-    				} else {
-    					$("#spanId").html(' <i class="fa-solid fa-x"></i> 7 ~ 20자의 영문, 숫자만 사용 가능합니다.');
-    				}
-    				$("#spanId").css("color", "red");
-    				flagId = false;
-    			} else {
-    				console.log("checkInputId AJAX 진입");
-    				$.ajax({
-    					url: "checkId.do",
-    					data: {
-    						memberId: inputId
-    					},
-    					type: "post",
-    				    dataType: "json",
-    					success: function(result){
-    					    if (result == 1) {
-    			    			$("#spanId").html(' <i class="fa-solid fa-x"></i> 중복된 아이디가 있습니다.');
-    			    			$("#spanId").css("color", "red");
-    			        		flagId = false;
-    			    		} else {
-    			    			$("#spanId").html(' <i class="fa-solid fa-check"></i>');
-    			    			$("#spanId").css("color", "green");
-    			        		flagId = true;
-    			    		}
-    					},
-    					error: function(error){
-    					    console.log(error);
-    				    }
-    		    	});
-    			}
-    			console.log(flagId);
-    		}
-			
-			// 비밀번호 입력
-			$("#inputPassword1").on("input", function(){
-				checkInputPassword1();
-    		})
-    		
-    		// 비밀번호 함수
-    		function checkInputPassword1(){
-				var regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
-    			inputPassword1 = $("#inputPassword1").val();
-    			inputPassword2 = $("#inputPassword2").val();
-    			
-    			if (!regexPassword.test(inputPassword1)) {
-    				if (inputPassword1 == '') {
-    					$("#spanPassword1").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
-    				} else {
-    					$("#spanPassword1").html(' <i class="fa-solid fa-x"></i> 8 ~ 20자의 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
-    				}
-    				$("#spanPassword1").css("color", "red");
-    				flagPassword1 = false;
-    			} else {
-    				$("#spanPassword1").html(' <i class="fa-solid fa-check"></i>');
-    				$("#spanPassword1").css("color", "green");
-    				flagPassword1 = true;
-    			}
-    			
-    			if (inputPassword1 != inputPassword2) {
-    				$("#spanPassword2").html(' <i class="fa-solid fa-x"></i> 비밀번호가 일치하지 않습니다.');
-    				$("#spanPassword2").css("color", "red");
-    				flagPassword2 = false;
-    			} else {
-    				$("#spanPassword2").html(' <i class="fa-solid fa-check"></i>');
-    				$("#spanPassword2").css("color", "green");
-    				flagPassword2 = true;
-    			}
-    			console.log(flagPassword1);
-    			console.log(flagPassword2);
-			}
-			
-			// 비밀번호 확인 입력
-			$("#inputPassword2").on("input", function(){
-				checkInputPassword2();
-    		})
-    		
-    		// 비밀번호 확인 함수
-    		function checkInputPassword2(){
-				inputPassword1 = $("#inputPassword1").val();
-				inputPassword2 = $("#inputPassword2").val();
-    			
-    			if (inputPassword1 != inputPassword2) {
-    				$("#spanPassword2").html(' <i class="fa-solid fa-x"></i> 비밀번호가 일치하지 않습니다.');
-    				$("#spanPassword2").css("color", "red");
-    				flagPassword2 = false;
-    			} else {
-    				$("#spanPassword2").html(' <i class="fa-solid fa-check"></i>');
-    				$("#spanPassword2").css("color", "green");
-    				flagPassword2 = true;
-    			}
-    			console.log(flagPassword2);
-			}
 			
 			// 이름 입력
 			$("#inputName").on("input", function(){
@@ -489,8 +377,6 @@
               		$("#signForm").submit();                			
 		    	}
 	    	});
-		});
-	
 	</script>
 
 	<!-- 커스텀 태그 적용하기 -->

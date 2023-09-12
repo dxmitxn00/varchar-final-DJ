@@ -28,11 +28,11 @@ public class MemberDAO {
 			+ "FROM MEMBER "
 			+ "WHERE MEMBER_ID = ? AND MEMBER_PW = ?";
 
-	static final private String SQL_SELECTONE_CKECKPHONE="SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_SALT "
+	static final private String SQL_SELECTONE_CKECKPHONE="SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_GRADE, MEMBER_PLATFORM, MEMBER_SALT "
 			+ "FROM MEMBER "
 			+ "WHERE MEMBER_PHONE = ?";
 
-	static final private String SQL_SELECTONE_CKECKEMAIL="SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_SALT "
+	static final private String SQL_SELECTONE_CKECKEMAIL="SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_GRADE, MEMBER_PLATFORM, MEMBER_SALT "
 			+ "FROM MEMBER "
 			+ "WHERE MEMBER_EMAIL = ?";
 
@@ -42,9 +42,10 @@ public class MemberDAO {
 
 	//	static final private String SQL_INSERT = "INSERT INTO MEMBER (MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL) VALUES(?, ?, ?, ?, CASE WHEN ? = NULL THEN NULL ELSE LPAD(?, 11, '0') END, ?)";
 	static final private String SQL_INSERT = "INSERT INTO MEMBER(MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_GRADE, MEMBER_PLATFORM, MEMBER_SALT) "
-			+ "VALUES(?, ?, ?, ?, CASE WHEN ? = NULL THEN NULL ELSE LPAD(?, 11, '0') END, ?, 0, ?, ?)";
+			+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	static final private String SQL_UPDATE="UPDATE MEMBER SET MEMBER_NAME = ?, MEMBER_ADDRESS = ?, MEMBER_PHONE = CASE WHEN ? = 0 THEN NULL ELSE ? END, MEMBER_EMAIL = ? WHERE MEMBER_ID = ?";
+	
 	static final private String SQL_UPDATE_PW="UPDATE MEMBER SET MEMBER_PW = ?, MEMBER_SALT = ? WHERE MEMBER_ID = ?";
 	//static final private String SQL_DELETE="DELETE FROM MEMBER WHERE MID=?";
 
@@ -88,8 +89,7 @@ public class MemberDAO {
 
 	public boolean insert(MemberVO memberVO) {
 		// System.out.println("MemberDAO 로그 insert() 메소드 호출");
-
-		int result = jdbcTemplate.update(SQL_INSERT, memberVO.getMemberId(), memberVO.getMemberPw(), memberVO.getMemberName(), memberVO.getMemberAddress(), memberVO.getMemberPhone(), memberVO.getMemberPhone(), memberVO.getMemberEmail(), memberVO.getMemberPlatform(), memberVO.getMemberSalt());
+		int result = jdbcTemplate.update(SQL_INSERT, memberVO.getMemberId(), memberVO.getMemberPw(), memberVO.getMemberName(), memberVO.getMemberAddress(), memberVO.getMemberPhone(), memberVO.getMemberEmail(), memberVO.getMemberGrade(), memberVO.getMemberPlatform(), memberVO.getMemberSalt());
 
 		if(result <= 0) {
 			return false;

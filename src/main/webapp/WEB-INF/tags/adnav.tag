@@ -9,10 +9,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="admin.jsp">
+          <a class="navbar-brand brand-logo" href="admin.do">
             <img src="Ad/images/logo.svg" alt="logo" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="admin.jsp">
+          <a class="navbar-brand brand-logo-mini" href="admin.do">
             <img src="Ad/images/logo-mini.svg" alt="logo" />
           </a>
         </div>
@@ -20,7 +20,7 @@
       <div class="navbar-menu-wrapper d-flex align-items-top"> 
         <ul class="navbar-nav">
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-            <h1 class="welcome-text">안녕하세요!<span class="text-black fw-bold">${sessionMemberId}님</span></h1>
+            <h1 class="welcome-text">안녕하세요!&nbsp;<span class="text-black fw-bold">${sessionMemberId}님</span></h1>
             <h3 class="welcome-sub-text">관리자 전용 페이지입니다.</h3>
           </li>
         </ul>
@@ -81,11 +81,7 @@
                 <p class="mb-1 mt-3 font-weight-semibold">${sessionMemberId}</p>
                 <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
               </div>
-              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile <span class="badge badge-pill badge-danger">1</span></a>
-              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-message-text-outline text-primary me-2"></i> Messages</a>
-              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-calendar-check-outline text-primary me-2"></i> Activity</a>
-              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-help-circle-outline text-primary me-2"></i> FAQ</a>
-              <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
+              <a class="dropdown-item" href="logoutPage.do"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
             </div>
           </li>
         </ul>

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,9 @@ public class ReviewHashtagDAO {
 												+ "JOIN HASHTAG_DETAIL hd ON hd.HASHTAG_NUM = rh.REVIEW_HASHTAG_NUM "
 												+ "WHERE ITEM_NUM = ?";
 	
+	static final private String SQL_SELECTONE = "SELECT REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT FROM REVIEW_HASHTAG WHERE REVIEW_HASHTAG_CONTENT = ? ";
+	
+	
 	static final private String SQL_INSERT ="INSERT INTO REVIEW_HASHTAG(REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT) "
 			+ "VALUES ((SELECT NVL(MAX(REVIEW_HASHTAG_NUM, 2000)+1 FROM REVIEW_HASHTAG, ?)";
 
@@ -31,7 +35,12 @@ public class ReviewHashtagDAO {
 	}
 
 	public ReviewHashtagVO selectOne(ReviewHashtagVO reviewHashtagVO) {
-		return null;
+		try {		
+			Object[] args = {reviewHashtagVO.getReviewHashtagContent()};
+			return jdbcTemplate.queryForObject(SQL_SELECTONE, args, new ReviewHashtagSelect());	
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	public boolean insert(ReviewHashtagVO reviewHashtagVO) {

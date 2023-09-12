@@ -45,6 +45,14 @@
     margin-top: 10px; /* 원하는 간격으로 조정 */
     margin-right: 5px;
 }
+
+#selectCategory {
+	color: black;
+}
+
+#selectTea{
+	color: black;
+}
 </style>    
 </head>
 
@@ -72,29 +80,23 @@
                       <p class="card-description">Add class <code>.btn-{color}</code> for buttons in theme colors</p>
                       <div class="template-demo">
 									  <div class="form-group">
-										<h5><strong>상품 카테고리 선택 [1) 카테코리를 먼저 지정한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
+										<h5><strong>상품 카테고리 선택 [1) 카테고리를 먼저 지정한다.]</strong></h5>
+										<select class="form-control" id="selectCategory">
+										<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
+										<c:forEach var="categoryData" items="${categoryDatas}">
+										<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
+										</c:forEach>
 										</select>
 									</div>
 										<div class="form-group">
 										<h5><strong>상품 선택 [2) 위에서 나눈 카테고리 별로 상품이 출력되게 한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-										</select>
+										<select class="form-control" id="selectTea"></select> <br>
+										<button type="button" id="selectbutton" class="btn btn-outline-info">조회</button>
 									</div>
-                    	<form id="hashTagForm" method="post" action="aaa.do" onsubmit="return false;">
+                    	<form id="hashTagForm" method="post" action="adminHashtagTea.do" onsubmit="return false;">
                     	<div id="hashTagContainer" class="template-demo">
                          </div> <br>
-                        <button type="button" class="btn btn-primary">저장(Save)</button>
+                        <button type="button" class="btn btn-primary" id="btnSave" >저장(Save)</button>
                         </form>
                       </div>
                     </div>
@@ -105,387 +107,10 @@
                       <p class="card-description">Add class <code>.btn-rounded</code></p>
                       <div class="template-demo">
                     	<div id="hashTagMaker" class="template-demo">
-                        <button type="button" id="addHashTag" class="btn btn-dark btn-rounded btn-fw">직접 입력 ㅇㅇ</button>
-                         </div> <br>
-                        <button type="button" class="btn btn-primary">저장(Save)</button>
+                        <button type="button" id="addHashTag" class="btn btn-dark btn-rounded btn-fw">직접 입력</button>
+                         </div> 
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="card-body">
-                      <h4 class="card-title">여기부터 밑엔 걍 안봐도됨</h4>
-                      <p class="card-description">Add class <code>.btn-{color}</code> for buttons in theme colors</p>
-                      <div class="template-demo">
-									  <div class="form-group">
-										<h5><strong>상품 카테고리 선택 [1) 카테코리를 먼저 지정한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-											<option>$-{teaData.teaCategory}</option>
-										</select>
-									</div>
-										<div class="form-group">
-										<h5><strong>상품 선택 [2) 위에서 나눈 카테고리 별로 상품이 출력되게 한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-											<option>$-{teaData.teaNum}</option>
-										</select>
-									</div>
-                    	<div id="hashTagFix" class="template-demo">
-                         </div> <br>
-                        <button type="button" class="btn btn-primary">저장(Save)</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="card-body">
-                      <h4 class="card-title">후기 해시태그 변경</h4>
-                      <p class="card-description">Add class <code>.btn-rounded</code></p>
-                      <div class="template-demo">
-                        <button type="button" class="btn btn-primary btn-rounded btn-fw">Primary</button>
-                        <button type="button" class="btn btn-secondary btn-rounded btn-fw">Secondary</button>
-                        <button type="button" class="btn btn-success btn-rounded btn-fw">Success</button>
-                        <button type="button" class="btn btn-danger btn-rounded btn-fw">Danger</button>
-                        <button type="button" class="btn btn-warning btn-rounded btn-fw">Warning</button>
-                        <button type="button" class="btn btn-info btn-rounded btn-fw">Info</button>
-                        <button type="button" class="btn btn-light btn-rounded btn-fw">Light</button>
-                        <button type="button" class="btn btn-dark btn-rounded btn-fw">Dark</button>
-                        <button type="button" class="btn btn-link btn-rounded btn-fw">Link</button>
-                        <button type="button" id="addHashTag" class="btn btn-dark btn-rounded btn-fw">직접 입력 ㅇㅇ</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-8 grid-margin stretch-card">
-              <div class="card">
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="card-body">
-                    <h4 class="card-title">Icon Buttons</h4>
-                    <p class="card-description">Add class <code>.btn-icon</code> for buttons with only icons</p>
-                    <div class="template-demo d-flex justify-content-between flex-nowrap">
-                      <button type="button" class="btn btn-primary btn-rounded btn-icon">
-                        <i class="ti-home"></i>
-                      </button>
-                      <button type="button" class="btn btn-dark btn-rounded btn-icon">
-                        <i class="ti-world"></i>
-                      </button>
-                      <button type="button" class="btn btn-danger btn-rounded btn-icon">
-                        <i class="ti-email"></i>
-                      </button>
-                      <button type="button" class="btn btn-info btn-rounded btn-icon">
-                        <i class="ti-star"></i>
-                      </button>
-                      <button type="button" class="btn btn-success btn-rounded btn-icon">
-                        <i class="ti-location-pin"></i>
-                      </button>
-                    </div>
-                    <div class="template-demo d-flex justify-content-between flex-nowrap">
-                      <button type="button" class="btn btn-inverse-primary btn-rounded btn-icon">
-                        <i class="ti-home"></i>
-                      </button>
-                      <button type="button" class="btn btn-inverse-dark btn-icon">
-                        <i class="ti-world"></i>
-                      </button>
-                      <button type="button" class="btn btn-inverse-danger btn-icon">
-                        <i class="ti-email"></i>
-                      </button>
-                      <button type="button" class="btn btn-inverse-info btn-icon">
-                        <i class="ti-star"></i>
-                      </button>
-                      <button type="button" class="btn btn-inverse-success btn-icon">
-                        <i class="ti-location-pin"></i>
-                      </button>
-                    </div>
-                    <div class="template-demo d-flex justify-content-between flex-nowrap mt-4">
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-heart text-danger"></i>
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-music-alt text-dark"></i>
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-star text-primary"></i>
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-bar-chart-alt text-info"></i>                          
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-stats-up text-success"></i>                          
-                      </button>
-                    </div>
-                    <div class="template-demo d-flex justify-content-between flex-nowrap">
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-heart"></i>
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-music-alt"></i>
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-star"></i>
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-bar-chart-alt"></i>                          
-                      </button>
-                      <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon">
-                        <i class="ti-stats-up"></i>                          
-                      </button>
-                    </div>
-                  </div>
-                  </div> 
-                  <div class="col-md-5">
-                    <div class="card-body">
-                      <h4 class="card-title">Button Size</h4>
-                      <p class="card-description">Use class <code>.btn-{size}</code></p>
-                      <div class="template-demo">
-                        <button type="button" class="btn btn-outline-secondary btn-lg">btn-lg</button>
-                        <button type="button" class="btn btn-outline-secondary btn-md">btn-md</button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm">btn-sm</button>
-                      </div>
-                      <div class="template-demo mt-4">
-                        <button type="button" class="btn btn-danger btn-lg">btn-lg</button>
-                        <button type="button" class="btn btn-success btn-md">btn-md</button>
-                        <button type="button" class="btn btn-primary btn-sm">btn-sm</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Block buttons</h4>
-                  <p class="card-description">Add class <code>.btn-block</code></p>
-                  <div class="template-demo">
-                    <button type="button" class="btn btn-info btn-lg btn-block">Block buttons
-                      <i class="ti-menu float-right"></i>
-                    </button>
-                    <button type="button" class="btn btn-dark btn-lg btn-block">Block buttons</button>
-                    <button type="button" class="btn btn-primary btn-lg btn-block">
-                      <i class="ti-user"></i>                      
-                      Block buttons
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg btn-block">Block buttons</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 grid-margin">
-              <div class="card">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="card-body">
-                      <h4 class="card-title">Button groups</h4>
-                      <p class="card-description">Wrap a series of buttons with <code>.btn</code> 
-                        in <code>.btn-group</code></p>
-                      <div class="template-demo">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-outline-secondary">1</button>
-                          <button type="button" class="btn btn-outline-secondary">2</button>
-                          <button type="button" class="btn btn-outline-secondary">3</button>
-                        </div>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-outline-secondary">
-                            <i class="ti-heart"></i>
-                          </button>
-                          <button type="button" class="btn btn-outline-secondary">
-                            <i class="ti-calendar"></i>
-                          </button>
-                          <button type="button" class="btn btn-outline-secondary">
-                            <i class="ti-time"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <div class="template-demo">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-primary">1</button>
-                          <button type="button" class="btn btn-primary">2</button>
-                          <button type="button" class="btn btn-primary">3</button>
-                        </div>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-primary">
-                            <i class="ti-heart"></i>
-                          </button>
-                          <button type="button" class="btn btn-primary">
-                            <i class="ti-calendar"></i>
-                          </button>
-                          <button type="button" class="btn btn-primary">
-                            <i class="ti-time"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <div class="template-demo mt-4">
-                        <div class="btn-group-vertical" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-outline-secondary">
-                            <i class="ti-upload"></i>
-                          </button>
-                          <button type="button" class="btn btn-outline-secondary">
-                            <i class="ti-split-v"></i>
-                          </button>
-                          <button type="button" class="btn btn-outline-secondary">
-                            <i class="ti-download"></i>
-                          </button>
-                        </div>
-                        <div class="btn-group-vertical" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-outline-secondary">Default</button>
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">Dropdown</button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item">Go back</a>
-                              <a class="dropdown-item">Delete</a>
-                              <a class="dropdown-item">Swap</a>
-                            </div>                          
-                          </div>
-                          <button type="button" class="btn btn-outline-secondary">Default</button>
-                        </div>
-                        <div class="btn-group-vertical" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-outline-secondary">Top</button>
-                          <button type="button" class="btn btn-outline-secondary">Middle</button>                          
-                          <button type="button" class="btn btn-outline-secondary">Bottom</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="card-body">
-                      <h4 class="card-title">Button with text and icon</h4>
-                      <p class="card-description">Wrap icon and text inside <code>.btn-icon-text</code> and use <code>.btn-icon-prepend</code> 
-                        or <code>.btn-icon-append</code> for icon tags</p>
-                      <div class="template-demo">
-                        <button type="button" class="btn btn-primary btn-icon-text">
-                          <i class="ti-file btn-icon-prepend"></i>
-                          Submit
-                        </button>
-                        <button type="button" class="btn btn-dark btn-icon-text">
-                          Edit
-                          <i class="ti-file btn-icon-append"></i>                          
-                        </button>
-                        <button type="button" class="btn btn-success btn-icon-text">
-                          <i class="ti-alert btn-icon-prepend"></i>                                                    
-                          Warning
-                        </button>
-                      </div>
-                      <div class="template-demo">
-                        <button type="button" class="btn btn-danger btn-icon-text">
-                          <i class="ti-upload btn-icon-prepend"></i>                                                    
-                          Upload
-                        </button>
-                        <button type="button" class="btn btn-info btn-icon-text">
-                          Print
-                          <i class="ti-printer btn-icon-append"></i>                                                                              
-                        </button>
-                        <button type="button" class="btn btn-warning btn-icon-text">
-                          <i class="ti-reload btn-icon-prepend"></i>                                                    
-                          Reset
-                        </button>
-                      </div>
-                      <div class="template-demo mt-2">
-                        <button type="button" class="btn btn-outline-primary btn-icon-text">
-                          <i class="ti-file btn-icon-prepend"></i>
-                          Submit
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary btn-icon-text">
-                          Edit
-                          <i class="ti-file btn-icon-append"></i>                          
-                        </button>
-                        <button type="button" class="btn btn-outline-success btn-icon-text">
-                          <i class="ti-alert btn-icon-prepend"></i>                                                    
-                          Warning
-                        </button>
-                      </div>
-                      <div class="template-demo">
-                        <button type="button" class="btn btn-outline-danger btn-icon-text">
-                          <i class="ti-upload btn-icon-prepend"></i>                                                    
-                          Upload
-                        </button>
-                        <button type="button" class="btn btn-outline-info btn-icon-text">
-                          Print
-                          <i class="ti-printer btn-icon-append"></i>                                                                              
-                        </button>
-                        <button type="button" class="btn btn-outline-warning btn-icon-text">
-                          <i class="ti-reload btn-icon-prepend"></i>                                                    
-                          Reset
-                        </button>
-                      </div>
-                      <div class="template-demo mt-2">
-                        <button class="btn btn-outline-dark btn-icon-text">
-                          <i class="ti-apple btn-icon-prepend"></i>
-                          <span class="d-inline-block text-left">
-                            <small class="fw-light d-block">Available on the</small>
-                            App Store
-                          </span>
-                        </button>
-                        <button class="btn btn-outline-dark btn-icon-text">
-                          <i class="ti-android btn-icon-prepend"></i>
-                          <span class="d-inline-block text-left">
-                            <small class="fw-light d-block">Get it on the</small>
-                            Google Play
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Social Icon Buttons</h4>
-                  <p class="card-description">Add class <code>.btn-social-icon</code></p>
-                  <div class="template-demo">
-                    <button type="button" class="btn btn-social-icon btn-outline-facebook"><i class="ti-facebook"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-outline-youtube"><i class="ti-youtube"></i></button>                                        
-                    <button type="button" class="btn btn-social-icon btn-outline-twitter"><i class="ti-twitter-alt"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-outline-dribbble"><i class="ti-dribbble"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-outline-linkedin"><i class="ti-linkedin"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-outline-google"><i class="ti-google"></i></button>
-                  </div>
-                  <div class="template-demo">
-                    <button type="button" class="btn btn-social-icon btn-facebook"><i class="ti-facebook"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-youtube"><i class="ti-youtube"></i></button>                                        
-                    <button type="button" class="btn btn-social-icon btn-twitter"><i class="ti-twitter-alt"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-dribbble"><i class="ti-dribbble"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-linkedin"><i class="ti-linkedin"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-google"><i class="ti-google"></i></button>
-                  </div>
-                  <div class="template-demo">
-                    <button type="button" class="btn btn-social-icon btn-facebook btn-rounded"><i class="ti-facebook"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-youtube btn-rounded"><i class="ti-youtube"></i></button>                                        
-                    <button type="button" class="btn btn-social-icon btn-twitter btn-rounded"><i class="ti-twitter-alt"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-dribbble btn-rounded"><i class="ti-dribbble"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-linkedin btn-rounded"><i class="ti-linkedin"></i></button>
-                    <button type="button" class="btn btn-social-icon btn-google btn-rounded"><i class="ti-google"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Social button with text</h4>
-                  <p class="card-description">Add class <code>.btn-social-icon-text</code></p>
-                  <div class="template-demo">
-                    <button type="button" class="btn btn-social-icon-text btn-facebook"><i class="ti-facebook"></i>Facebook</button>
-                    <button type="button" class="btn btn-social-icon-text btn-youtube"><i class="ti-youtube"></i>Youtube</button>                                        
-                    <button type="button" class="btn btn-social-icon-text btn-twitter"><i class="ti-twitter-alt"></i>Twitter</button>
-                    <button type="button" class="btn btn-social-icon-text btn-dribbble"><i class="ti-dribbble"></i>Dribbble</button>
-                    <button type="button" class="btn btn-social-icon-text btn-linkedin"><i class="ti-linkedin"></i>Linkedin</button>
-                    <button type="button" class="btn btn-social-icon-text btn-google"><i class="ti-google"></i>Google</button>
                   </div>
                 </div>
               </div>
@@ -519,8 +144,144 @@
   <script src="Ad/js/template.js"></script>
   <script src="Ad/js/settings.js"></script>
   <script src="Ad/js/todolist.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <!-- endinject -->
+<script type="text/javascript">
+$("#selectCategory").change(function() {
+	var categoryNum = $("#selectCategory").val();
+	console.log('첫번째');
+	$.ajax({
+		url: "selectTea.do",
+		data: {
+			category: categoryNum
+		},
+		type: "post",
+	    dataType: "json",
+		success: function(result){
+			 console.log(result);
+			   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
+			   // 기존의 <option>을 모두 제거합니다.
+			  // console.log(result[1].teaNum);
+	         $('#selectTea').empty();
+			   var teaInfo = result;
+			   //var selteaNum='';
+			   //var selteaName='';
+			   //var selteaCnt='';
+			   //var selteaPrice='';
+			   //var selteaContent='';
+			   var firstItem = result[0];
+			    $('#teaNum').attr("value",firstItem.teaNum);
+			    $('#teaName').attr("value",firstItem.teaName);
+			   for (var i=0;i<teaInfo.length;i++){
+			   var optteaNum=teaInfo[i].teaNum;
+			   var optteaName = teaInfo[i].teaName;
+			   console.log(optteaName);
+			//     console.log(optteaNum);
+			     // 각 <option>에 데이터를 속성으로 추가
+	                var optionElement = $('<option>' + optteaName + '</option>')
+	                    .attr('value', optteaNum)
+	                    .attr('data-tea-name', optteaName)
 
+	                // <option>을 #teaToDel에 추가
+	                $('#selectTea').append(optionElement);
+			 //  console.log(selteaName);
+			      }
+			   
+	           // 새로운 <option>을 추가합니다.
+	      //     $('#teaToDel').append(selteaName);
+			   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
+			 //  if($('#teaToDel'))
+	        //    $('#teaNum').attr("value",optteaNum);
+	       //     $('#teaName').attr("value",optteaName);
+	       //     $('#teaCnt').attr("value",optteaCnt);
+	       //     $('#teaPrice').attr("value",optteaPrice);
+	       //     $('#teaContent').attr("value",optteaContent);
+		   },
+		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
+		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
+		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
+		   // 오늘 집가서 이거 제대로 끝낸다 스바...
+		
+		error: function(error){
+		    console.log(error);
+	    }
+	});
+  });
+
+$("#selectbutton").click(function() {
+	  var hashtag = $("#selectTea").val();
+	 // var hashTags = exampleData.find(function(product) {
+	 //   return product.name === selectedProduct;
+	 // });
+	  $.ajax({
+			url: "selectTeaTag.do",
+			data: {
+				hashtag: hashtag
+			},
+			type: "post",
+		    dataType: "json",
+			success: function(result){
+			   console.log(result);
+			   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
+			 //  var teaInfo = result;
+			//   var selteaName='';
+			//   for (var i=0;i<teaInfo.length;i++){
+			//   var optteaName = teaInfo[i].teaName;
+			//   console.log(optteaName);
+			//   selteaName += '<option>' + optteaName + '</option>';
+			//      }
+			   // 기존의 <option>을 모두 제거합니다.
+	        //   $('#selectTea').empty();
+
+	           // 새로운 <option>을 추가합니다.
+	       //    $('#selectTea').append(selteaName);
+			   },
+			   // teaName이 forEach 형식으로 뜨게 하고 싶다.
+			   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
+			   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
+			   // 오늘 집가서 이거 제대로 끝낸다 스바...
+			
+			error: function(error){
+			    console.log(error);
+		    }
+		});
+	  
+	  // 해시태그 버튼을 생성하고 추가
+//	  var hashTagContainer = $("#hashTagContainer");
+//	  hashTagContainer.empty(); // 이전 버튼 제거
+	  
+//	  if (hashTags && hashTags.hashtags) {
+//	    hashTags.hashtags.forEach(function(tag) {
+//	      var classNames = ["btn-success", "btn-warning", "btn-info", "btn-dark"];
+//	      var randomClass = classNames[Math.floor(Math.random() * classNames.length)];
+//	      var hashTagButton = $('<input type="button" value="' + tag + '" name="hashTagContent" class="btn '+ randomClass +'" style="display: block;">');
+//	      console.log('해시태그: '+tag);
+//	      hashTagContainer.append(hashTagButton);
+//	    });
+//	  }
+	});
+</script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+	  const hashTagMaker = document.getElementById("hashTagMaker");
+
+	  // 페이지 로드 시 "hashTagMaker" <div> 영역 숨기기
+	  hashTagMaker.style.display = "none";
+	  
+	  const selectCategory = document.getElementById("selectCategory");
+	  
+	  // "카테고리 선택" 옵션이 변경될 때 이벤트 리스너를 추가
+	  selectCategory.addEventListener("change", function () {
+	    if (selectCategory.value === "선택하세요") {
+	      // "카테고리 선택"이 선택되었을 때 "hashTagMaker" <div> 영역 숨기기
+	      hashTagMaker.style.display = "none";
+	    } else {
+	      // 다른 카테고리가 선택되었을 때 "hashTagMaker" 표시
+	      hashTagMaker.style.display = "block";
+	    }
+	  });
+	});
+</script>
 <script>
         // 예비 스크립트
       // <div id="hashTagContainer"> 요소를 가져오기
@@ -629,7 +390,8 @@ document.getElementById("addHashTag").addEventListener("click", function() {
         alert("한 상품당 해시태그는 최대 3개까지입니다.");
         return;
     }
-	
+	// 조회되는 상품이 없다면 입력 막기
+
     var newHashTag = prompt("추가할 해시태그를 입력하세요:");
     
     // 새로운 해시태그 중복 검사
@@ -650,7 +412,7 @@ document.getElementById("addHashTag").addEventListener("click", function() {
         var randomIndex = Math.floor(Math.random() * classNames.length);
         hashTagElement.className = "btn " + classNames[randomIndex];
         // 상단에 설정해둔 var classNames 배열의 인덱스 값중 하나가 랜덤으로 선택됨
-        hashTagElement.setAttribute('name','teaHashtagName')
+        hashTagElement.setAttribute('name','teaHashtagContent')
         // 실제로 Form 영역에 담아서 제출해야 하므로, name의 인자를 M이 설정해둔 인자명과 동일하게 설정해서 보내주기 위한 메서드 (setAttribute)
         hashTagElement.value = newHashTag;
         // 해시태그에 특수 문자나 숫자 막기      
@@ -667,17 +429,12 @@ document.getElementById("addHashTag").addEventListener("click", function() {
         	return;
         }
         document.getElementById("hashTagContainer").appendChild(hashTagElement);
-//        var hashTagField = document.getElementById("hashTagField");
-//        var hiddenInput = document.createElement("input");
-//        hiddenInput.type = "hidden";
-//        hiddenInput.name = "hashtags[]"; 
-//        hiddenInput.value = newHashTag;
- //       hashTagField.appendChild(hiddenInput);
     }
 });
 
 function hashZungBok(newHashTag, inputElements) {
     // Set을 사용하여 중복된 해시태그를 확인
+    // 참고로 Set은 클래스이기 때문에 밑처럼 new 해주기
     var hashTags = new Set();
     
     // 현재 입력된 해시태그를 Set에 추가
@@ -705,6 +462,58 @@ const Validation = {
         return inputString === null || inputString.trim() === '';
     }
 };
+
+$('#btnSave').on("click", function(){
+	console.log('버튼 클릭됨');
+	
+	var inputElements = hashTagContainer.querySelectorAll("input[type='button']"); // 유효성 검사를 위해 해시태그 입력란 내 모든 input 요소 찾기
+	console.log(inputElements);
+	
+	//var teaNum = $('#teaNum').val();
+	var teaNum = $("#selectTea option:selected").val();
+	
+	var hashTags = new Array();
+	    
+	// 현재 입력된 해시태그를 Set에 추가
+	var i = 0;
+	inputElements.forEach(function(inputElement) {
+	var value = inputElement.value;
+	
+	
+	//hashTags.add(value);
+	hashTags[i] = value;
+	
+	console.log("value: "+value);
+	i++;
+	});
+	
+	console.log("arr: "+hashTags);
+	console.log("teaNum: "+teaNum);
+	
+	var hashTags = {itemNum: teaNum, tag1: hashTags[0], tag2: hashTags[1], tag3: hashTags[2] };
+
+	
+	$.ajax({
+        url: 'adminHashtagTea.do',
+        type: 'POST',
+        data: hashTags,
+        success: function(fresult){
+            //console.log('favorResult [' + favorResult + ']');
+          	
+        },
+        error: function(error){
+           alert('error [' + error + ']');
+        }
+     });
+	
+	
+});
+
+
+
+
+
+
 
 </script>
 </body>

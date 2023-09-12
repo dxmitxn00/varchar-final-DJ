@@ -11,10 +11,14 @@
     <try:favicon/>
     <!-- 링크 부분 태그 -->
     <try:link/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- 카카오 로그인 -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <!-- 네이버 로그인 -->
-    <script type="text/javascript"
-	src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
-	charset="utf-8">//naver api</script>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- 구글 로그인 -->
+	<script src="https://accounts.google.com/gsi/client"></script>
 	<style type="text/css">
 		.block-27 ul li span {
 			width: 70px;
@@ -28,14 +32,20 @@
 		#edit_span_kakao {
 			background-image: url("images/login_kakao.png");
 			background-size: 70px;
+			cursor: pointer;
 		}
 		#edit_span_naver {
 			background-image: url("images/login_naver.png");
 			background-size: 70px;
+			cursor: pointer;
 		}
 		#edit_span_google {
 			background-image: url("images/login_google.png");
 			background-size: 70px;
+			cursor: pointer;
+		}
+		.edit_hidden {
+			display: none;
 		}
 	</style>
   </head>
@@ -86,18 +96,110 @@
 				</div>
 	          </form>
            	  <!-- 로그인 폼 태그 끝 -->
+           	  <!-- SNS 로그인 시작 -->
            	  <div class="row mt-5">
 		      	<div class="col text-center">
 		      		<div class="block-27">
 		              <ul>
 		                <li><span id="edit_span_kakao"></span></li>
 		                <li><span id="edit_span_naver"></span></li>
-		                <li><span id="edit_span_google"></span></li>
+		                <li><span id="edit_span_google" data-client_id="831557176408-2a23dinpartetqap2lipe1c046pt24co.apps.googleusercontent.com"></span></li>
 		              </ul>
 		      		</div>
 		      	</div>
 		      </div>
-	  		<div id="naver_id_login"></div>
+		      <!-- SNS 로그인 끝 -->
+			  <!-- 구글 로그인 버튼 -->
+			  <div class="edit_hidden" id="g_id_onload" data-client_id="831557176408-2a23dinpartetqap2lipe1c046pt24co.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
+			  <div class="g_id_signin edit_hidden" data-type="standard" data-size="large" data-text="signin_with" data-shape="rectangular" data-width=300 data-radius=15px></div>
+		      
+		      <!-- kakao API START -->
+		      <script type="text/javascript">
+		      	$('#edit_span_kakao').click(function(){
+		      		loginWithKakao();
+		      	});
+		      
+				Kakao.init('0a516c7a8f0dd1acfb318dd2c3a159d3');
+				
+				function loginWithKakao() {
+					Kakao.Auth.login({
+						success: function (authObj) {
+							console.log("카카오 JSON : " + JSON.stringify(authObj));
+							profileWithKakao();
+						},
+						fail: function (error) {
+							console.log(JSON.stringify(error));
+						},
+					})
+				}
+				
+				function profileWithKakao() {
+					Kakao.API.request({
+						url: '/v2/user/me',
+						success: function (response) {
+							console.log(response);
+							$('#status').append(response.kakao_account.profile.nickname);
+							console.log('카카오톡 ID : ' + response.id);
+							console.log('카카오톡 이름 : ' + response.kakao_account.profile.nickname);
+							console.log('카카오톡 프로필 이미지 URL : ' + response.properties.thumbnail_image);
+							
+							const params = new URLSearchParams();
+							params.append('memberId', response.id);
+							params.append('memberName', response.kakao_account.profile.nickname);
+							params.append('memberPlatform', 'kakao');
+
+							const destinationURL = 'snsLogin.do?' + params.toString();
+							window.location.href = destinationURL;
+						},
+						fail: function (error) {
+							console.log(error);
+						}
+					});
+				}
+			</script>
+			<!-- kakao API END -->
+			<!-- google API START -->
+			<script>
+				$('#edit_span_google').click(function(){
+					$('.nsm7Bb-HzV7m-LgbsSe-BPrWId').trigger('click');
+				});
+				
+				function handleCredentialResponse(response) {
+					// decodeJwtResponse() is a custom function defined by you
+					// to decode the credential response.
+					const responsePayload = parseJwt(response.credential);
+			
+					$('#status').append(responsePayload.name);
+					console.log("구글 ID : " + responsePayload.sub);
+					console.log("구글 Email : " + responsePayload.email);
+					console.log("구글 Name : " + responsePayload.name);
+			
+					const params = new URLSearchParams();
+					params.append('memberId', responsePayload.sub);
+					params.append('memberEmail', responsePayload.email);
+					params.append('memberName', responsePayload.name);
+					params.append('memberPlatform', 'google');
+			
+					// 새로운 URL로 이동합니다. 여기에 목적지 URL을 입력하세요.
+					const destinationURL = 'snsLogin.do?' + params.toString();
+					window.location.href = destinationURL;
+			
+				};
+			
+				function parseJwt(token) {
+					var base64Url = token.split('.')[1];
+					var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+					var jsonPayload = decodeURIComponent(atob(base64).split('').map(
+							function(c) {
+								return '%'
+										+ ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+							}).join(''));
+					return JSON.parse(jsonPayload);
+				};
+			</script>
+			<!-- google API END -->
+	  		 <div class="edit_hidden" id="naver_id_login"></div>
+	  		     
 			</div>
           </div> <!-- .col-md-8 -->
         </div>
@@ -126,9 +228,7 @@
 		            
 		            $('#quantity').val(quantity + 1);
 
-		          
 		            // Increment
-		        
 		    });
 
 		     $('.quantity-left-minus').click(function(e){
@@ -144,7 +244,6 @@
 		            $('#quantity').val(quantity - 1);
 		            }
 		    });
-		    
 		});
 	</script>
 	
@@ -167,18 +266,52 @@
        		return true;
       	}
     </script>
-    
     <script type="text/javascript">
+    	$('#edit_span_naver').click(function(){
+    		console.log('네이버 클릭 확인');
+    		
+    		$("#naver_id_login_anchor").get(0).click();
+		});
+
 		// ---[ 네이버 로그인 ]-------------------------------------------------------------------------------------------------------------------------------------------------
-		var naver_id_login = new naver_id_login("gSqN5AjK3F7dFSVLcJF0", "http://localhost:8088/app/loginNaver.do");
+		var naver_id_login = new naver_id_login("gSqN5AjK3F7dFSVLcJF0", "http://localhost:8088/app/login.jsp");
 		var state = naver_id_login.getUniqState();
 		naver_id_login.setButton("green", 3, 40);
 		naver_id_login.setDomain("http://localhost:8088/");
 		naver_id_login.setState(state);
 		//naver_id_login.setPopup();
+		
 		naver_id_login.init_naver_id_login();
-  	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	</script>
+  		// -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  		
+  		// 네이버 사용자 프로필 조회
+    	naver_id_login.get_naver_userprofile("naverSignInCallback()");
+	    
+    	// 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
+    	function naverSignInCallback() {
+        	const id = naver_id_login.getProfileData('id');
+        	const name = naver_id_login.getProfileData('name');
+        	const email = naver_id_login.getProfileData('email');
+        	const mobile = naver_id_login.getProfileData('mobile');
+        
+        	console.log("네이버 ID : " + id);
+			console.log("네이버 Email : " + email);
+			console.log("네이버 Name : " + name);
+			console.log("네이버 mobile : " + mobile);
+			
+			const params = new URLSearchParams();
+			params.append('memberId', id);
+			params.append('memberEmail', email);
+			params.append('memberName', name);
+			params.append('memberPlatform', 'naver');
+			
+			// 새로운 URL로 이동합니다. 여기에 목적지 URL을 입력하세요.
+			const destinationURL = 'snsLogin.do?' + params.toString();
+			window.location.href = destinationURL;
+    	
+    	  }
+  	</script>
     
   </body>
 </html>

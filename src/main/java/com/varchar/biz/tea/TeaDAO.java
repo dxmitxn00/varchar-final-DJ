@@ -26,6 +26,11 @@ public class TeaDAO {
 		+ "AND t.TEA_NAME LIKE '%' || ? || '%' "
 		+ "AND i.IMAGE_DIVISION = 1 ";
 
+	static final private String SQL_SELECTALL_CATEGORY =
+			"SELECT TEA_NUM, TEA_NAME, TEA_PRICE, TEA_CNT, TEA_CONTENT, TEA_STATUS, CATEGORY_NUM, IMAGE_URL "
+			+ "FROM TEA t JOIN IMAGE i ON i.TEA_REVIEW_NUM = t.TEA_NUM "
+			+ "WHERE i.IMAGE_DIVISION = 1 AND t.CATEGORY_NUM = ? ";
+	
 //	static final private String SQL_SELECTALL_PAGING =
 //			"SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CONTENT, t.CATEGORY_NAME, t.IMAGE_URL "
 //			+ "FROM( "
@@ -64,16 +69,22 @@ public class TeaDAO {
 	
 	static final private String SQL_UPDATE_TEA = "UPDATE TEA SET TEA_STATUS = ? WHERE TEA_NUM = ?";
 	
+	static final private String SQL_UPDATE_ADMIN = "UPDATE TEA SET TEA_PRICE = ?, TEA_CNT = ? WHERE TEA_NUM = ? ";
+	
 	static final private String SQL_INSERT = "INSERT INTO TEA(TEA_NUM, CATEGORY_NUM, TEA_NAME, TEA_PRICE, TEA_CNT, TEA_CONTENT) "
 												+ "VALUES((SELECT NVL(MAX(TEA_NUM),1000)+1 FROM TEA), ?, ?, ?, ?, ?)";
 		
-	// static final private String SQL_DELETE = "DELETE FROM TEA WHERE TEA_NUM = ?;";
+	static final private String SQL_DELETE = "DELETE FROM TEA WHERE TEA_NUM = ? ";
 
 	public List<TeaVO> selectAll(TeaVO teaVO) {
 
 		if(teaVO.getTeaCondition().equals("페이징")) {
 			Object[] args = { teaVO.getMemberId(), teaVO.getCategoryName(), teaVO.getTeaSearchWord(), teaVO.getStartRnum(), teaVO.getEndRnum() };
 			return jdbcTemplate.query(SQL_SELECTALL_PAGING_LIKE, args, new TeaPagingRowMapper());
+		}
+		else if(teaVO.getTeaCondition().equals("카테고리")) {
+			Object[] args = { teaVO.getCategoryNum()};
+			return jdbcTemplate.query(SQL_SELECTALL_CATEGORY, args, new TeaAdminRowMapper());
 		}
 		else { // ALL
 			Object[] args = { teaVO.getCategoryName(), teaVO.getTeaSearchWord() };
@@ -93,7 +104,7 @@ public class TeaDAO {
 
 	public boolean insert(TeaVO teaVO) {
 		
-		int result = jdbcTemplate.update(SQL_INSERT, teaVO.getTeaName(), teaVO.getTeaPrice(), teaVO.getTeaCnt(), teaVO.getTeaContent());
+		int result = jdbcTemplate.update(SQL_INSERT, teaVO.getCategoryNum(), teaVO.getTeaName(), teaVO.getTeaPrice(), teaVO.getTeaCnt(), teaVO.getTeaContent());
 		
 		if(result <= 0) {
 			return false;
@@ -106,8 +117,11 @@ public class TeaDAO {
 
 		int result = 0;
 		
-		if(teaVO.getTeaCondition().equals("재고변경")) { 
+		if(teaVO.getTeaCondition().equals("재고변경")) { // 구매시 재고 변경
 			result = jdbcTemplate.update(SQL_UPDATE, teaVO.getTeaCnt(), teaVO.getTeaNum());
+		}
+		if(teaVO.getTeaCondition().equals("상품변경")) { // 관리자 상품 정보 변경
+			result = jdbcTemplate.update(SQL_UPDATE_ADMIN, teaVO.getTeaPrice(), teaVO.getTeaCnt(), teaVO.getTeaNum());
 		}
 		else { // 판매중단된 상품
 			result = jdbcTemplate.update(SQL_UPDATE_TEA, teaVO.getTeaStatus(), teaVO.getTeaNum());
@@ -121,11 +135,11 @@ public class TeaDAO {
 
 	public boolean delete(TeaVO teaVO) {
 		
-//		int result = jdbcTemplate.update(SQL_DELETE, teaVO.getTeaNum());
-//		
-//		if(result <= 0) {
-//			return false;
-//		}
+		int result = jdbcTemplate.update(SQL_DELETE, teaVO.getTeaNum());
+		
+		if(result <= 0) {
+			return false;
+		}
 		return false;
 	}
 }
@@ -169,4 +183,25 @@ class TeaSelectRowMapper implements RowMapper<TeaVO> {
 		return data;
 	}
 
+}
+
+
+
+//ADMIN CATEGORY [ selectAll ]
+class TeaAdminRowMapper implements RowMapper<TeaVO> {
+
+	@Override
+	public TeaVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+		TeaVO data = new TeaVO();
+		data.setTeaNum(rs.getInt("TEA_NUM"));
+		data.setTeaName(rs.getString("TEA_NAME"));
+		data.setTeaPrice(rs.getInt("TEA_PRICE"));
+		data.setTeaCnt(rs.getInt("TEA_CNT"));
+		data.setTeaContent(rs.getString("TEA_CONTENT"));
+		data.setTeaStatus(rs.getInt("TEA_STATUS"));
+		data.setCategoryNum(rs.getInt("CATEGORY_NUM"));
+		data.setImageUrl(rs.getString("IMAGE_URL"));
+		return data;
+	}
 }

@@ -40,7 +40,7 @@
 				</div>
 				<div class="media-body">
 				</div>
-			</div>      
+			</div>
 		</div>
 	</div>
 </div>
@@ -69,3 +69,8 @@
 	</div>
 </div>
 </div>
+<script type="text/javascript">
+	var flagId = true;
+	var flagPassword1 = true;
+	var flagPassword2 = true;
+</script>

@@ -72,6 +72,7 @@ public class MemberController {
 			model.addAttribute("sweetAlert", sweetAlertVO);
 			return "alertFalse.jsp";
 		}
+		
 		return "redirect:main.do";
 	}
 	
@@ -110,13 +111,16 @@ public class MemberController {
 		
 		String salt = Password.generateRandomPassword(10);
 		String shaPW = Password.ShaPass(memberVO.getMemberPw()+salt);
-		System.out.println("암호화pw: "+shaPW);
-		System.out.println("사용된 salt: "+salt);
+		System.out.println("암호화pw: " + shaPW);
+		System.out.println("사용된 salt: " + salt);
 		
 		memberVO.setMemberPw(shaPW);
 		memberVO.setMemberSalt(salt);
 		memberVO.setMemberGrade(0);
-		memberVO.setMemberPlatform("varChar"); // SNS 로그인 구현시 추후 논의 필요
+		System.out.println(memberVO);
+		if (memberVO.getMemberPlatform().equals("")) {
+			memberVO.setMemberPlatform("varChar");
+		}
 
 		System.out.println(memberVO);
 
@@ -269,57 +273,19 @@ public class MemberController {
 		return "alertTrue.jsp";
 	}
 	
-	// // ------------------------------------- 네이버 로그인 테스트 중 -------------------------------------
-	@RequestMapping(value = "/loginNaver.do")
-	public String loginNaver(HttpSession session, HttpServletRequest request) throws UnsupportedEncodingException {
-		System.out.println("loginNaver.do 진입");
-		System.out.println(request.getAttribute("naver_id_login"));
-		System.out.println(request.getAttribute("access_token"));
-		System.out.println(request.getAttribute("token_type"));
-		System.out.println(request.getAttribute("expires_in"));
-		
-	    String clientId = "gSqN5AjK3F7dFSVLcJF0";//애플리케이션 클라이언트 아이디값";
-	    String clientSecret = "29uaXEXBbp";//애플리케이션 클라이언트 시크릿값";
-	    String code = request.getParameter("code");
-	    String state = request.getParameter("state");
-	    String redirectURI = URLEncoder.encode("http://localhost:8088/app/loginNaver.do", "UTF-8");
-	    String apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code"
-	        + "&client_id=" + clientId
-	        + "&client_secret=" + clientSecret
-	        + "&redirect_uri=" + redirectURI
-	        + "&code=" + code
-	        + "&state=" + state;
-	    String accessToken = "";
-	    String refresh_token = "";
-	    
-	    System.out.println("apiURL: "+apiURL);
-	    try {
-	      URL url = new URL(apiURL);
-	      HttpURLConnection con = (HttpURLConnection)url.openConnection();
-	      con.setRequestMethod("GET");
-	      int responseCode = con.getResponseCode();
-	      BufferedReader br;
-	      if (responseCode == 200) { // 정상 호출
-	        br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	      } else {  // 에러 발생
-	        br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-	      }
-	      String inputLine;
-	      StringBuilder res = new StringBuilder();
-	      while ((inputLine = br.readLine()) != null) {
-	        res.append(inputLine);
-	      }
-	      br.close();
-	      if (responseCode == 200) {
-	    	  System.out.println(res.toString());
-	      }
-	    } catch (Exception e) {
-	      // Exception 로깅
-	    }
-		//session.setAttribute("sessionMemberId", accessToken);
+	// ------------------------------------- SNS 로그인  -------------------------------------	
+	@RequestMapping(value = "/snsLogin.do")
+	public String snsLogin(HttpServletRequest request, MemberVO memberVO, Model model, HttpSession session) {
+		System.out.println(memberVO);
+		memberVO.setMemberSearch("아이디 중복검사");
+		if (memberService.selectOne(memberVO) == null) {
+			model.addAttribute("memberData", memberVO);
+			return "signup.jsp";
+		}
+		session.setAttribute("sessionMemberId", memberVO.getMemberId());
 		return "main.do";
 	}
-
+	
 	// ------------------------------------- 회원가입 아이디 중복검사 ------------------------------------------
 	@ResponseBody
 	@RequestMapping(value = "/checkId.do")

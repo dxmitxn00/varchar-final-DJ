@@ -9,7 +9,6 @@ public class MainController{
 	// --------------------------------- 메인 페이지 이동 ---------------------------------
 	@RequestMapping(value="/main.do")
 	public String main(){
-		System.out.println("1111");
 		return "redirect:main.jsp";
 	}
 	

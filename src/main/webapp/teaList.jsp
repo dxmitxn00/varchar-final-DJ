@@ -13,6 +13,9 @@
     <!-- 링크 부분 태그 -->
     <try:link/>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
     <style type="text/css">
     .nolist{
     	margin: 0 auto;
@@ -129,6 +132,18 @@
     
     $(document).ready(function(){
     	
+    	const Toast = Swal.mixin({
+      	  toast: true,
+      	  position: 'top-end',
+      	  showConfirmButton: false,
+      	  timer: 1500,
+      	  timerProgressBar: true,
+      	  didOpen: (toast) => {
+      	    toast.addEventListener('mouseenter', Swal.stopTimer)
+      	    toast.addEventListener('mouseleave', Swal.resumeTimer)
+      	  }
+      	})
+    	
     	var favorResult = ${ teaData.favorResult }; // 찜 안한 상태가 default
     	console.log('favorResult: ' + favorResult);
     	
@@ -152,26 +167,11 @@
                   console.log('favorResult [' + favorResult + ']');
                   $("#fc"+${ teaData.teaNum }).removeClass("ion-ios-heart-empty").addClass("ion-ios-heart");
                   favorResult = 1;
-                  /**
-                  if (fresult == 1) {
-                 	 Swal.fire({
-                 		  position: 'top',
-                 		  icon: 'success',
-                 		  title: '찜 추가!',
-                 		  showConfirmButton: false,
-                 		  timer: 1000
-                 	})
-                  }
-                  else {
-                 	 Swal.fire({
-                 		  position: 'top',
-                 		  icon: 'success',
-                 		  title: '찜 삭제!',
-                 		  showConfirmButton: false,
-                 		  timer: 1000
-                 	})
-                  }
-                  */
+                  
+                  Toast.fire({
+                	  icon: 'success',
+                	  title: '찜 추가 완료!'
+                	}) 
                },
                error: function(error){
                   alert('error [' + error + ']');
@@ -188,26 +188,12 @@
                    console.log('favorResult [' + favorResult + ']');
                    $("#fc"+${ teaData.teaNum }).removeClass("ion-ios-heart").addClass("ion-ios-heart-empty");
                    favorResult = 0;
-                  /**
-                  if (fresult == 1) {
-                 	 Swal.fire({
-                 		  position: 'top',
-                 		  icon: 'success',
-                 		  title: '찜 추가!',
-                 		  showConfirmButton: false,
-                 		  timer: 1000
+                   
+                   Toast.fire({
+                 	  icon: 'error',
+                 	  title: '찜 삭제 완료...'
                  	})
-                  }
-                  else {
-                 	 Swal.fire({
-                 		  position: 'top',
-                 		  icon: 'success',
-                 		  title: '찜 삭제!',
-                 		  showConfirmButton: false,
-                 		  timer: 1000
-                 	})
-                  }
-                  */
+                 	
                },
                error: function(error){
                   alert('error [' + error + ']');
