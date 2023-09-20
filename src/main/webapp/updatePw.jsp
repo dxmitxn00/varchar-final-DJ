@@ -2,10 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="try"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Var茶 | 비밀번호 변경</title>
+    <title>Var茶 | <spring:message code='updateInfo.title' /></title> <!-- updateInfo.title -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- 파비콘 태그 -->
@@ -22,8 +23,8 @@
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="main.do">Home</a></span> <span>Update Information</span></p>
-            <h1 class="mb-0 bread">비밀번호 변경</h1>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="main.do"><spring:message code='updatePw.span1.title' /></a></span> <span><spring:message code='updatePw.span2.title' /></span></p> <!-- updateInfo.span1.title --> <!-- updateInfo.span2.title -->
+            <h1 class="mb-0 bread"><spring:message code='updatePw.title' /></h1> <!-- updatePw.title -->
           </div>
         </div>
       </div>
@@ -32,7 +33,7 @@
 
 	<!-- 회원정보 수정 변경 버튼 div -->
 	<div style="padding-top: 100px; padding-right: 15%;">
-	<p><a href="updateInfo.do"class="btn btn-primary py-3 px-4" style="float: right;">&nbsp;회원정보 수정&nbsp;</a></p>
+	<p><a href="updateInfo.do"class="btn btn-primary py-3 px-4" style="float: right;">&nbsp;<spring:message code='updatePw.span2.title' />&nbsp;</a></p>
 	</div>
 	<!-- 회원정보 수정 변경 버튼 div 끝 -->
 
@@ -43,25 +44,25 @@
           <div class="col-xl-7 ftco-animate">
           	<!-- 비번 변경 폼 태그 -->
 			<form action="updatePw.do" method="post" class="billing-form" onsubmit="return checkPw();">
-				<h3 class="mb-4 billing-heading" style="padding-bottom: 15px; border-bottom: 1px solid #e1e1e1">비밀번호 변경</h3>
+				<h3 class="mb-4 billing-heading" style="padding-bottom: 15px; border-bottom: 1px solid #e1e1e1"><spring:message code='updatePw.form.title' /> <a href="updatePw.do?lang=en">EN</a> | <a href="updatePw.do?lang=ko">KO</a></h3> <!-- updateInfo.form.title -->
 				<input type="hidden" name="memberId" value="${ sessionMemberId }">
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6" style="margin-top: 30px;">
 	                <div class="form-group">
-	                	<label for="firstname" >새 비밀번호</label>
-	                  <input type="password" name="memberPw" id="newPw" class="form-control" placeholder="새 비밀번호를 입력하세요.(최소 8글자 이상)" required style="width: 210%;">
+	                	<label for="firstname" ><spring:message code='updatePw.form.newPw' /></label> <!-- updateInfo.form.newPw -->
+	                  <input type="password" name="memberPw" id="newPw" class="form-control" placeholder="<spring:message code='updatePw.form.newPw.placeholder' />" required style="width: 210%;">
 	                </div>
 	              </div>
                 <div class="w-100" style="margin-bottom: 20px;"></div>
 	          		<div class="col-md-6">
 	                <div class="form-group">
-	                	<label for="firstname" >비밀번호 확인</label>
-	                  <input type="password" id="checkNewPw" class="form-control" placeholder="비밀번호를 한번 더 입력하세요."required style="width: 210%; margin-bottom: 100px;">
+	                	<label for="firstname" ><spring:message code='updatePw.form.checkPw' /></label> <!-- updateInfo.form.checkPw -->
+	                  <input type="password" id="checkNewPw" class="form-control" placeholder="<spring:message code='updatePw.form.checkPw.placeholder' />"required style="width: 210%; margin-bottom: 100px;"> <!-- updateInfo.form.checkPw.placeholder -->
 	                </div>
 	              </div>
 	            </div>
 				<div style="margin:auto; text-align:center;">
-					<p><input type="submit" class="btn btn-primary py-3 px-4" value="  변경 완료  "style="vertical-align:middle; display:inline-block;"></p>
+					<p><input type="submit" class="btn btn-primary py-3 px-4" value="  <spring:message code='updatePw.form.submit' />  "style="vertical-align:middle; display:inline-block;"></p>
 				</div>
 	          </form>
 	          <!-- 비번 변경 폼 태그 끝 -->

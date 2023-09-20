@@ -45,6 +45,22 @@
     margin-top: 10px; /* 원하는 간격으로 조정 */
     margin-right: 5px;
 }
+
+#selectCategory {
+	color: black;
+}
+
+#selectTea{
+	color: black;
+}
+
+#selectReview{
+	color: black;
+}
+
+#selectRwbutton {
+  display: none;
+}
 </style>    
 </head>
 
@@ -73,23 +89,22 @@
                       <div class="template-demo">
 									  <div class="form-group">
 										<h5><strong>상품 카테고리 선택 [1) 카테코리를 먼저 지정한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
+										<select class="form-control" id="selectCategory">
+										<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
+										<c:forEach var="categoryData" items="${categoryDatas}">
+										<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
+										</c:forEach>
 										</select>
 									</div>
 										<div class="form-group">
 										<h5><strong>상품 선택 [2) 위에서 나눈 카테고리 별로 상품이 출력되게 한다.]</strong></h5>
-										<select class="form-control" id="exampleFormControlSelect2">
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-											<option>$-{그 리뷰 관련 EL 넣으면 될듯합니다 ㅎㅎ}</option>
-										</select>
+										<select class="form-control" id="selectTea"></select> <br>
+										<button type="button" id="selectbutton" class="btn btn-outline-primary">상품 리뷰 조회</button>		
+									</div>
+									<div class="form-group">
+										<h5><strong>리뷰 선택 [3) 해당 상품의 리뷰들을 출력한다.]</strong></h5>
+										<select class="form-control" id="selectReview"></select> <br>
+										<button type="button" id="selectRwbutton" class="btn btn-outline-warning">리뷰 해시태그 조회</button>	
 									</div>
                     	<form id="hashTagForm" method="post" action="admin.jsp" onsubmit="return false;">
                     	<div id="hashTagContainer" class="template-demo">
@@ -107,7 +122,6 @@
                     	<div id="hashTagMaker" class="template-demo">
                         <button type="button" id="addHashTag" class="btn btn-dark btn-rounded btn-fw">직접 입력 ㅇㅇ</button>
                          </div> <br>
-                        <button type="button" class="btn btn-primary">저장(Save)</button>
                       </div>
                     </div>
                   </div>
@@ -144,7 +158,173 @@
   <script src="Ad/js/settings.js"></script>
   <script src="Ad/js/todolist.js"></script>
   <!-- endinject -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!-- endinject -->
+<script type="text/javascript">
+$("#selectCategory").change(function() {
+	var categoryNum = $("#selectCategory").val();
+	console.log('첫번째');
+	$.ajax({
+		url: "selectTea.do",
+		data: {
+			category: categoryNum
+		},
+		type: "post",
+	    dataType: "json",
+		success: function(result){
+			 console.log(result);
+	         $('#selectTea').empty();
+			   var teaInfo = result;
+			   var firstItem = result[0];
+			    $('#teaNum').attr("value",firstItem.teaNum);
+			    $('#teaName').attr("value",firstItem.teaName);
+			   for (var i=0;i<teaInfo.length;i++){
+			   var optteaNum=teaInfo[i].teaNum;
+			   var optteaName = teaInfo[i].teaName;
+			   console.log(optteaName);
+	                var optionElement = $('<option>' + optteaName + '</option>')
+	                    .attr('value', optteaNum)
+	                    .attr('data-tea-name', optteaName)
 
+	                
+	                $('#selectTea').append(optionElement);
+			
+			      }
+			   
+	           // 새로운 <option>을 추가합니다.
+	      //     $('#teaToDel').append(selteaName);
+			   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
+			 //  if($('#teaToDel'))
+	        //    $('#teaNum').attr("value",optteaNum);
+	       //     $('#teaName').attr("value",optteaName);
+	       //     $('#teaCnt').attr("value",optteaCnt);
+	       //     $('#teaPrice').attr("value",optteaPrice);
+	       //     $('#teaContent').attr("value",optteaContent);
+		   },
+		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
+		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
+		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
+		   // 오늘 집가서 이거 제대로 끝낸다 스바...
+		
+		error: function(error){
+		    console.log(error);
+	    }
+	});
+  });
+
+$("#selectbutton").click(function () {
+	  var tea = $("#selectTea").val();
+
+	  $.ajax({
+	    url: "selectReview.do",
+	    data: {
+	      tea: tea
+	    },
+	    type: "post",
+	    dataType: "json",
+	    success: function (result) {
+	    	  console.log(result);
+	    	  $('#selectReview').empty();
+
+	    	  if (result && result.length > 0) {
+	    	    var firstRw = result[0];
+	    	    $('#reviewNum').attr("value", firstRw.reviewNum);
+	    	    $('#reviewContent').attr("value", firstRw.reviewContent);
+	    	    $('#memberId').attr("value", firstRw.memberId);
+
+	    	    for (var i = 0; i < result.length; i++) {
+	    	      var optreviewNum = result[i].reviewNum;
+	    	      var optreviewContent = result[i].reviewContent;
+	    	      var optmemberId = result[i].memberId;
+
+	    	      var optRwElement = $('<option>' + optreviewContent + '</option>')
+	    	        .attr('value', optreviewNum)
+	    	        .attr('data-review-content', optreviewContent)
+	    	        .attr('data-member-id', optmemberId);
+
+	    	      $('#selectReview').append(optRwElement);
+	    	      $('#selectRwbutton').css('display', 'block');
+	    	      $('#addHashTag').css('display', 'block');
+	    	    }
+	    	  } else {
+	    	    alert("해당 상품은 리뷰가 없네용..ㅎㅎ");
+	    	    $('#selectRwbutton').css('display', 'none');
+	    	    $('#addHashTag').css('display', 'none');
+	    	    $('#hashTagContainer').empty();
+	    	  }
+	    	},
+	    error: function (error) {
+	      console.log(error);
+	    }
+	  });
+	});
+$("#selectRwbutton").click(function () {
+	  var hashtag = $("#selectReview").val();
+
+	  $.ajax({
+	    url: "selectReviewTag.do",
+	    data: {
+	      hashtag: hashtag
+	    },
+	    type: "post",
+	    dataType: "json",
+	    success: function (result) {
+	      console.log(result);
+	      var hashtagContainer = $("#hashTagContainer");
+	      hashtagContainer.empty();
+	      var hashtags = result;
+
+	      if (hashtags.length > 0) {
+	        var firstTag = hashtags[0].reviewHashtagContent;
+	        var hashTagElement = $("<input>", {
+	          type: "button",
+	          name: "reviewHashtagContent",
+	          value: firstTag
+	        });
+
+	        var randomStyle = getRandomStyle(); // 랜덤한 스타일을 얻는 도우미 함수
+	        hashTagElement.addClass("btn " + randomStyle);
+	        hashtagContainer.append(hashTagElement);
+
+	        for (var i = 1; i < hashtags.length; i++) {
+	          var hashtag = hashtags[i].reviewHashtagContent;
+	          randomStyle = getRandomStyle();
+	          var tagElement = $("<input type='button' name='reviewHashtagContent' class='btn " + randomStyle + "'>")
+	            .val(hashtag)
+	            .css("display", "block");
+	          hashtagContainer.append(tagElement);
+	        }
+	      } else {
+	        console.log("선택된 상품에 대한 해시태그가 없습니다.");
+	      }
+	    },
+	    error: function (error) {
+	      console.log(error);
+	    }
+	  });
+	});
+	// 랜덤한 버튼 스타일을 얻는 도우미 함수
+	function getRandomStyle() {
+	  var buttonStyles = ["btn-success", "btn-warning", "btn-info", "btn-dark"];
+	  return buttonStyles[Math.floor(Math.random() * buttonStyles.length)];
+	}
+</script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+	  const hashTagMaker = document.getElementById("hashTagMaker");
+
+	  // 페이지 로드 시 "hashTagMaker" <div> 영역 숨기기
+	  hashTagMaker.style.display = "none";
+
+	  const selectRwbutton = document.getElementById("selectRwbutton");
+
+	  // "selectRwbutton" 버튼이 클릭될 때 이벤트 리스너를 추가
+	  selectRwbutton.addEventListener("click", function () {
+	    // "selectRwbutton" 버튼이 클릭되었을 때 "hashTagMaker" 표시
+	    hashTagMaker.style.display = "block";
+	  });
+	});
+</script>
 <script>
         // 예비 스크립트
       // <div id="hashTagContainer"> 요소를 가져오기

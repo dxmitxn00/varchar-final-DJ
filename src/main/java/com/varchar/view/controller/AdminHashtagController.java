@@ -56,8 +56,8 @@ public class AdminHashtagController {
 		return "adhashTag.jsp";
 	}
 	// ---------------------------------!!!! 상품 해시태그 관리(추가/변경/삭제) !!!!---------------------------------
-	@RequestMapping(value = "/adminHashtagTea.do", method=RequestMethod.POST)
 	@ResponseBody
+	@RequestMapping(value = "/adminHashtagTea.do", method=RequestMethod.POST)
 	public String adminHashtagTea(@RequestParam Map<String,Object> hashTags, HashtagDetailVO hashtagDetailVO, TeaHashtagVO teaHashtagVO) {
 
 		System.out.println("로그: hashTagForm 제출");
@@ -96,8 +96,8 @@ public class AdminHashtagController {
 		return "adhashTagRw.jsp";
 	}
 	// ---------------------------------!!!! 리뷰 해시태그 관리(추가/변경/삭제) !!!!---------------------------------
-	@RequestMapping(value = "/adminHashtagReview.do", method=RequestMethod.POST)
 	@ResponseBody
+	@RequestMapping(value = "/adminHashtagReview.do", method=RequestMethod.POST)
 	public String adminHashtagReview(@RequestParam Map<String,Object> hashTags, HashtagDetailVO hashtagDetailVO, ReviewHashtagVO reviewHashtagVO) {
 		
 		System.out.println("로그: hashTagForm 제출");
@@ -127,8 +127,8 @@ public class AdminHashtagController {
 	}
 	
 	// --------------------------------- 카테고리 선택시 해당되는 상품들 반환 ---------------------------------
-	@RequestMapping(value = "/selectTea.do")
 	@ResponseBody 
+	@RequestMapping(value = "/selectTea.do")
 	public String teaList(@RequestParam("category") int categoryNum, TeaVO teaVO) {
 		teaVO.setCategoryNum(categoryNum);
 		teaVO.setTeaCondition("카테고리");
@@ -147,8 +147,8 @@ public class AdminHashtagController {
 	}
 	
 	// --------------------------------- 상품 선택시 해당되는 후기들 반환 ---------------------------------
-	@RequestMapping(value = "/selectReview.do")
 	@ResponseBody
+	@RequestMapping(value = "/selectReview.do")
 	public String reviewList(@RequestParam("tea") int teaNum, ReviewVO reviewVO) {
 		reviewVO.setTeaNum(teaNum);
 		reviewVO.setSearchName("DETAIL"); // 해당 상품의 후기들 반환
@@ -168,8 +168,8 @@ public class AdminHashtagController {
 	}
 	
 	// --------------------------------- 상품 선택시 해당되는 해시태그들 반환 ---------------------------------
-	@RequestMapping(value = "/selectTeaTag.do")
 	@ResponseBody
+	@RequestMapping(value = "/selectTeaTag.do")
 	public String selectTeaHashtag(@RequestParam("hashtag") int teaNum, TeaHashtagVO teahashtagVO) {
 		teahashtagVO.setItemNum(teaNum);
 	    List<TeaHashtagVO> teaHashtags = teaHashtagService.selectAll(teahashtagVO);
@@ -188,6 +188,11 @@ public class AdminHashtagController {
 	public String selectReviewHashtag(@RequestParam("hashtag") int reviewNum, ReviewHashtagVO reviewHashtagVO) {
 		
 		reviewHashtagVO.setItemNum(reviewNum);
+		reviewHashtagVO.setHashTagSearchCondition("후기번호검색");
+		
+		System.out.println("reviewNum" + reviewNum);
+		System.out.println("reviewHashtagVO" +reviewHashtagVO);
+		
 	    List<ReviewHashtagVO> reviewHashtags = reviewHashtagService.selectAll(reviewHashtagVO);
 	    System.out.println(reviewHashtags);
 	    

@@ -14,6 +14,11 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+<script type="module">
+    import * as LR from "https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-regular.min.js";
+
+    LR.registerBlocks(LR);
+</script>
 <style>
 	/* 에디터 최소 높이 */
 	.ck-editor__editable {
@@ -62,6 +67,25 @@
 		&:after { 
 			transform: rotate(-45deg); 
 		}
+	}
+	.tagcloud a {
+		font-size: 18px;
+	}
+	.my-config {
+	  --darkmode: 0;
+	  --h-accent: 223;
+	  --s-accent: 100%;
+	  --l-accent: 61%;
+	}
+	lr-file-uploader-minimal {
+		width: 100%;
+	}
+	.cart-list {
+		margin-bottom: 30px;
+	}
+	.col-lg-3 {
+		flex: 0 0 20%;
+    	max-width: 20%;
 	}
 </style>
 </head>
@@ -113,9 +137,36 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="row" id="reviewImagesThumbnail">
+					
+				</div>
 				<div class="row">
 					<input type="hidden" name="buySerial" value="${ buyDetailData.buySerial }">
-					<textarea id="editor" name="reviewContent" placeholder="150자 이내로 작성해주세요" maxlength="200"></textarea>
+					<div id="reviewImages">
+						
+					</div>
+					<lr-config
+					    ctx-name="my-uploader"
+					    pubkey="86c01c87f383d8c2191c"
+					    max-local-file-size-bytes="10000000"
+					    multiple-max="10"
+					    img-only="true"
+					></lr-config>
+					<lr-file-uploader-minimal
+					    css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-minimal.min.css"
+					    ctx-name="my-uploader"
+					    class="my-config"
+					>
+					</lr-file-uploader-minimal>
+					<lr-data-output
+					  ctx-name="my-uploader"
+					  use-console
+					  use-input
+					  use-group
+					  use-event
+					></lr-data-output>
+					<textarea id="editor" name="reviewContent" placeholder="150자 이내로 작성해주세요" maxlength="200">
+					</textarea>
 					<!-- CKEditor -->
 					<script>
 				        ClassicEditor.create(document.querySelector("#editor"), {
@@ -124,8 +175,38 @@
 				        	console.error(error);
 				        });
 			        </script>
+			        <script>
+			        	const reviewImagesContainer = document.getElementById("reviewImages");
+						const reviewImagesThumbnailContainer = document.getElementById("reviewImagesThumbnail");
+						const dataOutput = document.querySelector('lr-data-output');
+				        
+						dataOutput.addEventListener('lr-data-output', (event) => {
+				        	reviewImagesContainer.replaceChildren();
+				        	reviewImagesThumbnailContainer.replaceChildren();
+				        	for (var i = 0; i < event.detail.data.files.length; i++) {
+					        	console.log(event.detail.data.files[i].cdnUrl);
+					        	
+				        		const reviewImage = document.createElement("input");
+				        		reviewImage.type = "hidden";
+				        		reviewImage.value = event.detail.data.files[i].cdnUrl;
+				        		reviewImage.setAttribute("name", "reviewImage");
+				        		reviewImagesContainer.appendChild(reviewImage);
+				        		
+				        		var reviewImageThumbnailHtml = "";
+				        		reviewImageThumbnailHtml += "<div class='col-md-6 col-lg-3 ftco-animate'>";
+				        		reviewImageThumbnailHtml += 	"<div class='product'>";
+				        		reviewImageThumbnailHtml += 		"<a href='#' class='img-prod'>";
+				        		reviewImageThumbnailHtml += 			"<img class='img-fluid' src=" + event.detail.data.files[i].cdnUrl + " alt='Colorlib Template'>";
+				        		reviewImageThumbnailHtml += 			"<div class='overlay'></div>";
+				        		reviewImageThumbnailHtml += 		"</a>";
+				        		reviewImageThumbnailHtml += 	"</div>";
+				        		reviewImageThumbnailHtml += "</div>";
+				        		reviewImagesThumbnailContainer.innerHTML += reviewImageThumbnailHtml;
+				        	}
+				        });
+			        </script>
 					<input type="text" class="form-control" id="hashtags-input" placeholder="해시태그를 입력해주세요.">
-					<input type="hidden" id="reviewHashtag" name="reviewHashtag">
+					<input type="hidden" id="reviewHashtag">
 					<div class="tag-widget post-tag-container mb-5 mt-5">
 						<div id="hashtags-container" class="tagcloud">
 							
@@ -145,12 +226,17 @@
 		            			const a = document.createElement("a");
 		            			a.innerText = "#" + tag;
 		            			a.classList.add("tag-cloud-link");
+		            			const i = document.createElement("input");
+		            			i.type = "hidden";
+		            			i.value = tag;
+		            			i.setAttribute("name", "reviewHashtag");
 		            			
 		            			const removeButton = document.createElement("button");
 		            			removeButton.innerText = "X";
 		            			removeButton.classList.add("remove-button");
 		            			removeButton.addEventListener("click", () => {
 		            				hashtagsContainer.removeChild(a);
+		            				hashtagsContainer.removeChild(i);
 		            				hashtags = hashtags.filter((hashtag) => hashtag !== tag);
 		            				document.getElementById("reviewHashtag").value = hashtags;
 		            				console.log(hashtags);
@@ -158,6 +244,7 @@
 		            			});
 		            			a.appendChild(removeButton);
 		            			hashtagsContainer.appendChild(a);
+		            			hashtagsContainer.appendChild(i);
 		            			hashtags.push(tag);
 		            			
 		            			document.getElementById("reviewHashtag").value = hashtags;
@@ -179,6 +266,7 @@
 		            </script>
 				</div>
 			<input type="submit" class="btn btn-primary py-3 px-4" value="후기작성">
+			</div>
 		</section>
 	</form>
 	<!-- .section -->

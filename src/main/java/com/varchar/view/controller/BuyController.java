@@ -83,7 +83,9 @@ public class BuyController {
 		List<TeaVO> cart = (List<TeaVO>) session.getAttribute("cart");
 
 		int i = 0;
-		int total = 0;
+		final int ship = 3000;
+		
+		int total = ship;
 		for (TeaVO t : cart) {
 			int teaTotal = t.getTeaCnt() * t.getTeaPrice();
 			cart.get(i).setTeaTotal(teaTotal);

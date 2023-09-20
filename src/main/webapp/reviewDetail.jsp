@@ -66,7 +66,8 @@
                   </div>
                 </td>
                 <td class="total">${ reviewData.memberId }</td>
-              </tr><!-- END TR-->
+              </tr>
+              <!-- END TR-->
             </tbody>
           </table>
         </div>
@@ -77,10 +78,9 @@
 			<hr>
             <div class="tag-widget post-tag-container mb-5 mt-5">
               <div class="tagcloud">
-                <a href="#" class="tag-cloud-link">Life</a>
-                <a href="#" class="tag-cloud-link">Sport</a>
-                <a href="#" class="tag-cloud-link">Tech</a>
-                <a href="#" class="tag-cloud-link">Travel</a>
+              	<c:forEach var="reviewHashtag" items="${ reviewData.reviewHashtags }">
+              		<a href="reviewListPage.do?searchName=ALL" class="tag-cloud-link"># ${ reviewHashtag.reviewHashtagContent }</a>
+              	</c:forEach>
               </div>
             </div>
             <c:if test="${ reviewData.memberId eq sessionMemberId }">

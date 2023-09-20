@@ -78,14 +78,14 @@
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6" style="margin-top: 30px;">
 	                <div class="form-group">
-	                	<label for="firstname" >아이디</label>
+	                	<label for="firstname">아이디</label>
 	                  <input type="text" name="memberId" class="form-control" placeholder="아이디를 입력하세요." required style="width: 210%;">
 	                </div>
 	              </div>
                 <div class="w-100" style="margin-bottom: 20px;"></div>
 	          		<div class="col-md-6">
 	                <div class="form-group">
-	                	<label for="firstname" >비밀번호</label>
+	                	<label for="firstname">비밀번호</label>
 	                  <input type="password" name="memberPw" class="form-control" placeholder="비밀번호를 입력하세요."required style="width: 210%; margin-bottom: 100px;">
 	                  <a href="findPw.do">비밀번호 찾기</a>
 	                </div>
@@ -158,6 +158,7 @@
 				}
 			</script>
 			<!-- kakao API END -->
+			
 			<!-- google API START -->
 			<script>
 				$('#edit_span_google').click(function(){

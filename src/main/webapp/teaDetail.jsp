@@ -17,98 +17,96 @@
     <script src="https://kit.fontawesome.com/7b2dcea907.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script type="text/javascript"> 
-    $(document).ready(function(){
-    	console.log('확인1');
-    	
-        //var favor = 0;
-        var favorResult = ${favorResult};
-
-        if(favorResult > 0){
-           $("#fc").removeClass("fa-regular").addClass("fa-solid");
-        } else {
-           $("#fc").removeClass("fa-solid").addClass("fa-regular");
-        }
-
-        $("#fcBtn").on("click", function(){
-        	console.log('찜 버튼 클릭 확인');
-        	
-        	if(favorResult == 0){
-            	//
-                $.ajax({
-                   url: 'insertFavor.do?teaNum='+${ teaData.teaNum },
-                   type: 'POST',
-                   success: function(fresult){
-                      console.log('favorResult [' + favorResult + ']');
-                      $("#fc").removeClass("fa-regular").addClass("fa-solid");
-                      $("#fc").addClass('animate-like');
-                      favorResult = 1;
-                      /**
-                      if (fresult == 1) {
-                     	 Swal.fire({
-                     		  position: 'top',
-                     		  icon: 'success',
-                     		  title: '찜 추가!',
-                     		  showConfirmButton: false,
-                     		  timer: 1000
-                     	})
-                      }
-                      else {
-                     	 Swal.fire({
-                     		  position: 'top',
-                     		  icon: 'success',
-                     		  title: '찜 삭제!',
-                     		  showConfirmButton: false,
-                     		  timer: 1000
-                     	})
-                      }
-                      */
-                   },
-                   error: function(error){
-                      alert('error [' + error + ']');
-                   }
-                });
-                //
-        	}
-        	else{
-            	//
-                $.ajax({
-                   url: 'deleteFavor.do?teaNum='+${ teaData.teaNum },
-                   type: 'POST',
-                   success: function(fresult){
-                       console.log('favorResult [' + favorResult + ']');
-                       $("#fc").removeClass("fa-solid").addClass("fa-regular");
-                       $("#fc").removeClass('animate-like');
-                       favorResult = 0;
-                      /**
-                      if (fresult == 1) {
-                     	 Swal.fire({
-                     		  position: 'top',
-                     		  icon: 'success',
-                     		  title: '찜 추가!',
-                     		  showConfirmButton: false,
-                     		  timer: 1000
-                     	})
-                      }
-                      else {
-                     	 Swal.fire({
-                     		  position: 'top',
-                     		  icon: 'success',
-                     		  title: '찜 삭제!',
-                     		  showConfirmButton: false,
-                     		  timer: 1000
-                     	})
-                      }
-                      */
-                   },
-                   error: function(error){
-                      alert('error [' + error + ']');
-                   }
-                });
-                //
-        	} // if-else 문 끝
-        });
-        
-     });
+	    $(document).ready(function(){
+	    	console.log('확인1');
+	    	
+	        // var favor = 0;
+	        var favorResult = ${favorResult};
+	
+	        if (favorResult > 0){
+	           $("#fc").removeClass("fa-regular").addClass("fa-solid");
+	        } else {
+	           $("#fc").removeClass("fa-solid").addClass("fa-regular");
+	        }
+	
+	        $("#fcBtn").on("click", function(){
+	        	console.log('찜 버튼 클릭 확인');
+	        	
+	        	if (favorResult == 0){
+	                $.ajax({
+	                   url: 'insertFavor.do?teaNum='+${ teaData.teaNum },
+	                   type: 'POST',
+	                   success: function(fresult){
+	                      console.log('favorResult [' + favorResult + ']');
+	                      $("#fc").removeClass("fa-regular").addClass("fa-solid");
+	                      $("#fc").addClass('animate-like');
+	                      favorResult = 1;
+	                      /**
+	                      if (fresult == 1) {
+	                     	 Swal.fire({
+	                     		  position: 'top',
+	                     		  icon: 'success',
+	                     		  title: '찜 추가!',
+	                     		  showConfirmButton: false,
+	                     		  timer: 1000
+	                     	})
+	                      }
+	                      else {
+	                     	 Swal.fire({
+	                     		  position: 'top',
+	                     		  icon: 'success',
+	                     		  title: '찜 삭제!',
+	                     		  showConfirmButton: false,
+	                     		  timer: 1000
+	                     	})
+	                      }
+	                      */
+	                   },
+	                   error: function(error){
+	                      alert('error [' + error + ']');
+	                   }
+	                });
+	                //
+	        	}
+	        	else {
+	            	//
+	                $.ajax({
+	                   url: 'deleteFavor.do?teaNum='+${ teaData.teaNum },
+	                   type: 'POST',
+	                   success: function(fresult){
+	                       console.log('favorResult [' + favorResult + ']');
+	                       $("#fc").removeClass("fa-solid").addClass("fa-regular");
+	                       $("#fc").removeClass('animate-like');
+	                       favorResult = 0;
+	                      /**
+	                      if (fresult == 1) {
+	                     	 Swal.fire({
+	                     		  position: 'top',
+	                     		  icon: 'success',
+	                     		  title: '찜 추가!',
+	                     		  showConfirmButton: false,
+	                     		  timer: 1000
+	                     	})
+	                      }
+	                      else {
+	                     	 Swal.fire({
+	                     		  position: 'top',
+	                     		  icon: 'success',
+	                     		  title: '찜 삭제!',
+	                     		  showConfirmButton: false,
+	                     		  timer: 1000
+	                     	})
+	                      }
+	                      */
+	                   },
+	                   error: function(error){
+	                      alert('error [' + error + ']');
+	                   }
+	                });
+	                //
+	        	} // if-else 문 끝
+	        });
+	     });
     </script>
     <style type="text/css">
  	#cartform{
@@ -169,17 +167,16 @@
   		0%   { transform: scale(30); }
   		100% { transform: scale(1); }
 	}
-    	.reviewCon {
-	    	overflow: hidden;
-	    	text-overflow: ellipsis;
-	    	white-space: nowrap;
-    	}
-
+    .reviewCon {
+	   	overflow: hidden;
+	   	text-overflow: ellipsis;
+	   	white-space: nowrap;
+    }
     </style>
   </head>
   <body class="goto-here">
     <!-- 헤더 부분 태그 -->
-	 <try:nav/>	
+	<try:nav/>	
 
     <div class="hero-wrap hero-bread" style="background-image: url('images/bg_1.jpg');">
       <div class="container">
@@ -216,8 +213,15 @@
 								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">판매량</span></a>
 							</p>
 						</div>
-    				<p class="price"><span>${ teaData.teaPrice }</span></p>
+    				<p class="price"><span>${ teaData.teaPrice } 원</span></p>
     				<p>${ teaData.teaContent }</p>
+    					<div class="tag-widget post-tag-container mb-5 mt-5">
+							<div class="tagcloud">
+								<c:forEach var="teaHashtag" items="${ teaHashtags }">
+									<a href="teaListPage.do?teaHashtagContent=${ teaHashtag.teaHashtagContent }" class="tag-cloud-link"># ${ teaHashtag.teaHashtagContent }</a>
+								</c:forEach>
+							</div>
+						</div>
 						<div class="row mt-4">
 							<form id="cartform" action="insertCart.do">
 							 <input type="hidden" name="teaNum" value="${ teaData.teaNum }">

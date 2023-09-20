@@ -30,7 +30,7 @@
 <link rel="stylesheet" href="Ad/css/vertical-layout-light/style.css">
 <!-- endinject -->
 <link rel="shortcut icon" href="Ad/images/favicon.png" />
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- 스윗알랏 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
@@ -77,33 +77,31 @@
 									<h4 class="card-title">상품 추가</h4>
 									<p class="card-description">양식에 맞게 기재하세요.</p>
 									<!-- 상품 추가 form 시작 -->
-									<form action="insertTea.do" method="post" class="forms-sample" enctype="multipart/form-data">
-										<div class="form-group">
-											<label for="exampleInputUsername1">상품명</label>
-											<input type="text" class="form-control" name="teaName" id="exampleInputUsername1" placeholder="$-{teaData.teaName}" />
-										</div>
-										<div class="form-group">
-											<label for="exampleInputEmail1">상품 가격</label>
-											<input type="number" class="form-control" name="teaPrice" id="cntForAdd" placeholder="$-{teaData.teaPrice} 숫자만 입력하세요!!" oninput="checkInput(this)" />
-										</div>
-										<div class="form-group">
-											<label for="exampleInputPassword1">상품 총 재고</label>
-											<input type="number" class="form-control" id="priceForAdd" name="teaCnt" placeholder="$-{teaData.teaCnt}" oninput="checkInput(this)" />
-										</div>
-										<div class="form-group">
+									<form action="insertTea.do" class="forms-sample" enctype="multipart/form-data" id="teaForm" >
+									<div class="form-group">
 											<label>상품 카테고리</label>
-											<select id="categorySelect" class="form-control" name="categoryName">
+											<select id="categorySelect" class="form-control" name="categoryNum">
 												<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
 												<c:forEach var="categoryData" items="${categoryDatas}">
 													<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
 												</c:forEach>
 											</select>
-											<input type="hidden" id="categoryHidden" name="categoryNum" value="" />
-											<input type="hidden" id="categoryHidden" name="categoryName" value="" />
+										</div>
+										<div class="form-group">
+											<label for="exampleInputUsername1">상품명</label>
+											<input type="text" class="form-control" name="teaName"  required>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">상품 가격</label>
+											<input type="number" class="form-control" name="teaPrice"  oninput="checkInput(teaPrice)" required>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputPassword1">상품 총 재고</label>
+											<input type="number" class="form-control"  name="teaCnt"  oninput="checkInput(teaCnt)" required>
 										</div>
 										<div class="form-group">
 											<label>상품 사진</label>
-											<input type="file" name="imgUrl" class="file-upload-default" id="fileInput" />
+											<input type="file" class="file-upload-default" id="fileInput" />
 											<div class="input-group col-xs-12">
 												<input type="text" class="form-control file-upload-info" disabled placeholder="$-{teaData.imageUrl}" id="fileInputText" />
 												<span class="input-group-append" id="uploadSpan" >
@@ -117,10 +115,9 @@
 										  </div>	
 										<div class="form-group">
 											<label for="exampleInputPassword1">상품 설명</label>
-											<input type="text" class="form-control form-control-lg" name="teaContent" placeholder="$-{teaData.teaContent}" />
+											<input type="text" class="form-control form-control-lg" name="teaContent"  required>
 										</div>
-										<button type="submit" class="btn btn-primary me-2">Submit</button>
-										<button class="btn btn-light">Cancel</button>
+										<input type="submit" class="btn btn-primary me-2" id="submitButton">
 									</form>
 									<!-- 상품 추가 form 끝 -->
 								</div>
@@ -330,7 +327,7 @@
 	<script src="Ad/js/typeahead.js"></script>
 	<script src="Ad/js/select2.js"></script>
 	<!-- End custom js for this page-->
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	
 <script type="text/javascript">
 $("#categoryToDel").change(function() {
 	var categoryNum = $("#categoryToDel").val();
@@ -345,16 +342,8 @@ $("#categoryToDel").change(function() {
 	    dataType: "json",
 		success: function(result){
 		   console.log(result);
-		   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
-		   // 기존의 <option>을 모두 제거합니다.
-		  // console.log(result[1].teaNum);
          $('#teaToDel').empty();
 		   var teaInfo = result;
-		   //var selteaNum='';
-		   //var selteaName='';
-		   //var selteaCnt='';
-		   //var selteaPrice='';
-		   //var selteaContent='';
 		   var firstItem = result[0];
 		    $('#teaNum').attr("value",firstItem.teaNum);
 		    $('#teaName').attr("value",firstItem.teaName);
@@ -368,39 +357,21 @@ $("#categoryToDel").change(function() {
 		   var optteaPrice = teaInfo[i].teaPrice;
 		   var optteaContent = teaInfo[i].teaContent;
 		   console.log(optteaName);
-		//     console.log(optteaNum);
-		     // 각 <option>에 데이터를 속성으로 추가
                 var optionElement = $('<option>' + optteaName + '</option>')
                     .attr('data-tea-num', optteaNum)
                     .attr('data-tea-name', optteaName)
                     .attr('data-tea-cnt', optteaCnt)
                     .attr('data-tea-price', optteaPrice)
                     .attr('data-tea-content', optteaContent);
-
-                // <option>을 #teaToDel에 추가
                 $('#teaToDel').append(optionElement);
-		 //  console.log(selteaName);
 		      }
-		   
-           // 새로운 <option>을 추가합니다.
-      //     $('#teaToDel').append(selteaName);
-		   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
-		 //  if($('#teaToDel'))
-        //    $('#teaNum').attr("value",optteaNum);
-       //     $('#teaName').attr("value",optteaName);
-       //     $('#teaCnt').attr("value",optteaCnt);
-       //     $('#teaPrice').attr("value",optteaPrice);
-       //     $('#teaContent').attr("value",optteaContent);
 		   },
-		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
-		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
-		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
-		   // 오늘 집가서 이거 제대로 끝낸다 스바...
 		error: function(error){
 		    console.log(error);
 	    }
 	});
   });
+  
 //<select>에서 옵션을 선택했을 때 실행될 코드
 $("#teaToDel").change(function () {
     var selectedOption = $("#teaToDel option:selected");
@@ -412,7 +383,7 @@ $("#teaToDel").change(function () {
     console.log('여기오냐1');
 
     // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
-    $('#teaNum').attr("value",teaNum);
+     $('#teaNum').attr("value",teaNum);
     $('#teaName').attr("value",teaName);
     $('#teaCnt').attr("value",teaCnt);
     $('#teaPrice').attr("value",teaPrice);
@@ -557,12 +528,6 @@ function checkInput(input) {
 	  }
 }
 </script>	
-<script type="text/javascript">
-document.getElementById("categorySelect").addEventListener("change", function () {
-    var selectedValue = this.value;
-    document.getElementById("categoryHidden").value = selectedValue;
-});
-</script>
 
 <script type="text/javascript">
 $('#uploadSpan').on("click", async function(){
@@ -593,30 +558,6 @@ $('#uploadSpan').on("click", async function(){
 		}
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 
 </html>

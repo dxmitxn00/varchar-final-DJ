@@ -11,25 +11,82 @@
 <try:favicon />
 <!-- 링크 부분 헤더 -->
 <try:link />
-
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+<script type="module">
+    import * as LR from "https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-regular.min.js";
+
+    LR.registerBlocks(LR);
+</script>
 <style>
-/* 에디터 최소 높이 */
-.ck-editor__editable {
-	height: 500px;
-}
-
-.ck.ck-editor {
-	width: 100%;
-}
-
-.quantity.form-control.input-number {
-	text-align: center;
-	font-size: 14px;
-	border: 1px solid rgba(0, 0, 0, 0.05) !important;
-	height: 54px !important;
-}
+	/* 에디터 최소 높이 */
+	.ck-editor__editable {
+		height: 500px;
+	}
+	
+	.ck.ck-editor {
+		width: 100%;
+	}
+	
+	.quantity.form-control.input-number {
+		text-align: center;
+		font-size: 14px;
+		border: 1px solid rgba(0, 0, 0, 0.05) !important;
+		height: 54px !important;
+	}
+	.remove-button {
+		overflow: hidden;
+		position: relative;
+		border: none;
+		padding: 0;
+		width: 2em; height: 2em;
+		border-radius: 50%;
+		background: transparent;
+		color: #82ae46;
+		font: inherit;
+		text-indent: 100%;
+		cursor: pointer;
+		
+		&:focus {
+			outline: solid 0 transparent;
+			box-shadow: 0 0 0 2px #8ed0f9
+		}
+		&:hover {
+			background: rgba(29, 161, 142, .1)
+		}
+		&:before, &:after {
+			position: absolute;
+			top: 15%; left: calc(50% - .0625em);
+			width: .125em; height: 70%;
+			border-radius: .125em;
+			transform: rotate(45deg);
+			background: currentcolor;
+			content: ''
+		}
+		&:after { 
+			transform: rotate(-45deg); 
+		}
+	}
+	.tagcloud a {
+		font-size: 18px;
+	}
+	.my-config {
+	  --darkmode: 0;
+	  --h-accent: 223;
+	  --s-accent: 100%;
+	  --l-accent: 61%;
+	}
+	lr-file-uploader-minimal {
+		width: 100%;
+	}
+	.cart-list {
+		margin-bottom: 30px;
+	}
+	.col-lg-3 {
+		flex: 0 0 20%;
+    	max-width: 20%;
+	}
 </style>
 </head>
 <body class="goto-here">
@@ -42,7 +99,7 @@
 					<p class="breadcrumbs">
 						<span class="mr-2"><a href="main.do">Home</a></span> <span>Blog</span>
 					</p>
-					<h1 class="mb-0 bread">리뷰작성</h1>
+					<h1 class="mb-0 bread">리뷰수정</h1>
 				</div>
 			</div>
 		</div>
@@ -80,8 +137,34 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="row" id="reviewImagesThumbnail">
+					
+				</div>
 				<div class="row">
 					<input type="hidden" name="buySerial" value="${ reviewData.buySerial }"> <input type="hidden" name="reviewNum" value="${ reviewData.reviewNum }">
+					<div id="reviewImages">
+						
+					</div>
+					<lr-config
+					    ctx-name="my-uploader"
+					    pubkey="86c01c87f383d8c2191c"
+					    max-local-file-size-bytes="10000000"
+					    multiple-max="10"
+					    img-only="true"
+					></lr-config>
+					<lr-file-uploader-minimal
+					    css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-minimal.min.css"
+					    ctx-name="my-uploader"
+					    class="my-config"
+					>
+					</lr-file-uploader-minimal>
+					<lr-data-output
+					  ctx-name="my-uploader"
+					  use-console
+					  use-input
+					  use-group
+					  use-event
+					></lr-data-output>
 					<textarea id="editor" name="reviewContent">
 						${ reviewData.reviewContent }
 					</textarea>
@@ -93,8 +176,104 @@
 							console.error(error);
 						});
 					</script>
-					<input type="submit" class="btn btn-primary py-3 px-4" value="후기수정">
+					<script>
+			        	const reviewImagesContainer = document.getElementById("reviewImages");
+						const reviewImagesThumbnailContainer = document.getElementById("reviewImagesThumbnail");
+						const dataOutput = document.querySelector('lr-data-output');
+				        
+						dataOutput.addEventListener('lr-data-output', (event) => {
+				        	reviewImagesContainer.replaceChildren();
+				        	reviewImagesThumbnailContainer.replaceChildren();
+				        	for (var i = 0; i < event.detail.data.files.length; i++) {
+					        	console.log(event.detail.data.files[i].cdnUrl);
+					        	
+				        		const reviewImage = document.createElement("input");
+				        		reviewImage.type = "hidden";
+				        		reviewImage.value = event.detail.data.files[i].cdnUrl;
+				        		reviewImage.setAttribute("name", "reviewImage");
+				        		reviewImagesContainer.appendChild(reviewImage);
+				        		
+				        		var reviewImageThumbnailHtml = "";
+				        		reviewImageThumbnailHtml += "<div class='col-md-6 col-lg-3 ftco-animate'>";
+				        		reviewImageThumbnailHtml += 	"<div class='product'>";
+				        		reviewImageThumbnailHtml += 		"<a href='#' class='img-prod'>";
+				        		reviewImageThumbnailHtml += 			"<img class='img-fluid' src=" + event.detail.data.files[i].cdnUrl + " alt='Colorlib Template'>";
+				        		reviewImageThumbnailHtml += 			"<div class='overlay'></div>";
+				        		reviewImageThumbnailHtml += 		"</a>";
+				        		reviewImageThumbnailHtml += 	"</div>";
+				        		reviewImageThumbnailHtml += "</div>";
+				        		reviewImagesThumbnailContainer.innerHTML += reviewImageThumbnailHtml;
+				        	}
+				        });
+			        </script>
+					<input type="text" class="form-control" id="hashtags-input" placeholder="해시태그를 입력해주세요.">
+					<input type="hidden" id="reviewHashtag">
+					<div class="tag-widget post-tag-container mb-5 mt-5">
+						<div id="hashtags-container" class="tagcloud">
+						<script>
+							const hashtagsInput = document.getElementById("hashtags-input");
+			            	const hashtagsContainer = document.getElementById("hashtags-container");
+			            	
+			            	let hashtags = [];
+						
+			            	function addHashtag(tag) {
+			            		if (hashtags.length > 2) {
+			            			return;
+			            		}
+			            		if (tag && !hashtags.includes(tag)) {
+			            			const a = document.createElement("a");
+			            			a.innerText = "# " + tag;
+			            			a.classList.add("tag-cloud-link");
+			            			const i = document.createElement("input");
+			            			i.type = "hidden";
+			            			i.value = tag;
+			            			i.setAttribute("name", "reviewHashtag");
+			            			
+			            			const removeButton = document.createElement("button");
+			            			removeButton.innerText = "X";
+			            			removeButton.classList.add("remove-button");
+			            			removeButton.addEventListener("click", () => {
+			            				hashtagsContainer.removeChild(a);
+			            				hashtagsContainer.removeChild(i);
+			            				hashtags = hashtags.filter((hashtag) => hashtag !== tag);
+			            				document.getElementById("reviewHashtag").value = hashtags;
+			            				console.log(hashtags);
+			            				console.log(document.getElementById("reviewHashtag").value);
+			            			});
+			            			a.appendChild(removeButton);
+			            			hashtagsContainer.appendChild(a);
+			            			hashtagsContainer.appendChild(i);
+			            			hashtags.push(tag);
+			            			
+			            			document.getElementById("reviewHashtag").value = hashtags;
+			            			console.log(hashtags);
+			            			console.log(document.getElementById("reviewHashtag").value);
+			            		}
+			            	}
+			            	
+			            	hashtagsInput.addEventListener("keydown", (event) => {
+			            		if (event.key === 'Enter') {
+			            			event.preventDefault();
+			            			const tag = hashtagsInput.value.trim();
+			            			if (tag) {
+			            				addHashtag(tag);
+			            				hashtagsInput.value = "";
+			            			}
+			            		}
+			            	});
+			            </script>
+							<c:if test="${ reviewData.reviewHashtags ne null }">
+								<c:forEach var="reviewHashtag" items="${ reviewData.reviewHashtags }">
+									<script>
+										var tag = "${ reviewHashtag.reviewHashtagContent }";
+										addHashtag(tag);
+									</script>
+								</c:forEach>
+							</c:if>
+						</div>
+					</div>
 				</div>
+				<input type="submit" class="btn btn-primary py-3 px-4" value="후기수정">
 			</div>
 		</section>
 	</form>

@@ -20,9 +20,9 @@ public class ImageDAO {
 //	static final private String SQL_SELECTONE = "";
 	static final private String SQL_INSERT = "INSERT INTO IMAGE(IMAGE_NUM, TEA_REVIEW_NUM, IMAGE_URL, IMAGE_DIVISION) "
 											+ "VALUES((SELECT NVL(MAX(IMAGE_NUM), 0) + 1 FROM IMAGE), ?, ?, SELECT COUNT(*) FROM IMAGE WHERE TEA_REVIEW_NUM = ?)";
-	static final private String SQL_UPDATE = "UPDATE IMAGE SET IMAGE_URL = ?"
+	static final private String SQL_UPDATE = "UPDATE IMAGE SET IMAGE_URL = ? "
 											+ "WHERE IMAGE_NUM = ? AND IMAGE_DIVISION = ?";
-//	static final private String SQL_DELETE = "";
+	static final private String SQL_DELETE = "DELETE FROM IMAGE WHERE TEA_REVIEW_NUM = ?";
 	
 	public List<ImageVO> selectAll(ImageVO imageVO){
 		Object[] args = { imageVO.getTeaReviewNum() };
@@ -55,13 +55,20 @@ public class ImageDAO {
 	}
 	
 	public boolean delete(ImageVO imageVO) {
-		return false;
+		
+		int result = jdbcTemplete.update(SQL_DELETE, imageVO.getTeaReviewNum());
+		
+		if(result <= 0) {
+			return false;
+		}
+		return true;
 	}
 
 }
 
 // ---------------------------------------------------------------
 
+// SQL_SELECTALL
 class ImageRowMapper implements RowMapper<ImageVO> {
 
 	@Override

@@ -10,6 +10,7 @@ public class FavorVO {
 	private String imageUrl;
 	private int teaPrice;
 	private String teaContent;
+	private String memberName;
 	
 	public FavorVO() {
 		this(0, "", 0);
@@ -19,6 +20,14 @@ public class FavorVO {
 		this.favorNum = favorNum;
 		this.memberId = memberId;
 		this.teaNum = teaNum;
+	}
+	
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 
 	public int getFavorNum() {

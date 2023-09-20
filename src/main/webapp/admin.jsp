@@ -84,7 +84,7 @@
                                    <p class="card-subtitle card-subtitle-dash">원하시는 상품을 클릭하여 관리하세요</p>
                                   </div>
                                   <div>
-                                    <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>새 카테고리 추가</button>
+                                    <a href=""><button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>새 카테고리 추가</button></a>
                                   </div>
                                 </div>
                                 <div class="table-responsive  mt-1">
@@ -97,131 +97,25 @@
                                       </tr>
                                     </thead>
                                     <tbody>
+                                    <c:forEach var="categoryData" items="${categoryDatas}">
                                       <tr>
                                         <td>
                                           <div class="d-flex ">
                                             <img src="Ad/images/faces/face1.jpg" alt="">
                                             <div>
-                                            <a href="adteaListPage.do?teaCategory=녹차">
-                                              <h6>녹차</h6>
-                                              <p>Green Tea</p>
-                                             </a>
+                                              <h6 id="cateName">${categoryData.categoryName}</h6>
                                             </div>
                                           </div>
                                         </td>
                                         <td>
                                           <div>
-                                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                              <p class="text-success">79%</p>
-                                              <p>85/162</p>
-                                            </div>
-                                            <div class="progress progress-md">
-                                              <div class="progress-bar bg-success" role="progressbar" style="width: 85%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                           <p>여기 카테고리당 재고 쓸거냐</p>
                                           </div>
                                         </td>
-                                        <td><div class="badge badge-opacity-warning">In progress</div></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="fixCate('${categoryData.categoryNum}', '${categoryData.categoryName}')">수정</button>
+                                        <button type="button" class="btn btn-info" onclick="delCate('${categoryData.categoryNum}', '${categoryData.categoryName}')">삭제</button></td>
                                       </tr>
-                                      <tr>
-                                        <td>
-                                          <div class="d-flex">
-                                            <img src="Ad/images/faces/face2.jpg" alt="">
-                                            <div>
-                                            <a href="adteaListPage.do?teaCategory=홍차">
-                                              <h6>홍차</h6>
-                                              <p>Black Tea</p>
-                                              </a>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td>
-                                          <div>
-                                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                              <p class="text-success">65%</p>
-                                              <p>85/162</p>
-                                            </div>
-                                            <div class="progress progress-md">
-                                              <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td><div class="badge badge-opacity-warning">In progress</div></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <div class="d-flex">
-                                            <img src="Ad/images/faces/face3.jpg" alt="">
-                                            <div>
-                                            <a href="adteaListPage.do?teaCategory=우롱차">
-                                              <h6>우롱차</h6>
-                                              <p>Oolong Tea</p>
-                                             </a>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td>
-                                          <div>
-                                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                              <p class="text-success">65%</p>
-                                              <p>85/162</p>
-                                            </div>
-                                            <div class="progress progress-md">
-                                              <div class="progress-bar bg-warning" role="progressbar" style="width: 38%" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td><div class="badge badge-opacity-warning">In progress</div></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <div class="d-flex">
-                                            <img src="Ad/images/faces/face4.jpg" alt="">
-                                            <div>
-                                            <a href="adteaListPage.do?teaCategory=허브차">
-                                              <h6>허브차</h6>
-                                              <p>Herbal Tea</p>
-                                             </a>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td>
-                                          <div>
-                                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                              <p class="text-success">65%</p>
-                                              <p>85/162</p>
-                                            </div>
-                                            <div class="progress progress-md">
-                                              <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td><div class="badge badge-opacity-danger">Pending</div></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <div class="d-flex">
-                                            <img src="Ad/images/faces/face5.jpg" alt="">
-                                            <div>
-                                            <a href="adteaListPage.do?teaCategory=루이보스차">
-                                              <h6>루이보스차</h6>
-                                              <p>Rooibos Tea</p>
-                                             </a>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td>
-                                          <div>
-                                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                              <p class="text-success">65%</p>
-                                              <p>85/162</p>
-                                            </div>
-                                            <div class="progress progress-md">
-                                              <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td><div class="badge badge-opacity-success">Completed</div></td>
-                                      </tr>
+                                      </c:forEach>
                                     </tbody>
                                   </table>
                                 </div>
@@ -273,6 +167,85 @@
   <script src="Ad/js/dashboard.js"></script>
   <script src="Ad/js/Chart.roundedBarCharts.js"></script>
   <!-- End custom js for this page-->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+function fixCate(categoryNum, categoryName) {
+    var resFix = prompt('수정하실 카테고리명을 입력하세요', categoryName);
+    if (resFix !== null) {
+        console.log(resFix);
+        
+        
+    	var category = {categoryNum: categoryNum, categoryName: resFix };
+    	
+    	$.ajax({
+            url: 'updateCategory.do',
+            type: 'POST',
+            data: category,
+            success: function(fresult){
+                //console.log('favorResult [' + favorResult + ']');
+              	
+            },
+            error: function(error){
+               alert('error [' + error + ']');
+            }
+         });
+
+/*         // 요청 본문 데이터를 JSON 형식으로 설정
+        var requestData = {
+            categoryNum: categoryNum,
+            categoryName: resFix
+        };
+		console.log(requestData);
+        // fetch를 사용하여 서버에 POST 요청 보내기
+        fetch('/updateCategory.do', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify(requestData),
+        })
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('네트워크 응답 실패');
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data); // 서버에서 온 응답 데이터 처리
+            window.location.reload();
+        })
+        .catch(function(error) {
+            console.error('오류 발생:', error);
+        }); */
+    }
+}
+
+function delCate(categoryNum, categoryName) {
+	 if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+
+	    	//var category = {categoryNum: categoryNum, categoryName: resFix };
+	    	
+	    	$.ajax({
+	            url: 'deleteCategory.do?categoryNum='+categoryNum,
+	            type: 'POST',
+	            success: function(fresult){
+	                //console.log('favorResult [' + favorResult + ']');
+	              	
+	            },
+	            error: function(error){
+	               alert('error [' + error + ']');
+	            }
+	         });
+	     
+
+	 }else{   //취소
+
+	     return false;
+
+	 }
+}
+
+</script>
 </body>
 
 </html>

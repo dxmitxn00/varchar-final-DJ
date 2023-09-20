@@ -159,16 +159,8 @@ $("#selectCategory").change(function() {
 	    dataType: "json",
 		success: function(result){
 			 console.log(result);
-			   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
-			   // 기존의 <option>을 모두 제거합니다.
-			  // console.log(result[1].teaNum);
 	         $('#selectTea').empty();
 			   var teaInfo = result;
-			   //var selteaNum='';
-			   //var selteaName='';
-			   //var selteaCnt='';
-			   //var selteaPrice='';
-			   //var selteaContent='';
 			   var firstItem = result[0];
 			    $('#teaNum').attr("value",firstItem.teaNum);
 			    $('#teaName').attr("value",firstItem.teaName);
@@ -176,31 +168,13 @@ $("#selectCategory").change(function() {
 			   var optteaNum=teaInfo[i].teaNum;
 			   var optteaName = teaInfo[i].teaName;
 			   console.log(optteaName);
-			//     console.log(optteaNum);
-			     // 각 <option>에 데이터를 속성으로 추가
 	                var optionElement = $('<option>' + optteaName + '</option>')
 	                    .attr('value', optteaNum)
 	                    .attr('data-tea-name', optteaName)
 
-	                // <option>을 #teaToDel에 추가
 	                $('#selectTea').append(optionElement);
-			 //  console.log(selteaName);
-			      }
-			   
-	           // 새로운 <option>을 추가합니다.
-	      //     $('#teaToDel').append(selteaName);
-			   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
-			 //  if($('#teaToDel'))
-	        //    $('#teaNum').attr("value",optteaNum);
-	       //     $('#teaName').attr("value",optteaName);
-	       //     $('#teaCnt').attr("value",optteaCnt);
-	       //     $('#teaPrice').attr("value",optteaPrice);
-	       //     $('#teaContent').attr("value",optteaContent);
+			      }		   
 		   },
-		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
-		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
-		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
-		   // 오늘 집가서 이거 제대로 끝낸다 스바...
 		
 		error: function(error){
 		    console.log(error);
@@ -208,58 +182,57 @@ $("#selectCategory").change(function() {
 	});
   });
 
-$("#selectbutton").click(function() {
+$("#selectbutton").click(function () {
 	  var hashtag = $("#selectTea").val();
-	 // var hashTags = exampleData.find(function(product) {
-	 //   return product.name === selectedProduct;
-	 // });
-	  $.ajax({
-			url: "selectTeaTag.do",
-			data: {
-				hashtag: hashtag
-			},
-			type: "post",
-		    dataType: "json",
-			success: function(result){
-			   console.log(result);
-			   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
-			 //  var teaInfo = result;
-			//   var selteaName='';
-			//   for (var i=0;i<teaInfo.length;i++){
-			//   var optteaName = teaInfo[i].teaName;
-			//   console.log(optteaName);
-			//   selteaName += '<option>' + optteaName + '</option>';
-			//      }
-			   // 기존의 <option>을 모두 제거합니다.
-	        //   $('#selectTea').empty();
 
-	           // 새로운 <option>을 추가합니다.
-	       //    $('#selectTea').append(selteaName);
-			   },
-			   // teaName이 forEach 형식으로 뜨게 하고 싶다.
-			   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
-			   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
-			   // 오늘 집가서 이거 제대로 끝낸다 스바...
-			
-			error: function(error){
-			    console.log(error);
-		    }
-		});
-	  
-	  // 해시태그 버튼을 생성하고 추가
-//	  var hashTagContainer = $("#hashTagContainer");
-//	  hashTagContainer.empty(); // 이전 버튼 제거
-	  
-//	  if (hashTags && hashTags.hashtags) {
-//	    hashTags.hashtags.forEach(function(tag) {
-//	      var classNames = ["btn-success", "btn-warning", "btn-info", "btn-dark"];
-//	      var randomClass = classNames[Math.floor(Math.random() * classNames.length)];
-//	      var hashTagButton = $('<input type="button" value="' + tag + '" name="hashTagContent" class="btn '+ randomClass +'" style="display: block;">');
-//	      console.log('해시태그: '+tag);
-//	      hashTagContainer.append(hashTagButton);
-//	    });
-//	  }
+	  $.ajax({
+	    url: "selectTeaTag.do",
+	    data: {
+	      hashtag: hashtag
+	    },
+	    type: "post",
+	    dataType: "json",
+	    success: function (result) {
+	      console.log(result);
+	      var hashtagContainer = $("#hashTagContainer");
+	      hashtagContainer.empty();
+	      var hashtags = result;
+
+	      if (hashtags.length > 0) {
+	        var firstTag = hashtags[0].teaHashtagContent;
+	        var hashTagElement = $("<input>", {
+	          type: "button",
+	          name: "teaHashtagContent",
+	          value: firstTag
+	        });
+
+	        var randomStyle = getRandomStyle(); // 랜덤한 스타일을 얻는 도우미 함수
+	        hashTagElement.addClass("btn " + randomStyle);
+	        hashtagContainer.append(hashTagElement);
+
+	        for (var i = 1; i < hashtags.length; i++) {
+	          var hashtag = hashtags[i].teaHashtagContent;
+	          randomStyle = getRandomStyle();
+	          var tagElement = $("<input type='button' name='teaHashtagContent' class='btn " + randomStyle + "'>")
+	            .val(hashtag)
+	            .css("display", "block");
+	          hashtagContainer.append(tagElement);
+	        }
+	      } else {
+	        console.log("선택된 상품에 대한 해시태그가 없습니다.");
+	      }
+	    },
+	    error: function (error) {
+	      console.log(error);
+	    }
+	  });
 	});
+
+	// 랜덤한 버튼 스타일을 얻는 도우미 함수
+	function getRandomStyle() {
+	  var buttonStyles = ["btn-success", "btn-warning", "btn-info", "btn-dark"];
+	  return buttonStyles[Math.floor(Math.random() * buttonStyles.length)];
+	}
 </script>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function () {

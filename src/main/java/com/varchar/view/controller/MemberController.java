@@ -1,12 +1,5 @@
 package com.varchar.view.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,7 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +31,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/login.do", method=RequestMethod.GET)
 	public String loginPage() { // 로그인 페이지
-		return "redirect:login.jsp";
+		return "login.jsp";
 	}
 
 	@RequestMapping(value = "/login.do", method=RequestMethod.POST) // 로그인
@@ -52,9 +44,9 @@ public class MemberController {
 		String shaPW = Password.ShaPass(pw+salt);
 		memberVO.setMemberPw(shaPW);
 		
-		System.out.println("pw: "+ pw);
-		System.out.println("암호화pw: "+shaPW);
-		System.out.println("사용된 salt: "+salt);
+		System.out.println("pw : " + pw);
+		System.out.println("암호화pw : " + shaPW);
+		System.out.println("사용된 salt : " + salt);
 		
 		memberVO.setMemberSearch("로그인");
 		memberVO = memberService.selectOne(memberVO);
@@ -62,7 +54,8 @@ public class MemberController {
 
 		if (memberVO != null) {
 			session.setAttribute("sessionMemberId", memberVO.getMemberId());
-			
+			session.setAttribute("sessionMemberPlatform", memberVO.getMemberPlatform());
+			System.out.println(memberVO);
 //			if(memberVO.getMemberGrade().equals("ADMIN")) { // 관리자 검사
 //				return "관리자 페이지";
 //			}
@@ -73,7 +66,7 @@ public class MemberController {
 			return "alertFalse.jsp";
 		}
 		
-		return "redirect:main.do";
+		return "main.do";
 	}
 	
 	// ------------------------------------- 로그아웃 페이지 ------------------------------------------
@@ -91,6 +84,7 @@ public class MemberController {
 
 		System.out.println("LogoutController 로그");
 		session.removeAttribute("sessionMemberId");
+		session.removeAttribute("sessionMemberPlatform");
 
 		AlertVO sweetAlertVO = new AlertVO("로그아웃", "메인으로 이동합니다.", null, "success", "main.do");
 		model.addAttribute("sweetAlert", sweetAlertVO);
@@ -102,7 +96,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/signup.do", method=RequestMethod.GET)
 	public String signupPage() { // 회원가입 페이지
-		return "redirect:signup.jsp";
+		return "signup.jsp";
 	}
 
 	@RequestMapping(value = "/signup.do", method=RequestMethod.POST)
@@ -189,7 +183,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/updatePw.do", method=RequestMethod.GET)
 	public String updatePwPage() {
-		return "redirect:updatePw.jsp";
+		return "updatePw.jsp";
 	}
 
 	@RequestMapping(value = "/updatePw.do", method=RequestMethod.POST)
@@ -283,6 +277,7 @@ public class MemberController {
 			return "signup.jsp";
 		}
 		session.setAttribute("sessionMemberId", memberVO.getMemberId());
+		session.setAttribute("sessionMemberPlatform", memberVO.getMemberPlatform());
 		return "main.do";
 	}
 	

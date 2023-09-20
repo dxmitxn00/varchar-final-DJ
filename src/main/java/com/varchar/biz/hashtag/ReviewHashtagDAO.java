@@ -16,22 +16,31 @@ public class ReviewHashtagDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-
-	static final private String SQL_SELECTALL = "SELECT REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT "
+	static final private String SQL_SELECTALL = "SELECT rh.REVIEW_HASHTAG_NUM, rh.REVIEW_HASHTAG_CONTENT "
 												+ "FROM REVIEW_HASHTAG rh "
 												+ "JOIN HASHTAG_DETAIL hd ON hd.HASHTAG_NUM = rh.REVIEW_HASHTAG_NUM "
-												+ "WHERE ITEM_NUM = ?";
+												+ "WHERE hd.ITEM_NUM = ?";
+	
+	static final private String SQL_SELECTALL_RANK = "SELECT hd.HASHTAG_NUM, COUNT(rh.REVIEW_HASHTAG_NUM) AS USAGE_COUNT, MAX(rh.REVIEW_HASHTAG_CONTENT) AS REVIEW_HASHTAG_CONTENT "
+													+ "FROM HASHTAG_DETAIL hd "
+													+ "JOIN REVIEW_HASHTAG rh ON rh.REVIEW_HASHTAG_NUM = hd.HASHTAG_NUM "
+													+ "WHERE hd.ITEM_NUM >= 2000 "
+													+ "GROUP BY hd.HASHTAG_NUM";
 	
 	static final private String SQL_SELECTONE = "SELECT REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT FROM REVIEW_HASHTAG WHERE REVIEW_HASHTAG_CONTENT = ? ";
 	
-	
-	static final private String SQL_INSERT ="INSERT INTO REVIEW_HASHTAG(REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT) "
-			+ "VALUES ((SELECT NVL(MAX(REVIEW_HASHTAG_NUM, 2000)+1 FROM REVIEW_HASHTAG, ?)";
+	static final private String SQL_INSERT = "INSERT INTO REVIEW_HASHTAG(REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT) "
+											+ "VALUES ((SELECT NVL(MAX(REVIEW_HASHTAG_NUM), 2000) + 1 FROM REVIEW_HASHTAG), ?)";
 
 	public List<ReviewHashtagVO> selectAll(ReviewHashtagVO reviewHashtagVO) {
 		
-		Object[] args = { reviewHashtagVO.getItemNum() };
-		return jdbcTemplate.query(SQL_SELECTALL, args, new ReviewHashtagSelect());
+		if (reviewHashtagVO.getHashTagSearchCondition().equals("후기번호검색")) {
+			Object[] args = { reviewHashtagVO.getItemNum() };
+			return jdbcTemplate.query(SQL_SELECTALL, args, new ReviewHashtagSelect());
+		} 
+		else { // if(reviewHashtagVO.getHashTagSearchCondition().equals("해시태그랭크")) 
+			return jdbcTemplate.query(SQL_SELECTALL_RANK, new ReviewHashtagRank());
+		}
 	}
 
 	public ReviewHashtagVO selectOne(ReviewHashtagVO reviewHashtagVO) {
@@ -65,6 +74,7 @@ public class ReviewHashtagDAO {
 
 //----------------------------------------------------------------------------------------------------
 
+// selectAll
 class ReviewHashtagSelect implements RowMapper<ReviewHashtagVO> {
 
 	@Override
@@ -78,3 +88,20 @@ class ReviewHashtagSelect implements RowMapper<ReviewHashtagVO> {
 	}
 	
 }
+
+// SQL_SELECTALL_RANK
+class ReviewHashtagRank implements RowMapper<ReviewHashtagVO> {
+
+	@Override
+	public ReviewHashtagVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ReviewHashtagVO data = new ReviewHashtagVO();
+		data.setHashtagNum(rs.getInt("HASHTAG_NUM"));
+		data.setUsageCount(rs.getInt("USAGE_COUNT"));
+		data.setReviewHashtagContent(rs.getString("REVIEW_HASHTAG_CONTENT"));
+		return data;
+	}
+	
+}
+
+
+

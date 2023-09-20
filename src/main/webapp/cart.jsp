@@ -312,17 +312,17 @@
 						<div class="cart-total mb-3">
 							<h3>Cart Totals</h3>
 							<p class="d-flex">
-								<span>Subtotal</span> <span id="subTotal">0 원</span>
+								<span>총 상품 금액</span> <span id="subTotal">0 원</span>
 							</p>
 							<p class="d-flex">
-								<span>Delivery</span> <span>3000 원</span>
+								<span>배송비</span> <span>3000 원</span>
 							</p>
 							<p class="d-flex">
-								<span>Discount</span> <span>0 원</span>
+								<span>할인 금액</span> <span>0 원</span>
 							</p>
 							<hr>
 							<p class="d-flex total-price">
-								<span>Total</span> <span id="total">3000 원</span>
+								<span>최종 결제 금액</span> <span id="total">3000 원</span>
 							</p>
 						</div>
 					</div>
@@ -334,7 +334,7 @@
 								<a id="payBtn" href="buyPage.do" class="btn btn-primary py-3 px-4">결제하기</a>
 							</c:if>
 							<c:if test="${ empty sessionScope.cart }">
-								<a class="btn btn-primary py-3 px-4">결제하기</a>
+								<a id="payBtnEmpty" class="btn btn-primary py-3 px-4">결제하기</a>
 							</c:if>
 						</c:if>
 						<c:if test="${ empty sessionMemberId }">
