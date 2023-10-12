@@ -2619,7 +2619,7 @@ html[subframe] body {
 
   <div style="margin:auto; text-align:center;">
   	<p style="color:#8a8a8a; font-size:.8em;"><br><br>또 다른 에러를 찾으며 다양한 게임을 플레이해보세요 \^0^/</p>
-  	<input type="button" class="btn" value="  메인으로 갈까여?ㅜ  " onclick = "location.href = 'main.do' ">
+  	<input type="button" class="btn" value="  메인으로 갈까여?ㅜ  " onclick = "location.href = '../main.do' ">
   </div>
 
     <script type="text/javascript">

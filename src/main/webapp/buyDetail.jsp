@@ -73,7 +73,7 @@
 													<input type="submit" class="btn btn-primary py-3 px-4" value="후기작성">
 												</c:if>
 												<c:if test="${ buyDetailData.reviewDone == false }">
-													<input type="submit" class="btn btn-primary py-3 px-4" value="작성완료" style="background-color: #788D7C;" disabled>
+													<input type="submit" class="btn btn-primary py-3 px-4" value="작성완료" style="background-color: #9d9ca6; border:#9d9ca6; color:#ffffff;" disabled>
 												</c:if></td>
 										</tr>
 										<!-- END TR-->

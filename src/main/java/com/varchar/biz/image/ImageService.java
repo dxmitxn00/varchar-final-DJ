@@ -1,4 +1,4 @@
-package com.varchar.biz.tea;
+package com.varchar.biz.image;
 
 import java.util.List;
 

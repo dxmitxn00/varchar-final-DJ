@@ -314,13 +314,13 @@
 
 	function makeTimer() {
 
-		var endTime = new Date("21 December 2019 9:56:00 GMT+01:00");			
-		endTime = (Date.parse(endTime) / 1000);
+		var startTime = new Date("07 June 2023 9:19:00 GMT+09:00");			
+		startTime = (Date.parse(startTime) / 1000);
 
 		var now = new Date();
 		now = (Date.parse(now) / 1000);
 
-		var timeLeft = endTime - now;
+		var timeLeft = now - startTime;
 
 		var days = Math.floor(timeLeft / 86400); 
 		var hours = Math.floor((timeLeft - (days * 86400)) / 3600);

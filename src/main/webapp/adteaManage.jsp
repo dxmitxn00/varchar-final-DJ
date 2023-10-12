@@ -29,7 +29,8 @@
 <!-- inject:css -->
 <link rel="stylesheet" href="Ad/css/vertical-layout-light/style.css">
 <!-- endinject -->
-<link rel="shortcut icon" href="Ad/images/favicon.png" />
+<!-- 파비콘 태그 -->
+<try:favicon/>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- 스윗알랏 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
@@ -53,6 +54,9 @@
   	display: flex;
   }
 
+select {
+	color: black !important;
+}
 </style>  
 </head>
 
@@ -77,7 +81,7 @@
 									<h4 class="card-title">상품 추가</h4>
 									<p class="card-description">양식에 맞게 기재하세요.</p>
 									<!-- 상품 추가 form 시작 -->
-									<form action="insertTea.do" class="forms-sample" enctype="multipart/form-data" id="teaForm" >
+									<form action="insertTea.do" class="forms-sample" enctype="multipart/form-data" id="insertTeaForm" method="post">
 									<div class="form-group">
 											<label>상품 카테고리</label>
 											<select id="categorySelect" class="form-control" name="categoryNum">
@@ -101,13 +105,13 @@
 										</div>
 										<div class="form-group">
 											<label>상품 사진</label>
-											<input type="file" class="file-upload-default" id="fileInput" />
+											<input type="file" class="file-upload-default" name="fileUpload" id="fileInput" multiple="multiple"/>
 											<div class="input-group col-xs-12">
-												<input type="text" class="form-control file-upload-info" disabled placeholder="$-{teaData.imageUrl}" id="fileInputText" />
-												<span class="input-group-append" id="uploadSpan" >
-													<button class="file-upload-browse btn btn-success btn-icon-text"
-														type="button" id="uploadButton"><i class="ti-upload btn-icon-prepend"></i>사진 업로드</button>
-												</span>
+												<input type="text" class="form-control file-upload-info" disabled id="fileInputText" />
+												<button class="btn btn-danger btn-icon-text" type="button" id="uploadButton">
+						
+													<i class="ti-upload btn-icon-prepend"></i>사진 업로드
+												</button>
 											</div>
 											 <div class="image-preview mt-2">
                                                <img src="#" alt="미리보기" id="imagePreview" style="display: none; max-width: 200px;">
@@ -117,7 +121,7 @@
 											<label for="exampleInputPassword1">상품 설명</label>
 											<input type="text" class="form-control form-control-lg" name="teaContent"  required>
 										</div>
-										<input type="submit" class="btn btn-primary me-2" id="submitButton">
+										<input type="submit" value="추가" class="btn btn-primary me-2" id="insertSubmitButton">
 									</form>
 									<!-- 상품 추가 form 끝 -->
 								</div>
@@ -131,7 +135,7 @@
 									<!-- 상품 삭제 form 시작 -->
 									<form action="deleteTea.do" method="post" class="forms-sample">
 									  <div class="form-group">
-										<h5><strong>상품 카테고리 선택 [1) 카테고리를 먼저 지정한다.]</strong></h5>
+										<h5><strong>상품 카테고리 선택</strong></h5>
 										<select class="form-control" id="categoryToDel">
 										<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
 											<c:forEach var="categoryData" items="${categoryDatas}">
@@ -140,7 +144,7 @@
 										</select>
 									</div>
 										<div class="form-group">
-										<h5><strong>상품 선택 [2) 위에서 나눈 카테고리 별로 상품이 출력되게 한다.]</strong></h5>
+										<h5><strong>상품 선택</strong></h5>
 										<select class="form-control" id="teaToDel">
 										</select>
 									</div>
@@ -148,29 +152,33 @@
 										<div class="form-group">
 											<label for="exampleInputName1">상품번호(PK)</label> <input
 												type="text" class="form-control" id="teaNum" name="teaNum"
-												placeholder="$-{teaData.teaNum}" readonly>
+												 readonly>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputEmail3">상품명</label> <input
 												type="text" class="form-control" id="teaName" name="teaName"
-												placeholder="$-{teaData.teaName}" readonly>
+											 readonly>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputPrice">상품 가격</label> <input
 												type="text" class="form-control" name="teaPrice"
-												id="teaPrice" placeholder="$-{teaData.teaPrice}" readonly>
+												id="teaPrice" readonly>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputCnt">상품 총 재고</label> <input
 												type="text" class="form-control" name="teaCnt"
-												id="teaCnt" placeholder="$-{teaData.teaCnt}" readonly>
+												id="teaCnt" readonly>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputCity1">상품 설명</label> <input
-												type="text" name="teaContent" class="form-control" id="teaContent" placeholder="$-{teaData.teaContent}" readonly>
+												type="text" name="teaContent" class="form-control" id="teaContent" readonly>
 										</div>
-										<button id="scrolltofix"  type="submit" class="btn btn-primary me-2">Submit</button>
-										<button class="btn btn-light">Cancel</button>
+										<div class="form-group">
+											<label for="exampleInputPrice">상품 판매 상태</label> <input
+												type="text" class="form-control" name="teaStatus"
+												id="teaStatus" readonly>
+										</div>
+										<button id="delTeabt"  type="submit" class="btn btn-primary me-2">삭제</button>
 									</form>
 									<!-- 상품 삭제 form 끝 -->
 								</div>
@@ -188,7 +196,7 @@
 												<div class="form-group row">
 													<label class="col-sm-3 col-form-label">카테고리 선택</label>
 													<div class="col-sm-9">
-														<select class="form-control" id="categoryToFix">
+														<select class="form-control" id="categoryToFix" name="categoryNum">
 														<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
 															<c:forEach var="categoryData" items="${categoryDatas}">
 											<option value="${categoryData.categoryNum}">${categoryData.categoryName}</option>
@@ -210,15 +218,15 @@
 												<div class="form-group row">
 													<label class="col-sm-3 col-form-label">상품번호(PK)</label>
 													<div class="col-sm-9">
-														<input type="text" name="teaNum" id="fixteaNum"class="form-control" placeholder="$-{teaData.teaNum}" readonly/>
+														<input type="text" name="teaNum" id="fixteaNum"class="form-control" readonly/>
 													</div>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group row">
-													<label class="col-sm-3 col-form-label">상품명</label>
+													<label class="col-sm-3 col-form-label">상품명 (변경하실 경우 새로 입력)</label>
 													<div class="col-sm-9">
-														<input type="text" name="teaName" id="fixteaName" class="form-control" placeholder="$-{teaData.teaName}"/>
+														<input type="text" name="teaName" id="fixteaName" class="form-control" />
 													</div>
 												</div>
 											</div>
@@ -275,9 +283,17 @@
 										 <div id="msg">
 										 <p>해당 상품의 기존 <strong>재고</strong>는 <strong id="existteaCnt">$-{teaData.teaCnt}</strong>개, 기존 <strong>가격</strong>은 <strong id="existteaPrice">$-{teaData.teaPrice}</strong>원 입니다.</p>
 										 </div>
+										 <div class="form-group">
+											<label for="exampleInputPassword1">상품 설명 변경</label>
+											<input type="text" id="fixteaContent" class="form-control form-control-lg" name="teaContent">
+										</div>
+										<div class="form-group">
+                                          <label for="exampleFormControlSelect3">상품 판매 상태 변경</label>
+                                            <input type="text" class="form-control" id="fixteaStatus" name="teaStatus" readonly>
+                                            <button type="button" class="btn btn-outline-info" onclick="fixStatus()">상태 바꾸기</button>
+                                        </div>
 									   </div>
-									   <button type="submit" class="btn btn-primary me-2">Submit</button>
-									   <button class="btn btn-light">Cancel</button>
+									   <button id="fixTeabt" type="submit" class="btn btn-primary me-2">수정</button>
 									</form>
 									<!-- 상품 수정 form 끝 -->
 								</div>
@@ -344,26 +360,42 @@ $("#categoryToDel").change(function() {
 		   console.log(result);
          $('#teaToDel').empty();
 		   var teaInfo = result;
+		   if(teaInfo.length == 0){
+			   alert('해당 카테고리에 상품이 존재하지 않습니다.');
+			   $('#teaToDel').empty();
+			   $('#teaNum').val(' ');
+				$('#teaName').val(' ');
+				$('#teaCnt').val(' ');
+				$('#teaPrice').val(' ');
+				$('#teaContent').val(' ');
+				$('#teaStatus').val(' ');
+			   $('#delTeabt').css("display", "none");
+		   }
 		   var firstItem = result[0];
-		    $('#teaNum').attr("value",firstItem.teaNum);
-		    $('#teaName').attr("value",firstItem.teaName);
-		    $('#teaCnt').attr("value",firstItem.teaCnt);
-		    $('#teaPrice').attr("value",firstItem.teaPrice);
-		    $('#teaContent').attr("value",firstItem.teaContent);
+		   $('#teaNum').val(firstItem.teaNum);
+		   $('#teaName').val(firstItem.teaName);
+		   $('#teaCnt').val(firstItem.teaCnt);
+		   $('#teaPrice').val(firstItem.teaPrice);
+		   $('#teaContent').val(firstItem.teaContent);
+		   $('#teaStatus').val(firstItem.teaStatus);
+		   $('#delTeabt').css("display", "block");
 		   for (var i=0;i<teaInfo.length;i++){
 		   var optteaNum=teaInfo[i].teaNum;
 		   var optteaName = teaInfo[i].teaName;
 		   var optteaCnt = teaInfo[i].teaCnt;
 		   var optteaPrice = teaInfo[i].teaPrice;
 		   var optteaContent = teaInfo[i].teaContent;
+		   var optteaStatus = teaInfo[i].teaStatus;
 		   console.log(optteaName);
-                var optionElement = $('<option>' + optteaName + '</option>')
-                    .attr('data-tea-num', optteaNum)
-                    .attr('data-tea-name', optteaName)
-                    .attr('data-tea-cnt', optteaCnt)
-                    .attr('data-tea-price', optteaPrice)
-                    .attr('data-tea-content', optteaContent);
-                $('#teaToDel').append(optionElement);
+           var optionElement = 
+           $('<option>' + optteaName + '</option>')
+           .attr('data-tea-num', optteaNum)
+           .attr('data-tea-name', optteaName)
+           .attr('data-tea-cnt', optteaCnt)
+           .attr('data-tea-price', optteaPrice)
+           .attr('data-tea-content', optteaContent)
+           .attr('data-tea-status', optteaStatus);
+           $('#teaToDel').append(optionElement);
 		      }
 		   },
 		error: function(error){
@@ -380,15 +412,18 @@ $("#teaToDel").change(function () {
     var teaCnt = selectedOption.attr('data-tea-cnt');
     var teaPrice = selectedOption.attr('data-tea-price');
     var teaContent = selectedOption.attr('data-tea-content');
-    console.log('여기오냐1');
+    var teaStatus = selectedOption.attr('data-tea-status');
+    console.log('로그1');
 
-    // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
-     $('#teaNum').attr("value",teaNum);
-    $('#teaName').attr("value",teaName);
-    $('#teaCnt').attr("value",teaCnt);
-    $('#teaPrice').attr("value",teaPrice);
-    $('#teaContent').attr("value",teaContent);
-    console.log('여기오냐2');
+    // 각각의 <input> 엘리먼트에 데이터를 설정
+    $('#teaNum').val(teaNum);
+	$('#teaName').val(teaName);
+	$('#teaCnt').val(teaCnt);
+	$('#teaPrice').val(teaPrice);
+	$('#teaContent').val(teaContent);
+	$('#teaStatus').val(teaStatus);
+	$('#delTeabt').css("display", "block");
+    console.log('로그2');
 });
 
 </script>	
@@ -407,54 +442,53 @@ $("#categoryToFix").change(function() {
 		success: function(result){
 		   console.log(result);
 		   // 여기서 id가 selectTea라는 <select> 하위의 <option>에 gson으로 받아온
-		   // 기존의 <option>을 모두 제거합니다.
-		  // console.log(result[1].teaNum);
+		   // 기존의 <option>을 모두 제거
          $('#teaToFix').empty();
 		   var teaInfo = result;
-		   //var selteaNum='';
-		   //var selteaName='';
-		   //var selteaCnt='';
-		   //var selteaPrice='';
-		   //var selteaContent='';
+		   if(teaInfo.length == 0){
+			   alert('해당 카테고리에 상품이 존재하지 않습니다.');
+			   $('#teaToFix').empty();
+			   $('#fixteaNum').val(' ');
+				$('#fixteaName').val(' ').prop('readonly', true);
+				$('#fixradicnt').val(' ').prop('readonly', true);
+				$('#fixradiprice').val(' ').prop('readonly', true);
+				$('#existteaCnt').text(' ');
+				$('#existteaPrice').text(' ');
+				$('#fixteaContent').val(' ').prop('readonly', true);
+				$('#fixteaStatus').val(' ');
+			    $('#fixTeabt').css("display", "none");
+		   }
 		   var firstItem = result[0];
-		    $('#fixteaNum').attr("value",firstItem.teaNum);
-		    $('#fixteaName').attr("value",firstItem.teaName);
-		    $('#existteaCnt').text(firstItem.teaCnt);
-		    $('#existteaPrice').text(firstItem.teaPrice);
+		   $('#fixteaNum').val(firstItem.teaNum);
+		   $('#fixteaName').val(firstItem.teaName).prop('readonly', false);
+		   $('#fixradiprice').val(firstItem.teaPrice).prop('readonly', false);
+		   $('#fixradicnt').val(firstItem.teaCnt).prop('readonly', false);
+		   $('#existteaCnt').text(firstItem.teaCnt);
+		   $('#existteaPrice').text(firstItem.teaPrice);
+		   $('#fixteaContent').val(firstItem.teaContent).prop('readonly', false);
+		   $('#fixteaStatus').val(firstItem.teaStatus);
+		   $('#fixteaStatus').attr("placeholder", firstItem.teaStatus);
+		   $('#fixTeabt').css("display", "block");
 		   for (var i=0;i<teaInfo.length;i++){
 		   var optteaNum=teaInfo[i].teaNum;
 		   var optteaName = teaInfo[i].teaName;
 		   var optteaCnt = teaInfo[i].teaCnt;
 		   var optteaPrice = teaInfo[i].teaPrice;
 		   var optteaContent = teaInfo[i].teaContent;
+		   var optteaStatus = teaInfo[i].teaStatus;
 		   console.log(optteaName);
-		//     console.log(optteaNum);
 		     // 각 <option>에 데이터를 속성으로 추가
-                var optionElement = $('<option>' + optteaName + '</option>')
-                    .attr('data-tea-num', optteaNum)
-                    .attr('data-tea-name', optteaName)
-                    .attr('data-tea-cnt', optteaCnt)
-                    .attr('data-tea-price', optteaPrice)
-
-                // <option>을 #teaToDel에 추가
-                $('#teaToFix').append(optionElement);
-		 //  console.log(selteaName);
+           var optionElement = 
+           $('<option>' + optteaName + '</option>')
+           .attr('data-tea-num', optteaNum)
+           .attr('data-tea-name', optteaName)
+           .attr('data-tea-cnt', optteaCnt)
+           .attr('data-tea-price', optteaPrice)
+           .attr('data-tea-content', optteaContent)
+           .attr('data-tea-status', optteaStatus);
+           $('#teaToFix').append(optionElement);
 		      }
-		   
-           // 새로운 <option>을 추가합니다.
-      //     $('#teaToDel').append(selteaName);
-		   // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
-		 //  if($('#teaToDel'))
-        //    $('#teaNum').attr("value",optteaNum);
-       //     $('#teaName').attr("value",optteaName);
-       //     $('#teaCnt').attr("value",optteaCnt);
-       //     $('#teaPrice').attr("value",optteaPrice);
-       //     $('#teaContent').attr("value",optteaContent);
 		   },
-		   // teaName이 forEach 형식으로 뜨게 하고 싶다.
-		   // 결국엔 배열 형식이기 때문에, 항상 JAVA에서 써오던 for문 방식으로 먼저 체크를 해보자.
-		   // 그리고 TeaVO의 멤버변수 하나하나로 다 받아온 저 result를 teaName만 추출해서 나오게 하도록!
-		   // 오늘 집가서 이거 제대로 끝낸다 스바...
 		error: function(error){
 		    console.log(error);
 	    }
@@ -467,14 +501,22 @@ $("#teaToFix").change(function () {
     var teaName = selectedOption.attr('data-tea-name');
     var teaCnt = selectedOption.attr('data-tea-cnt');
     var teaPrice = selectedOption.attr('data-tea-price');
-    console.log('여기오냐1');
-
-    // 각각의 <input> 엘리먼트에 데이터를 설정합니다.
-    $('#fixteaNum').attr("value",teaNum);
-    $('#fixteaName').attr("value",teaName);
-    $('#existteaCnt').text(teaCnt);
-    $('#existteaPrice').text(teaPrice);
-    console.log('여기오냐2');
+    var teaContent = selectedOption.attr('data-tea-content');
+    var teaStatus = selectedOption.attr('data-tea-status');
+    console.log('로그1');
+  
+    // 각각의 <input> 태그에 데이터를 설정
+    $('#fixteaNum').val(teaNum);
+	$('#fixteaName').val(teaName).prop('readonly', false);
+    $('#fixradiprice').val(teaPrice).prop('readonly', false);
+	$('#fixradicnt').val(teaCnt).prop('readonly', false);
+	$('#existteaCnt').text(teaCnt);
+	$('#existteaPrice').text(teaPrice);
+	$('#fixteaContent').val(teaContent).prop('readonly', false);
+	$('#fixteaStatus').val(teaStatus);
+	$('#fixTeabt').css("display", "block");
+    console.log('로그2');
+    
 });
 
 </script>
@@ -530,33 +572,33 @@ function checkInput(input) {
 </script>	
 
 <script type="text/javascript">
-$('#uploadSpan').on("click", async function(){
-	console.log('이미지 업로드 버튼 클릭됨');
-	
-	const { value: file } = await Swal.fire({
-		  title: '상품 이미지 선택',
-		  input: 'file',
-		  inputAttributes: {
-		    'accept': 'image/*',
-		    'aria-label': '업로드할 이미지를 선택해주세요'
-		  }
-		})
 
-		if (file) {
-		  const reader = new FileReader()
-		  reader.onload = async(e) => {
-		    Swal.fire({
-		      title: '선택된 상품 이미지',
-		      imageUrl: e.target.result,
-		      imageAlt: 'The uploaded picture'
-		    })
-		  }
-		  console.log('이미지 로그1 '+file);
-		  //$('input[type=file]').attr('value', file);
-		  console.log('이미지 로그2 '+reader.readAsDataURL(file));
-		  reader.readAsDataURL(file)
-		}
+$('#uploadButton').on("click", function(){
+	console.log('이미지 업로드 버튼 클릭됨');
+		
+	$('#fileInput').trigger('click');
 });
+</script>
+<script type="text/javascript">
+function fixStatus(){
+	var teaStatus = document.getElementById('fixteaStatus').value;
+	teaStatus = parseInt(teaStatus);	
+		if(teaStatus === 1) {
+			teaStatus = 0;
+		}
+		else if(teaStatus === 0){
+			teaStatus = 1;
+		}
+		else{
+			alert('상품 선택후 조회 버튼을 눌러주세요!');
+			location.reload();
+		}
+     document.getElementById('fixteaStatus').value = teaStatus;	
+     console.log(teaStatus);
+    
+}
+
+
 </script>
 </body>
 

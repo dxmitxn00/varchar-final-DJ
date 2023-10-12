@@ -1,7 +1,6 @@
 package com.varchar.view.controller;
 
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -40,35 +38,38 @@ public class MemberController {
 
 		memberVO.setMemberSearch("솔트");
 		String pw = memberVO.getMemberPw();
-		String salt = memberService.selectOne(memberVO).getMemberSalt(); // 회원의 솔트값 가져옴
-		String shaPW = Password.ShaPass(pw+salt);
-		memberVO.setMemberPw(shaPW);
-		
-		System.out.println("pw : " + pw);
-		System.out.println("암호화pw : " + shaPW);
-		System.out.println("사용된 salt : " + salt);
-		
-		memberVO.setMemberSearch("로그인");
-		memberVO = memberService.selectOne(memberVO);
-		
 
-		if (memberVO != null) {
-			session.setAttribute("sessionMemberId", memberVO.getMemberId());
-			session.setAttribute("sessionMemberPlatform", memberVO.getMemberPlatform());
-			System.out.println(memberVO);
-//			if(memberVO.getMemberGrade().equals("ADMIN")) { // 관리자 검사
-//				return "관리자 페이지";
-//			}
-			
-		} else {
-			AlertVO sweetAlertVO = new AlertVO("로그인실패", "로그인실패", null, "error", null);
-			model.addAttribute("sweetAlert", sweetAlertVO);
-			return "alertFalse.jsp";
+		memberVO = memberService.selectOne(memberVO);
+
+		if(memberVO != null) {
+			String salt = memberVO.getMemberSalt(); // 회원의 솔트값 가져옴
+			String shaPW = Password.ShaPass(pw+salt);
+			memberVO.setMemberPw(shaPW);
+
+			System.out.println("pw : " + pw);
+			System.out.println("암호화pw : " + shaPW);
+			System.out.println("사용된 salt : " + salt);
+
+			memberVO.setMemberSearch("로그인");
+			memberVO = memberService.selectOne(memberVO); 
+
+
+			if (memberVO != null) {
+				session.setAttribute("sessionMemberId", memberVO.getMemberId());
+				session.setAttribute("sessionMemberName", memberVO.getMemberName());
+				session.setAttribute("sessionMemberPlatform", memberVO.getMemberPlatform());
+				session.setAttribute("sessionMemberGrade", memberVO.getMemberGrade());
+				System.out.println(memberVO);
+
+				return "main.do";
+			}	
 		}
-		
-		return "main.do";
+
+		AlertVO sweetAlertVO = new AlertVO("로그인실패", "로그인실패", null, "error", null);
+		model.addAttribute("sweetAlert", sweetAlertVO);
+		return "alertFalse.jsp";
 	}
-	
+
 	// ------------------------------------- 로그아웃 페이지 ------------------------------------------
 
 	@RequestMapping(value = "/logoutPage.do")
@@ -84,7 +85,9 @@ public class MemberController {
 
 		System.out.println("LogoutController 로그");
 		session.removeAttribute("sessionMemberId");
+		session.removeAttribute("sessionMemberName");
 		session.removeAttribute("sessionMemberPlatform");
+		session.removeAttribute("sessionMemberGrade");
 
 		AlertVO sweetAlertVO = new AlertVO("로그아웃", "메인으로 이동합니다.", null, "success", "main.do");
 		model.addAttribute("sweetAlert", sweetAlertVO);
@@ -101,13 +104,13 @@ public class MemberController {
 
 	@RequestMapping(value = "/signup.do", method=RequestMethod.POST)
 	public String signup(MemberVO memberVO, Model model) { // 회원가입
-		
-		
-		String salt = Password.generateRandomPassword(10);
+
+
+		String salt = Password.randomPassword(null);
 		String shaPW = Password.ShaPass(memberVO.getMemberPw()+salt);
 		System.out.println("암호화pw: " + shaPW);
 		System.out.println("사용된 salt: " + salt);
-		
+
 		memberVO.setMemberPw(shaPW);
 		memberVO.setMemberSalt(salt);
 		memberVO.setMemberGrade(0);
@@ -121,7 +124,7 @@ public class MemberController {
 		if (memberService.insert(memberVO)) {
 			AlertVO sweetAlertVO = new AlertVO("회원가입", "회원가입 성공!", null, "success", "main.do");
 			model.addAttribute("sweetAlert", sweetAlertVO);
-			
+
 			if(memberVO.getMemberEmail() != null) {
 				return "signupEmail.do";
 			}
@@ -169,7 +172,7 @@ public class MemberController {
 		AlertVO sweetAlertVO = new AlertVO("회원정보 변경", "회원정보 변경 실패!", null, "warning", "main.do");
 		model.addAttribute("sweetAlert", sweetAlertVO);
 		return "alertFalse.jsp";
-		
+
 	}
 
 	@RequestMapping(value = "/updateInfoPageConfirm.do")
@@ -188,13 +191,13 @@ public class MemberController {
 
 	@RequestMapping(value = "/updatePw.do", method=RequestMethod.POST)
 	public String updatePw(MemberVO memberVO, Model model) {
-		
 
-		String salt = Password.generateRandomPassword(10);
+
+		String salt = Password.randomPassword(null);
 		String shaPW = Password.ShaPass(memberVO.getMemberPw()+salt);
 		memberVO.setMemberPw(shaPW);
 		memberVO.setMemberSalt(salt);
-		
+
 		System.out.println("암호화pw: "+shaPW);
 		System.out.println("사용된 salt: "+salt);
 
@@ -208,34 +211,45 @@ public class MemberController {
 	}
 
 	// ------------------------------------- 비밀번호 찾기 페이지  ------------------------------------------
-	
+
 	@RequestMapping(value="/findPw.do", method=RequestMethod.GET)
 	public String findPwPage() {
 		return "findPw.jsp";
 	}
-	
+
 	@RequestMapping(value="/findPw.do", method=RequestMethod.POST)
 	public String findPw(MemberVO memberVO, Model model) {
-		
-		String randomPw = Password.main(null);
-		System.out.println("임시비밀번호 : " + randomPw);
 
-		String salt = Password.generateRandomPassword(10);
-		String shaPW = Password.ShaPass(randomPw+salt);
-		memberVO.setMemberPw(shaPW);
-		memberVO.setMemberSalt(salt);
-		
-		System.out.println("암호화pw: "+shaPW);
-		System.out.println("사용된 salt: "+salt);
-		
-		memberVO.setMemberSearch("비밀번호변경");
-		if(memberService.update(memberVO)) {
-			MessageAPI_Test.main(memberVO, randomPw);
-			System.out.println("로그 : 임시비밀번호 문자 발송 성공");
+		// 해당 회원 존재 여부 확인
+		memberVO.setMemberSearch("아이디 확인");
+		if(memberService.selectOne(memberVO) != null) {
+
+			// 임시 비밀번호 생성
+			String randomPw = Password.randomPassword(null);
+			System.out.println("임시비밀번호 : " + randomPw);
+
+			// 생성된 임시 비밀번호 암호화
+			String salt = Password.randomPassword(null);
+			String shaPW = Password.ShaPass(randomPw+salt);
+			memberVO.setMemberPw(shaPW);
+			memberVO.setMemberSalt(salt);
+
+			System.out.println("암호화pw: "+shaPW);
+			System.out.println("사용된 salt: "+salt);
+
+			// 암호화된 임시비밀번호로 비밀번호 변경
+			memberVO.setMemberSearch("비밀번호변경");
+			if(memberService.update(memberVO)) { // 비밀번호 변경 성공 시
+				MessageAPI.messageAPI(memberVO, randomPw); // 임시비밀번호 문자발송
+				System.out.println("로그 : 임시비밀번호 문자 발송 성공");
+				
+				AlertVO sweetAlertVO = new AlertVO("비밀번호변경", "임시비밀번호 문자 발송!", null, "success", "login.jsp");
+				model.addAttribute("sweetAlert", sweetAlertVO);
+			}
 		}
-		return "login.jsp";
+		return "alertTrue.jsp";
 	}
-	
+
 	// ------------------------------------- 이메일 전송 ------------------------------------------
 	@RequestMapping(value = "/signupEmail.do")
 	public String signupEmail(MemberVO memberVO) {
@@ -266,21 +280,26 @@ public class MemberController {
 
 		return "alertTrue.jsp";
 	}
-	
+
 	// ------------------------------------- SNS 로그인  -------------------------------------	
 	@RequestMapping(value = "/snsLogin.do")
-	public String snsLogin(HttpServletRequest request, MemberVO memberVO, Model model, HttpSession session) {
+	public String snsLogin(MemberVO memberVO, Model model, HttpSession session) {
 		System.out.println(memberVO);
 		memberVO.setMemberSearch("아이디 중복검사");
 		if (memberService.selectOne(memberVO) == null) {
 			model.addAttribute("memberData", memberVO);
 			return "signup.jsp";
 		}
+		memberVO = memberService.selectOne(memberVO);
+
 		session.setAttribute("sessionMemberId", memberVO.getMemberId());
+		session.setAttribute("sessionMemberName", memberVO.getMemberName());
 		session.setAttribute("sessionMemberPlatform", memberVO.getMemberPlatform());
+		session.setAttribute("sessionMemberGrade", memberVO.getMemberGrade());
+		// 스윗알랏 True(로그인 성공)
 		return "main.do";
 	}
-	
+
 	// ------------------------------------- 회원가입 아이디 중복검사 ------------------------------------------
 	@ResponseBody
 	@RequestMapping(value = "/checkId.do")
@@ -293,29 +312,29 @@ public class MemberController {
 			return String.valueOf(0);
 		}
 		return String.valueOf(1);
-		
+
 	}
-	
+
 	// ------------------------------------- 회원가입 연락처 중복검사 ------------------------------------------
 	@ResponseBody
 	@RequestMapping(value = "/checkPhone.do")
 	public String checkPhone(@RequestParam("memberPhone")String memberPhone, MemberVO memberVO) {
 		memberVO.setMemberSearch("연락처 중복검사");
 		memberVO.setMemberPhone(memberPhone);
-		
+
 		if (memberService.selectOne(memberVO) == null) {
 			return String.valueOf(0);
 		}
 		return String.valueOf(1);
 	}
-	
+
 	// ------------------------------------- 회원가입 이메일 중복검사 ------------------------------------------
 	@ResponseBody
 	@RequestMapping(value = "/checkEmail.do")
 	public String checkEmail(@RequestParam("memberEmail")String memberEmail, MemberVO memberVO) {
 		memberVO.setMemberSearch("이메일 중복검사");
 		memberVO.setMemberEmail(memberEmail);
-		
+
 		if (memberService.selectOne(memberVO) == null) {
 			return String.valueOf(0);
 		}

@@ -14,6 +14,8 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 <script type="module">
     import * as LR from "https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-regular.min.js";
 
@@ -83,10 +85,25 @@
 	.cart-list {
 		margin-bottom: 30px;
 	}
-	.col-lg-3 {
+	.edit_align_center_f {
 		flex: 0 0 20%;
     	max-width: 20%;
+		display: flex;
+		align-items: center;
 	}
+	.product {
+        position: relative;
+    }
+    .icon-cancel {
+        position: absolute;
+        top: 5px; /* 위쪽 여백 조절 */
+        right: 5px; /* 오른쪽 여백 조절 */
+        background-color: transparent;
+        border: none;
+        color: red;
+        font-size: 20px;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body class="goto-here">
@@ -104,7 +121,7 @@
 			</div>
 		</div>
 	</div>
-	<form action="updateReview.do" method="post">
+	<form id="updateForm" action="updateReview.do" method="post">
 		<section class="ftco-section ftco-degree-bg">
 			<div class="container">
 				<div class="cart-list">
@@ -137,11 +154,61 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="row" id="originReviewImagesThumbnail">
+				
+				</div>
+				<hr>
 				<div class="row" id="reviewImagesThumbnail">
 					
 				</div>
 				<div class="row">
-					<input type="hidden" name="buySerial" value="${ reviewData.buySerial }"> <input type="hidden" name="reviewNum" value="${ reviewData.reviewNum }">
+					<input type="hidden" name="buySerial" value="${ reviewData.buySerial }">
+					<input type="hidden" name="reviewNum" value="${ reviewData.reviewNum }">
+					<div id="originReviewImages">
+						<script>					
+							const originReviewImagesContainer = document.getElementById("originReviewImages");
+							const originReviewImagesThumbnailContainer = document.getElementById("originReviewImagesThumbnail");
+							
+							function originImages(url) {
+								const originReviewImage = document.createElement("input");
+								originReviewImage.type = "hidden";
+								originReviewImage.value = url;
+								originReviewImage.setAttribute("name", "reviewImage");
+				        		originReviewImagesContainer.appendChild(originReviewImage);
+				        		
+				        		const originThumbnailDiv = document.createElement('div');
+				        		originThumbnailDiv.className = 'col-md-6 col-lg-3 edit_align_center_f';
+				        		const originProductDiv = document.createElement('div');
+				        		originProductDiv.className = 'product';
+				        		const originImgElement = document.createElement('img');
+				        		originImgElement.className = 'img-fluid';
+				        		originImgElement.src = url;
+				        		originImgElement.alt = 'Colorlib Template';
+				        		const originCancelSpan = document.createElement('span');
+				        		originCancelSpan.className = 'icon-cancel';
+				        		originCancelSpan.addEventListener("click", () => {
+				        			originReviewImagesContainer.removeChild(originReviewImage);
+				        			originReviewImagesThumbnailContainer.removeChild(originThumbnailDiv);
+				        			editMultipleMax();
+				        		});
+				        		const originOverlayDiv = document.createElement('div');
+				        		originOverlayDiv.className = 'overlay';
+	
+				        		originProductDiv.appendChild(originImgElement);
+				        		originProductDiv.appendChild(originCancelSpan);
+				        		originProductDiv.appendChild(originOverlayDiv);
+				        		originThumbnailDiv.appendChild(originProductDiv);
+				        		originReviewImagesThumbnailContainer.appendChild(originThumbnailDiv);
+				        		editMultipleMax();
+							}
+						</script>
+						<c:forEach var="reviewImage" items="${ reviewData.reviewImages }">
+							<script>
+								var url = "${ reviewImage.imageUrl }";
+								originImages(url);
+							</script>
+						</c:forEach>
+					</div>
 					<div id="reviewImages">
 						
 					</div>
@@ -181,7 +248,24 @@
 						const reviewImagesThumbnailContainer = document.getElementById("reviewImagesThumbnail");
 						const dataOutput = document.querySelector('lr-data-output');
 				        
-						dataOutput.addEventListener('lr-data-output', (event) => {
+						let imageCount = 0;
+						
+						window.addEventListener('LR_REMOVE', (event) => {
+							console.log(event.detail);
+							console.log(imageCount);
+							if (imageCount == 1) {
+								reviewImagesContainer.replaceChildren();
+					        	reviewImagesThumbnailContainer.replaceChildren();
+					        	let imageCount = 0;
+							}
+						});
+						
+						window.addEventListener('LR_UPLOAD_FINISH', (event) => {
+							console.log(event.detail);
+							console.log("업로드 완료");
+						});
+						
+						window.addEventListener('lr-data-output', (event) => {
 				        	reviewImagesContainer.replaceChildren();
 				        	reviewImagesThumbnailContainer.replaceChildren();
 				        	for (var i = 0; i < event.detail.data.files.length; i++) {
@@ -193,18 +277,34 @@
 				        		reviewImage.setAttribute("name", "reviewImage");
 				        		reviewImagesContainer.appendChild(reviewImage);
 				        		
-				        		var reviewImageThumbnailHtml = "";
-				        		reviewImageThumbnailHtml += "<div class='col-md-6 col-lg-3 ftco-animate'>";
-				        		reviewImageThumbnailHtml += 	"<div class='product'>";
-				        		reviewImageThumbnailHtml += 		"<a href='#' class='img-prod'>";
-				        		reviewImageThumbnailHtml += 			"<img class='img-fluid' src=" + event.detail.data.files[i].cdnUrl + " alt='Colorlib Template'>";
-				        		reviewImageThumbnailHtml += 			"<div class='overlay'></div>";
-				        		reviewImageThumbnailHtml += 		"</a>";
-				        		reviewImageThumbnailHtml += 	"</div>";
-				        		reviewImageThumbnailHtml += "</div>";
-				        		reviewImagesThumbnailContainer.innerHTML += reviewImageThumbnailHtml;
+				        		const thumbnailDiv = document.createElement('div');
+				        		thumbnailDiv.className = 'col-md-6 col-lg-3 edit_align_center_f';
+				        		const productDiv = document.createElement('div');
+				        		productDiv.className = 'product';
+				        		const imgElement = document.createElement('img');
+				        		imgElement.className = 'img-fluid';
+				        		imgElement.src = event.detail.data.files[i].cdnUrl;
+				        		imgElement.alt = 'Colorlib Template';
+				        		const overlayDiv = document.createElement('div');
+				        		overlayDiv.className = 'overlay';
+
+				        		productDiv.appendChild(imgElement);
+				        		productDiv.appendChild(overlayDiv);
+				        		thumbnailDiv.appendChild(productDiv);
+				        		reviewImagesThumbnailContainer.appendChild(thumbnailDiv);
 				        	}
+				        	imageCount = event.detail.data.files.length;
 				        });
+						
+						function editMultipleMax() {
+							const originReviewImagesThumbnail = document.getElementById('originReviewImagesThumbnail');
+							const originThumbnailchildCount = originReviewImagesThumbnail.childElementCount;
+							
+							let maxUpload = 10 - originThumbnailchildCount;
+							$("lr-config").attr("multiple-max", maxUpload);
+							$("lr-config").attr("multiplemax", maxUpload);
+							console.log("maxUpload : " + maxUpload);
+						}
 			        </script>
 					<input type="text" class="form-control" id="hashtags-input" placeholder="해시태그를 입력해주세요.">
 					<input type="hidden" id="reviewHashtag">
@@ -261,6 +361,8 @@
 			            			}
 			            		}
 			            	});
+			            	
+			            	editMultipleMax();
 			            </script>
 							<c:if test="${ reviewData.reviewHashtags ne null }">
 								<c:forEach var="reviewHashtag" items="${ reviewData.reviewHashtags }">
@@ -273,10 +375,37 @@
 						</div>
 					</div>
 				</div>
-				<input type="submit" class="btn btn-primary py-3 px-4" value="후기수정">
+				<input id="inputSubmit" type="button" class="btn btn-primary py-3 px-4" value="후기수정">
 			</div>
 		</section>
 	</form>
+	
+	<script>
+	// Submit (후기수정)
+	$("#inputSubmit").on("click", function(){
+		// alert 시작
+		Swal.fire({
+			title: '후기 수정', // 제목 text
+			text: '수정하시겠습니까?', // 내용 text
+			icon: 'question', // warning, success, info, error, question
+			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+			showCancelButton: true, // cancle 버튼 보이기
+			confirmButtonText: '확인', // confirm 버튼 text
+			cancelButtonText: '취소' // cancel 버튼 text
+		}).then((result) => {
+			if (result.isConfirmed) {
+  				$("#updateForm").submit();                			
+			}
+			else {
+				//history.go(-1);
+			}
+		});
+		// alert 끝
+	});
+	</script>
+	
+	
 	<!-- .section -->
 
 	<footer class="ftco-footer ftco-section bg-light">

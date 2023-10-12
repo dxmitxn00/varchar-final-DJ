@@ -6,6 +6,7 @@
 <html lang="en">
 
 <head>
+
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,7 +26,8 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="Ad/css/vertical-layout-light/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="Ad/images/favicon.png" />
+  <!-- 파비콘 태그 -->
+  <try:favicon/>
 <style type="text/css">
 
   a {
@@ -36,6 +38,11 @@
     text-decoration: underline;
     color: black;
   }
+  
+  a:link { color: red; text-decoration: none;}
+  a:visited { color: black; text-decoration: none;}
+  a:hover { color: blue; text-decoration: underline;}
+ 
 </style>  
 </head>
 <body>
@@ -84,42 +91,207 @@
                                    <p class="card-subtitle card-subtitle-dash">원하시는 상품을 클릭하여 관리하세요</p>
                                   </div>
                                   <div>
-                                    <a href=""><button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>새 카테고리 추가</button></a>
+                                    <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button" onclick="addCate();"><i class="mdi mdi-account-plus"></i>새 카테고리 추가</button>
                                   </div>
                                 </div>
                                 <div class="table-responsive  mt-1">
                                   <table class="table select-table">
                                     <thead>
                                       <tr>
-                                        <th><h6>차 종류</h6></th>
-                                        <th><h6>재고현황</h6></th>
+                                        <th><h6>카테고리</h6></th>
+                                        <th><h6>판매현황</h6></th>
                                         <th><h6>상태</h6></th>
                                       </tr>
                                     </thead>
                                     <tbody>
+                                    <!-- 반복 시작 -->
                                     <c:forEach var="categoryData" items="${categoryDatas}">
                                       <tr>
                                         <td>
                                           <div class="d-flex ">
-                                            <img src="Ad/images/faces/face1.jpg" alt="">
+                                            <img src="Ad/images/default.png" alt="카테고리 이미지">
                                             <div>
-                                              <h6 id="cateName">${categoryData.categoryName}</h6>
+                                              <h6 id="cateName"><a href="adminCategory.do?categoryNum=${categoryData.categoryNum}&categoryName=${categoryData.categoryName}">${categoryData.categoryName}</a></h6>
                                             </div>
                                           </div>
                                         </td>
                                         <td>
                                           <div>
-                                           <p>여기 카테고리당 재고 쓸거냐</p>
+                                           <p>총 ${categoryData.buyCnt}개</p>
                                           </div>
                                         </td>
-                                        <td><button type="button" class="btn btn-danger" onclick="fixCate('${categoryData.categoryNum}', '${categoryData.categoryName}')">수정</button>
-                                        <button type="button" class="btn btn-info" onclick="delCate('${categoryData.categoryNum}', '${categoryData.categoryName}')">삭제</button></td>
+                                        
+                                        <td>
+                                        <c:if test="${ categoryData.categoryNum ne 0 }">
+                                        	<button type="button" class="btn btn-danger" onclick="fixCate('${categoryData.categoryNum}', '${categoryData.categoryName}')">수정</button>
+                                        	<button type="button" class="btn btn-info" onclick="delCate('${categoryData.categoryNum}', '${categoryData.categoryName}')">삭제</button>
+                                      	</c:if>
+                                        </td>
                                       </tr>
                                       </c:forEach>
+                                       <!-- 반복 끝 -->
                                     </tbody>
                                   </table>
                                 </div>
                               </div>
+                              <!-- 차트 시작 -->
+<div class="card-body">
+	<div class="chartjs-size-monitor">
+		<div class="chartjs-size-monitor-expand">
+			<div class=""></div>
+		</div>
+		<div class="chartjs-size-monitor-shrink">
+			<div class=""></div>
+		</div>
+	</div>
+<h4 class="card-title">카테고리 별 판매량</h4>
+<canvas id="barChart" style="display: block; height: 342px; width: 685px;" width="1370" height="684" class="chartjs-render-monitor"></canvas>
+</div>
+<!-- 차트 끝 -->
+
+<!-- 차트 시작 -->
+<div class="card-body">
+	<div class="chartjs-size-monitor">
+		<div class="chartjs-size-monitor-expand">
+			<div class=""></div>
+		</div>
+		<div class="chartjs-size-monitor-shrink">
+			<div class=""></div>
+		</div>
+	</div>
+<h4 class="card-title">플랫폼별 사용자 수</h4>
+<canvas id="pieChart" style="display: block; height: 342px; width: 685px;" width="1370" height="684" class="chartjs-render-monitor"></canvas>
+</div>
+<!-- 차트 끝 -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script type="text/javascript">
+var labelss = [];
+var datas = [];
+<c:forEach var="categoryData" items="${categoryDatas}">
+labelss.push('${categoryData.categoryName}');
+datas.push(${categoryData.buyCnt});
+</c:forEach>
+var labels2 = [];
+var datas2 = [];
+<c:forEach var="memberData" items="${memberDatas}">
+labels2.push('${memberData.memberPlatform}');
+datas2.push(${memberData.memberGrade});
+</c:forEach>
+			// bar 차트 시작 카테고리별 판매량
+            var context = document
+                .getElementById('barChart')
+                .getContext('2d');
+            var barChart = new Chart(context, {
+                type: 'bar', // 차트의 형태
+                data: { // 차트에 들어갈 데이터
+                    labels: 
+                        //x 축
+                        labelss //녹차 홍차 ...(카테고리 명)
+                    ,
+                    datasets: [
+                        { //데이터
+                            label: '판매량', //차트 제목
+                            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+                            data: 
+                            	datas //x축 label에 대응되는 데이터 값 // 판매량
+                            ,
+                            backgroundColor: [
+                                //색상
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                //경계선 색상
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1 //경계선 굵기
+                        }/* ,
+                        {
+                            label: 'test2',
+                            fill: false,
+                            data: [
+                                8, 34, 12, 24
+                            ],
+                            backgroundColor: 'rgb(157, 109, 12)',
+                            borderColor: 'rgb(157, 109, 12)'
+                        } */
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }
+                        ]
+                    }
+                }
+            });
+            
+			// pie 차트 시작 카테고리별 판매량
+            var context = document
+                .getElementById('pieChart')
+                .getContext('2d');
+            var pieChart = new Chart(context, {
+                type: 'pie', // 차트의 형태
+                data: { // 차트에 들어갈 데이터
+                    labels: 
+                        //x 축
+                        labels2 //(플랫폼 명)
+                    ,
+                    datasets: [
+                        { //데이터
+                            label: '사용자 수', //차트 제목
+                            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+                            data: 
+                            	datas2 //x축 label에 대응되는 데이터 값 // 판매량
+                            ,
+                            backgroundColor: [
+                                //색상
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                //경계선 색상
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1 //경계선 굵기
+                        }/* ,
+                        {
+                            label: 'test2',
+                            fill: false,
+                            data: [
+                                8, 34, 12, 24
+                            ],
+                            backgroundColor: 'rgb(157, 109, 12)',
+                            borderColor: 'rgb(157, 109, 12)'
+                        } */
+                    ]
+                }
+            });
+        </script>
                             </div>
                           </div>
                         </div>
@@ -177,54 +349,35 @@ function fixCate(categoryNum, categoryName) {
         
     	var category = {categoryNum: categoryNum, categoryName: resFix };
     	
-    	$.ajax({
-            url: 'updateCategory.do',
-            type: 'POST',
-            data: category,
-            success: function(fresult){
+		if(categoryNum > 0){
+    		$.ajax({
+            	url: 'updateCategory.do',
+            	type: 'POST',
+            	data: category,
+            	success: function(fresult){
                 //console.log('favorResult [' + favorResult + ']');
               	
-            },
-            error: function(error){
-               alert('error [' + error + ']');
-            }
-         });
+            	},
+            	error: function(error){
+          			alert('error [' + error + ']');
+         		}
+         	});
+			 
+		 }
+		 else{
+			 alert('해당 카테고리는 수정할 수 없습니다!');
+			 return false;
+		 }
+    	
 
-/*         // 요청 본문 데이터를 JSON 형식으로 설정
-        var requestData = {
-            categoryNum: categoryNum,
-            categoryName: resFix
-        };
-		console.log(requestData);
-        // fetch를 사용하여 서버에 POST 요청 보내기
-        fetch('/updateCategory.do', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-            },
-            body: JSON.stringify(requestData),
-        })
-        .then(function(response) {
-            if (!response.ok) {
-                throw new Error('네트워크 응답 실패');
-            }
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(data); // 서버에서 온 응답 데이터 처리
-            window.location.reload();
-        })
-        .catch(function(error) {
-            console.error('오류 발생:', error);
-        }); */
     }
 }
 
 function delCate(categoryNum, categoryName) {
 	 if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-
-	    	//var category = {categoryNum: categoryNum, categoryName: resFix };
 	    	
+		 if(categoryNum > 0){
+			 
 	    	$.ajax({
 	            url: 'deleteCategory.do?categoryNum='+categoryNum,
 	            type: 'POST',
@@ -236,13 +389,38 @@ function delCate(categoryNum, categoryName) {
 	               alert('error [' + error + ']');
 	            }
 	         });
-	     
-
-	 }else{   //취소
-
+	    	
+		 }
+		 else{
+			 alert('해당 카테고리는 삭제할 수 없습니다!');
+			 return false;
+		 }
+	 }
+	 else{   //취소
 	     return false;
 
 	 }
+}
+
+</script>
+<script type="text/javascript">
+function addCate(categoryName) {
+    var resAdd = prompt('추가하실 카테고리명을 입력하세요');
+    if (resAdd !== null) {
+        console.log(resAdd);
+        
+        $.ajax({
+            url: 'insertCategory.do?categoryName='+resAdd,
+            type: 'POST',
+            success: function(fresult){
+                //console.log('favorResult [' + favorResult + ']');
+              	
+            },
+            error: function(error){
+               alert('error [' + error + ']');
+            }
+         });
+    }
 }
 
 </script>

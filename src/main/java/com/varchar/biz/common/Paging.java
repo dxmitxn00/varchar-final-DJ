@@ -3,13 +3,9 @@ package com.varchar.biz.common;
 public class Paging {
 
 	public static PagingVO paging(PagingVO pagingVO) {
-		System.out.println("\tLog: controller => TeaListPageAction [START]");
-
 		int currentPage = 1;
 
 		String currentPageStr = pagingVO.getCurrentPageStr();
-		System.out.println("로그 currentPageStr: " + currentPageStr);
-		//String currentPageStr = request.getParameter("page");
 
 		try {
 			if (currentPageStr != null && !currentPageStr.equals("")) {
@@ -18,9 +14,7 @@ public class Paging {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
-		System.out.println("로그 int currentPage: " + currentPage);
 		
-
 		final int pageSize = pagingVO.getPageSize(); // 한페이지에 보여줄 행
 		final int pageBlock = 2; // 페이징에 나타날 페이지 수
 		int startPage = 0; // 시작 페이지
@@ -31,6 +25,7 @@ public class Paging {
 		
 		totalCnt = pagingVO.getTotalCnt();
 		
+		// 페이징 로직 시작
 		int totalPageCnt = (totalCnt / pageSize) + (totalCnt % pageSize == 0 ? 0 : 1);
 		if (currentPage % pageBlock == 0) {
 			startPage = ((currentPage / pageBlock) - 1) * pageBlock + 1;
@@ -42,16 +37,12 @@ public class Paging {
 			endPage = totalPageCnt;
 		}
 		
-		System.out.println("\teaLog: controller => TeaListPageAction [page: startPage: " + startPage + ", endPage: " + endPage + "]");
-		
-		startRnum = (currentPage - 1) * pageSize + 1;
-		endRnum = startRnum + pageSize - 1;
 		startRnum = (currentPage - 1) * pageSize + 1;
 		endRnum = startRnum + pageSize;
 		if (endRnum > totalCnt) {
 			endRnum = totalCnt;
 		}
-		
+		// 페이징 로직 끝
 		
 		pagingVO.setStartPage(startPage);
 		pagingVO.setEndPage(endPage);
@@ -59,14 +50,7 @@ public class Paging {
 		pagingVO.setCurrentPage(currentPage);
 		pagingVO.setStartRnum(startRnum);
 		
-		
-		System.out.println("\teaLog: controller => TeaListPageAction: [page: startRnum: " + startRnum + ", endRnum: " + endRnum + "]");
-		
-		System.out.println(pagingVO);
-		
 		return pagingVO;
-		
-		
 	}
 
 }

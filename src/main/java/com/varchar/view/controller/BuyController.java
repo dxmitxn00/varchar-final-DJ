@@ -13,7 +13,6 @@ import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.List;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,11 +21,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.varchar.biz.buy.BuyDetailService;
 import com.varchar.biz.buy.BuyDetailVO;
@@ -136,7 +133,6 @@ public class BuyController {
 				}
 			}
 			model.addAttribute("buyDetailDatas", buyDetailDatas);
-			// View님들 bddatas를 buyDetailDatas로 변수명 바꿔주셈 ---> ㅋㅋㅋㅋㅋㅋ귀엽네
 		}
 
 		return "buyDetail.jsp";
@@ -148,16 +144,12 @@ public class BuyController {
 			TeaVO teaVO, PaymentVO paymentVO, Model model, MemberVO memberVO) throws IOException {
 
 		// 결제 승인 API 호출하기
-
 		String orderName = request.getParameter("orderName");
 		String orderId = request.getParameter("orderId");
 		String paymentKey = request.getParameter("paymentKey");
 		int amount = Integer.parseInt(request.getParameter("amount"));
 		String secretKey = "test_sk_zXLkKEypNArWmo50nX3lmeaxYG5R:";
 
-		System.out.println("orderId" + orderId);
-		System.out.println("paymentKey" + paymentKey);
-		System.out.println("amount" + amount);
 		Encoder encoder = Base64.getEncoder();
 		byte[] encodedBytes = encoder.encode(secretKey.getBytes("UTF-8"));
 		String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
@@ -171,6 +163,7 @@ public class BuyController {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);
+		
 		JSONObject obj = new JSONObject();
 		obj.put("paymentKey", paymentKey);
 		obj.put("orderId", orderId);
@@ -188,15 +181,8 @@ public class BuyController {
 		Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
 		JSONParser parser = new JSONParser();
 		try {
-			System.out.println("try 들어옴");
-
 			JSONObject jsonObject = (JSONObject) parser.parse(reader);
-			request.setAttribute("JSONObject", jsonObject);
-			request.setAttribute("isSuccess", isSuccess);
 
-			// 이거 안되서 뭔가 생각좀 해봐야 될거 같은데
-			// 그냥 우리가 가진 VO DAO로 출력하는게 제일 나을거 같다는 생각이 듦.....
-			System.out.println("로그: jsonObject " + jsonObject);
 			model.addAttribute("data", jsonObject);
 
 //====================================================== 기존 로직 ======================================================
@@ -317,122 +303,6 @@ public class BuyController {
 //					e.printStackTrace();
 //				}
 //			}
-
-// 해당 로직은 결제 단건 VO / DAO 만든거 같아서 참고용으로 둡니다
-//====================================================== 별빛역 로직 ======================================================
-//		         HttpSession session = request.getSession();// 세션 객체 생성
-//		         String mid = (String) session.getAttribute("mid");// 세션에 저장된 사용자 아이디 값
-//		         MemberVO mVO = new MemberVO();// 사용자 객체
-//		         MemberDAO mDAO = new MemberDAO();
-//
-//		         OrderVO oVO = new OrderVO();// 구매 목록 객체
-//		         OrderDAO oDAO = new OrderDAO();
-//		         
-//		         ProductVO pVO = new ProductVO();
-//		         ProductDAO pDAO = new ProductDAO();
-//		         
-//		         OrderdetailVO odVO = new OrderdetailVO();// 구매 상세정보 객체
-//		         OrderdetailDAO odDAO = new OrderdetailDAO();
-//
-//		         // 구독인지의 여부를 확인할 세션 가져오기
-//		         if (session.getAttribute("subNum") == null) {
-//		        	// 물건 구매라면
-//		            // 물건 여러개인지 아닌지 확인
-//		            if (session.getAttribute("cartFlag") == null) {
-//		               String address = request.getParameter("address");
-//
-//		               oVO.setmID(mid);// 아이디(세션)
-//		               oVO.setoAddress("경기도");// 사용자가 입력한 주소
-//		               oVO.setoPrice(amount);// 사용자가 구매한 가격
-//		               oVO.setoState("결제 완료");// 결제 상태
-//
-//		               oDAO.insert(oVO);// DB에 삽입
-//
-//		               oVO = oDAO.selectOne(oVO);// 주문 번호를 가져오기 위한 장치
-//		               int pnum = (int) session.getAttribute("pnum");
-//		               pVO.setpNum(pnum);
-//		               pVO = pDAO.selectOne(pVO);
-//		               int cnt = amount/pVO.getpPrice();
-//		               odVO.setpNum(pnum);// 상품 번호
-//		               odVO.setoNum(oVO.getoNum());// 주문 번호 
-//		               odVO.setOdCnt(cnt);// 구매한 상품 개수
-//		               
-//		               odDAO.insert(odVO);
-//		               forward = new ActionForward();// 객체 생성
-//		               forward.setPath("success.jsp");// 이동 경로
-//		               forward.setRedirect(false);// 넘겨줄 값 없음
-//		               
-//		            }
-//		            // 장바구니 구매라면
-//		            else if (session.getAttribute("cartFlag").equals("cart")) {
-//		               //장바구니 세션 가져오기
-//		               ArrayList<HashMap<Integer, ProductVO>>cart = (ArrayList<HashMap<Integer, ProductVO>>) session.getAttribute("cart");
-//		               //이거를 DB에 넣어주기
-//		               oVO.setmID(mid);// 아이디(세션)
-//		               oVO.setoAddress("경기도");// 사용자가 입력한 주소
-//		               oVO.setoPrice(amount);// 사용자가 구매한 가격
-//		               oVO.setoState("결제 완료");// 결제 상태
-//
-//		               oDAO.insert(oVO);// DB에 삽입
-//
-//		               oVO = oDAO.selectOne(oVO);// 주문 번호를 가져오기 위한 장치
-//
-//		               
-//		               
-//		               
-//		               for(int i =0; i< cart.size();i++) {
-//		                  HashMap<Integer, ProductVO> hashMap = cart.get(i);// 키 값
-//		                  Set<Integer> keySet = hashMap.keySet();
-//		                  ArrayList<Integer> keyList = new ArrayList<Integer>();
-//		                  for (int v : keySet) {
-//		                     keyList.add(v);
-//		                  }
-////		                  System.out.println("확인: "+keyList);
-//		                  for (int v : keyList) {
-//		                     pVO = hashMap.get(v);
-//		                     odVO.setpNum(pVO.getpNum());// 상품 번호
-//		                     odVO.setoNum(oVO.getoNum());// 주문 번호
-//		                     odVO.setOdCnt(pVO.getTmpCnt());// 구매한 상품 개수
-//		                     odDAO.insert(odVO);
-//		                  }
-//		               }
-//		               
-//		               
-//		               
-//		               
-//		               session.removeAttribute("cart");
-//		               forward = new ActionForward();// 객체 생성
-//		               forward.setPath("success.jsp");// 이동 경로
-//		               forward.setRedirect(false);// 넘겨줄 값 없음
-//
-//		            }
-//
-//		         }
-//		         // 구독 상품 구매라면
-//		         else {
-//		            int subNum = (int) session.getAttribute("subNum");
-//		            SubsinfoVO subVO = new SubsinfoVO();
-//		            SubsinfoDAO subDAO = new SubsinfoDAO();
-//
-//		            subVO.setmID(mid);// 사용자 아이디
-//		            subVO.setSubNum(subNum);// 구매할려는 구독 상품 세팅
-//
-//		            subDAO.insert(subVO);// DB에 구독 정보 추가
-//
-//		            // 구독 정보 추가 후 구독 여부 변경하기
-//		            mVO.setSk("CHANGESUBS");// 구독 변경 SK
-//		            mVO.setmID(mid);// 사용자 아이디 세팅
-//
-//		            mDAO.update(mVO);// 구독 여부 변경(0에서 1로 변경)
-//
-//		            forward = new ActionForward();// 객체 생성
-//		            forward.setPath("success.jsp");// 이동 경로
-//		            forward.setRedirect(false);// 넘겨줄 값 없음
-//
-//		            session.removeAttribute("subNum");// 구매후 세션 제거(구독 상품 여부)
-//
-//		         }
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

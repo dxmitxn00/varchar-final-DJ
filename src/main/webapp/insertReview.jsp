@@ -83,10 +83,25 @@
 	.cart-list {
 		margin-bottom: 30px;
 	}
-	.col-lg-3 {
+	.edit_align_center_f {
 		flex: 0 0 20%;
     	max-width: 20%;
+		display: flex;
+		align-items: center;
 	}
+	.product {
+        position: relative;
+    }
+    .icon-cancel {
+        position: absolute;
+        top: 5px; /* 위쪽 여백 조절 */
+        right: 5px; /* 오른쪽 여백 조절 */
+        background-color: transparent;
+        border: none;
+        color: red;
+        font-size: 20px;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body class="goto-here">
@@ -104,7 +119,7 @@
 			</div>
 		</div>
 	</div>
-	<form action="insertReview.do" method="post">
+	<form id="insertReviewForm" action="insertReview.do" method="post">
 		<section class="ftco-section ftco-degree-bg">
 			<div class="container">
 				<div class="cart-list">
@@ -138,6 +153,15 @@
 					</table>
 				</div>
 				<div class="row" id="reviewImagesThumbnail">
+				
+<!-- 					<div class="col-md-6 col-lg-3 edit_align_center_f">
+						<div class="product">
+							<img class="img-fluid" src="https://ucarecdn.com/d8e4a07d-0a51-4337-8e24-5f56614e2bfa/" alt="Colorlib Template">
+							<span class="icon-cancel" onclick="removeProduct(this)"></span>
+							<div class="overlay">
+							</div>
+						</div>
+					</div> -->
 					
 				</div>
 				<div class="row">
@@ -162,6 +186,7 @@
 					  ctx-name="my-uploader"
 					  use-console
 					  use-input
+					  use-template
 					  use-group
 					  use-event
 					></lr-data-output>
@@ -180,7 +205,19 @@
 						const reviewImagesThumbnailContainer = document.getElementById("reviewImagesThumbnail");
 						const dataOutput = document.querySelector('lr-data-output');
 				        
-						dataOutput.addEventListener('lr-data-output', (event) => {
+						let imageCount = 0;
+						
+						window.addEventListener('LR_REMOVE', (event) => {
+							console.log(event.detail);
+							console.log(imageCount);
+							if (imageCount == 1) {
+								reviewImagesContainer.replaceChildren();
+					        	reviewImagesThumbnailContainer.replaceChildren();
+					        	let imageCount = 0;
+							}
+						});
+						
+						window.addEventListener('lr-data-output', (event) => {
 				        	reviewImagesContainer.replaceChildren();
 				        	reviewImagesThumbnailContainer.replaceChildren();
 				        	for (var i = 0; i < event.detail.data.files.length; i++) {
@@ -192,17 +229,23 @@
 				        		reviewImage.setAttribute("name", "reviewImage");
 				        		reviewImagesContainer.appendChild(reviewImage);
 				        		
-				        		var reviewImageThumbnailHtml = "";
-				        		reviewImageThumbnailHtml += "<div class='col-md-6 col-lg-3 ftco-animate'>";
-				        		reviewImageThumbnailHtml += 	"<div class='product'>";
-				        		reviewImageThumbnailHtml += 		"<a href='#' class='img-prod'>";
-				        		reviewImageThumbnailHtml += 			"<img class='img-fluid' src=" + event.detail.data.files[i].cdnUrl + " alt='Colorlib Template'>";
-				        		reviewImageThumbnailHtml += 			"<div class='overlay'></div>";
-				        		reviewImageThumbnailHtml += 		"</a>";
-				        		reviewImageThumbnailHtml += 	"</div>";
-				        		reviewImageThumbnailHtml += "</div>";
-				        		reviewImagesThumbnailContainer.innerHTML += reviewImageThumbnailHtml;
+				        		const thumbnailDiv = document.createElement('div');
+				        		thumbnailDiv.className = 'col-md-6 col-lg-3 edit_align_center_f';
+				        		const productDiv = document.createElement('div');
+				        		productDiv.className = 'product';
+				        		const imgElement = document.createElement('img');
+				        		imgElement.className = 'img-fluid';
+				        		imgElement.src = event.detail.data.files[i].cdnUrl;
+				        		imgElement.alt = 'Colorlib Template';
+				        		const overlayDiv = document.createElement('div');
+				        		overlayDiv.className = 'overlay';
+
+				        		productDiv.appendChild(imgElement);
+				        		productDiv.appendChild(overlayDiv);
+				        		thumbnailDiv.appendChild(productDiv);
+				        		reviewImagesThumbnailContainer.appendChild(thumbnailDiv);
 				        	}
+				        	imageCount = event.detail.data.files.length;
 				        });
 			        </script>
 					<input type="text" class="form-control" id="hashtags-input" placeholder="해시태그를 입력해주세요.">
@@ -265,10 +308,17 @@
 		            	});
 		            </script>
 				</div>
-			<input type="submit" class="btn btn-primary py-3 px-4" value="후기작성">
+			<input id="submitBtn" type="submit" class="btn btn-primary py-3 px-4" value="후기작성">
 			</div>
 		</section>
 	</form>
+	<!-- <script>
+		$("#submitBtn").on("click", function() {
+			if ($("#editor").val() != "") {
+				
+			}
+		});
+	</script> -->
 	<!-- .section -->
 
 	<footer class="ftco-footer ftco-section bg-light">

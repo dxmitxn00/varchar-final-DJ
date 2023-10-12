@@ -26,7 +26,7 @@
 						    	<span class="text">Healing and Fresh all day with varchar</span> <!-- primary.emptyid -->
 						    </c:if>
 					    	<c:if test="${ not empty sessionMemberId }">
-						    	<span class="text"><img id="edit_loginIcon" alt="" src="images/icon_${ sessionMemberPlatform }.png"> ${ sessionMemberId }님 환영합니다!</span> <!-- primary.id -->
+						    	<span class="text"><img id="edit_loginIcon" alt="" src="images/icon_${ sessionMemberPlatform }.png"> ${ sessionMemberName }님 환영합니다!</span> <!-- primary.id -->
 						    </c:if>
 					    </div>
 				    </div>
@@ -51,15 +51,20 @@
               <a class="nav-link dropdown-toggle" href="teaListPage.do" id="dropdown04" aria-haspopup="true" aria-expanded="false">티 제품
               </a><!-- nav.category -->
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="teaListPage.do?categoryName=녹차">녹차</a> <!-- nav.category01 -->
+              	<c:forEach var="category" items="${ categorys }">
+              		<c:if test="${ category.categoryName != '해당없음'  }">
+	              		<a class="dropdown-item" href="teaListPage.do?categoryName=${ category.categoryName }">${ category.categoryName }</a>
+              		</c:if>
+              	</c:forEach>
+              	<!-- <a class="dropdown-item" href="teaListPage.do?categoryName=녹차">녹차</a> nav.category01
                 <a class="dropdown-item" href="teaListPage.do?categoryName=홍차">홍차</a>
                 <a class="dropdown-item" href="teaListPage.do?categoryName=루이보스">루이보스</a>
                 <a class="dropdown-item" href="teaListPage.do?categoryName=우롱차">우롱차</a>
-				<a class="dropdown-item" href="teaListPage.do?categoryName=허브차">허브차</a>
+				<a class="dropdown-item" href="teaListPage.do?categoryName=허브차">허브차</a> -->
               </div>
             </li>
 			  <li class="nav-item"><a href="reviewListPage.do?searchName=ALL" class="nav-link">티 후기</a></li> <!-- nav.review -->
-	          <li class="nav-item"><a href="mapPage.do" class="nav-link">픽업 장소</a></li> <!-- nav.place -->
+	          <li class="nav-item"><a href="mapPage.do" class="nav-link">지점 위치</a></li> <!-- nav.place -->
 			<!-- 비로그인 시 : 마이페이로 이동 -->
 			<c:if test="${ empty sessionMemberId }">
 			<li class="nav-item dropdown">
@@ -80,6 +85,9 @@
 			  	<a class="dropdown-item" href="myReviewsListPage.do?searchName=MEMBER">내 후기</a> <!-- nav.myReview -->
 			  	<a class="dropdown-item" href="updateInfo.do">회원정보변경</a> <!-- nav.member -->
 			  </div>
+			 <c:if test="${ sessionMemberGrade eq 1 }">
+			 	 <li class="nav-item"><a href="admin.do" class="nav-link">관리자페이지</a></li>
+			 </c:if>
 			</li>
 			</c:if>
 			</ul>

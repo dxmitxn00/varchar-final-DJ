@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="try"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="try"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,8 +12,17 @@
     <!-- 링크 부분 헤더 -->
 	<try:link/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> 
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
   	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+  	<script type="text/javascript">
+  		var onloadCallback = function() {
+  			grecaptcha.render('html_element', {
+  	          'sitekey' : '6LfbYEsoAAAAADbMBkuObINtbVX7g93_RheWuUun'
+  	        });
+  		};
+	</script>
+
   	<style type="text/css">
   		.edit-d-f {
   			display: flex;
@@ -26,6 +35,12 @@
   		}
   		.edit-red {
   			color: red;
+  		}
+  		#html_element {
+  			margin: auto;
+  		}
+  		#spanRecaptcha {
+  			margin: auto;
   		}
   	</style>
   </head>
@@ -168,7 +183,7 @@
                       			console.log(flagAddress);
                       		},
                       		theme: {
-                                bgColor: "#23512E", //바탕 배경색
+                                bgColor: "#7895CB", //바탕 배경색
                                 searchBgColor: "#FFFFFF", //검색창 배경색
                                 contentBgColor: "#FFFFFF", //본문 배경색(검색결과,결과없음,첫화면,검색서제스트)
                                 //pageBgColor: "", //페이지 배경색
@@ -182,11 +197,22 @@
                     }
                 </script>
                 <div class="w-100"></div>
+                <div class="col-md-12">
+	                <div class="form-group edit-d-f" style="margin-bottom: 0px;">
+						<div class="g-recaptcha" data-sitekey="6LfbYEsoAAAAADbMBkuObINtbVX7g93_RheWuUun"></div>
+			          	<div id="html_element">
+			          	
+			          	</div>
+	                </div>
+	                <label id="recaptchaLabel" class="edit-d-f" for="recaptcha"><span id="spanRecaptcha" class="edit-red"></span></label>
+                </div>
+                <div class="w-100"></div>
 	            </div>
 				<div style="margin:auto; text-align:center;">
-					<p><input id="inputSubmit" type="button" class="btn btn-primary py-3 px-4" value="  가입하기  "style="vertical-align:middle; display:inline-block;"></p>
+					<p><input id="inputSubmit" type="button" class="btn btn-primary py-3 px-4" value="가입하기" style="vertical-align:middle; display:inline-block;"></p>
 				</div>
 	          </form>
+	          <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
           	  <!-- 회원가입 폼 태그 끝 -->
 			</div>
           </div> <!-- .col-md-8 -->
@@ -205,6 +231,7 @@
     		var flagEmail = false;
     		var flagPhone = false;
     		var flagAddressDetail = false;
+			var flagRecaptcha = false;
 			
 			// 이름 입력
 			$("#inputName").on("input", function(){
@@ -215,7 +242,7 @@
     		function checkInputName(){
     			var regexName = /(^[가-힣]{2,5}$)|(^[a-zA-Z]{2,20}(\s[a-zA-Z]{2,20})?$)/;
     			inputName = $("#inputName").val();		
-    			
+    			console.log("name");
     			if (!regexName.test(inputName)) {
     				if (inputName == '') {
     					$("#spanName").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
@@ -241,7 +268,7 @@
     		function checkInputPhone(){
 				var regexPhone = /^010\d{8}$/;
 				inputPhone = $("#inputPhone").val();
-    			
+    			console.log("phone");
     			if (!regexPhone.test(inputPhone)) {
     				if (inputPhone == '') {
     					$("#spanPhone").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
@@ -286,7 +313,7 @@
 			function checkInputEmail(){
 				var regexEmail = /^[A-Za-z0-9\.\-_]+@([a-z0-9\-]+\.)+[a-z]{2,6}$/;
     			inputEmail = $("#inputEmail").val();
-    			
+    			console.log("email");
     			if (!regexEmail.test(inputEmail)) {
     				if (inputEmail == '') {
     					$("#spanEmail").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
@@ -333,7 +360,7 @@
     		// 상세주소 함수
     		function checkInputAddressDetail(){
 				inputAddressDetail = $("#inputAddressDetail").val();		
-    			
+				console.log("adde");
 				if (inputAddressDetail == '') {
 					$("#spanAddressDetail").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
 					$("#spanAddressDetail").css("color", "red");
@@ -346,39 +373,56 @@
 				console.log(flagAddressDetail);
 			}
 			
+			function checkRecaptcha(){
+				var v = grecaptcha.getResponse();
+				if (v.length == 0) {
+					$("#spanRecaptcha").html('<i class="fa-solid fa-x"></i> "로봇이 아닙니다."를 체크해주세요.');
+					flagRecaptcha = false;
+				} else {
+					$("#spanRecaptcha").html('<i class="fa-solid fa-check"></i>');
+					$("#spanRecaptcha").css("color", "green");
+					flagRecaptcha = true;
+				}
+			}
+			
 			// Submit 유효성 검사
 	    	$("#inputSubmit").on("click", function(){
-		    	if (!flagId) {
+		    	if (!flagId) { // 아이디 유효성 검사
 		    		checkInputId();
 		    		$("#inputId").focus();
-		    	} else if (!flagPassword1) {
+		    	} else if (!flagPassword1) { // 비밀번호 유효성 검사
 		    		checkInputPassword1();
 		    		$("#inputPassword1").focus();
-		    	} else if (!flagPassword2) {
+		    	} else if (!flagPassword2) { // 비밀번호 확인 유효성 검사
 		    		checkInputPassword2();
 		    		$("#inputPassword2").focus();
-		    	} else if (!flagName) {
+		    	} else if (!flagName) { // 이름 유효성 검사
 		    		checkInputName();
 		    		$("#inputName").focus();
-		    	} else if (!flagEmail) {
-		    		checkInputEmail();
-		    		$("#inputEmail").focus();
-		    	} else if (!flagPhone) {
+		    	} else if (!flagPhone) { // 연락처 유효성 검사
 		    		checkInputPhone();
 		    		$("#inputPhone").focus();
-		    	} else if (!flagAddress) {
+		    	} else if (!flagEmail) { // 이메일 유효성 검사
+		    		checkInputEmail();
+		    		$("#inputEmail").focus();
+		    	} else if (!flagAddress) { // 주소 유효성 검사
 		    		$("#spanAddress").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
 		        	$("#spanAddress").css("color", "red");
 		        	$("#inputAddress").focus();
-		    	} else if (!flagAddressDetail) {
+		    	} else if (!flagAddressDetail) { // 상세주소 유효성 검사
 		    		checkInputAddressDetail();
 		    		$("#inputAddressDetail").focus();
 		    	} else {
-              		$("#signForm").submit();                			
+		    		checkRecaptcha();
+		    		if (flagRecaptcha) { // 리캡챠 유효성 검사
+	              		$("#signForm").submit();		    			
+		    		}
 		    	}
 	    	});
 	</script>
-
+	<script type="text/javascript"> 
+	   history.replaceState({}, null, location.pathname);
+	</script>
 	<!-- 커스텀 태그 적용하기 -->
 	<try:footer/>	
 	<!-- 채팅 API -->

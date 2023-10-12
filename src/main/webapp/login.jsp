@@ -28,7 +28,12 @@
 			margin-right: 10px;
 			margin-left: 10px;
 		}
-		
+		.edit_hidden {
+			display: none;
+		}
+		#edit_snsLogin_media_l {
+			display: none;
+		}
 		#edit_span_kakao {
 			background-image: url("images/login_kakao.png");
 			background-size: 70px;
@@ -44,10 +49,76 @@
 			background-size: 70px;
 			cursor: pointer;
 		}
-		.edit_hidden {
-			display: none;
+		@media (min-width: 768px) {
+			#edit_snsLogin_media_s {
+				display: none;
+			}
+			#edit_snsLogin_media_l {
+				display: block;
+			}
+  			#edit_span_kakao_l {
+				background-image: url("images/login_kakao_m.png");
+				background-size: contain;
+				cursor: pointer;
+			}
+			#edit_span_naver_l {
+				background-image: url("images/login_naver_m.png");
+				background-size: contain;
+				cursor: pointer;
+			}
+			#edit_span_google_l {
+				background-image: url("images/login_google_m.png");
+				background-size: contain;
+				cursor: pointer;
+			}
+			.list-unstyled li span {
+				display: inline-block;
+			}
+			.list-unstyled li span {
+				width: 288px;
+				height: 58px;
+			}
+
 		}
+		@media (min-width: 992px) {
+  			#edit_snsLogin_media_s {
+				display: none;
+			}
+			#edit_snsLogin_media_l {
+				display: block;
+			}
+  			#edit_span_kakao_l {
+				background-image: url("images/login_kakao_l.png");
+				background-size: contain;
+				cursor: pointer;
+			}
+			#edit_span_naver_l {
+				background-image: url("images/login_naver_l.png");
+				background-size: contain;
+				cursor: pointer;
+			}
+			#edit_span_google_l {
+				background-image: url("images/login_google_l.png");
+				background-size: contain;
+				cursor: pointer;
+			}
+			.list-unstyled li span {
+				display: inline-block;
+			}
+			.list-unstyled li span {
+				width: 331px;
+				height: 58px;
+			}
+  		}
 	</style>
+	
+	<script src="https://www.google.com/recaptcha/api.js?render=6LfpIUsoAAAAAOAtRW14-c_XrAOW6LyWOpQGLSYV&badge=bottomleft"></script>
+  	<script>
+   		function onSubmit(token) {
+     		document.getElementById("demo-form").submit();
+   		}
+ 	</script>
+    
   </head>
   <body class="goto-here">
   <!-- 상단, 하단은 커스텀 태그로 넣어주셈 -->
@@ -73,7 +144,8 @@
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
           	<!-- 로그인 폼 태그 -->
-			<form action="login.do" method="post" class="billing-form" onsubmit="return checkPw();">
+          	
+			<form action="login.do" method="post" class="billing-form" onsubmit="return checkPw();" id="demo-form">
 				<h3 class="mb-4 billing-heading" style="padding-bottom: 15px; border-bottom: 1px solid #e1e1e1">로그인</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6" style="margin-top: 30px;">
@@ -92,20 +164,35 @@
 	              </div>
 	            </div>
 				<div style="margin:auto; text-align:center;">
-					<p><input type="submit" class="btn btn-primary py-3 px-4" value="  로그인  "style="vertical-align:middle; display:inline-block;"></p>
+					<p><input type="submit" class="btn btn-primary py-3 px-4 g-recaptcha" value="  로그인  "style="vertical-align:middle; display:inline-block;"
+							data-sitekey="6LfpIUsoAAAAAOAtRW14-c_XrAOW6LyWOpQGLSYV" 
+        					data-callback='onSubmit' 
+        					data-action='submit'></p>
 				</div>
 	          </form>
+	          
            	  <!-- 로그인 폼 태그 끝 -->
+           	  
+           	  
            	  <!-- SNS 로그인 시작 -->
-           	  <div class="row mt-5">
+           	  <div class="row mt-5" id="edit_snsLogin_media_s">
 		      	<div class="col text-center">
 		      		<div class="block-27">
 		              <ul>
-		                <li><span id="edit_span_kakao"></span></li>
-		                <li><span id="edit_span_naver"></span></li>
-		                <li><span id="edit_span_google" data-client_id="831557176408-2a23dinpartetqap2lipe1c046pt24co.apps.googleusercontent.com"></span></li>
+		                <li><span class="btn_span_kakao" id="edit_span_kakao"></span></li>
+		                <li><span class="btn_span_naver" id="edit_span_naver"></span></li>
+		                <li><span class="btn_span_google" id="edit_span_google" data-client_id="831557176408-2a23dinpartetqap2lipe1c046pt24co.apps.googleusercontent.com"></span></li>
 		              </ul>
 		      		</div>
+		      	</div>
+		      </div>
+		      <div class="row mt-5" id="edit_snsLogin_media_l">
+		      	<div class="col text-center">
+		      		<ul class="list-unstyled">
+		      			<li><span class="btn_span_kakao" id="edit_span_kakao_l"></span></li>
+		      			<li><span class="btn_span_naver" id="edit_span_naver_l"></span></li>
+		      			<li><span class="btn_span_google" id="edit_span_google_l" data-client_id="831557176408-2a23dinpartetqap2lipe1c046pt24co.apps.googleusercontent.com"></span></li>
+		      		</ul>
 		      	</div>
 		      </div>
 		      <!-- SNS 로그인 끝 -->
@@ -115,7 +202,7 @@
 		      
 		      <!-- kakao API START -->
 		      <script type="text/javascript">
-		      	$('#edit_span_kakao').click(function(){
+		      	$('.btn_span_kakao').click(function(){
 		      		loginWithKakao();
 		      	});
 		      
@@ -161,7 +248,7 @@
 			
 			<!-- google API START -->
 			<script>
-				$('#edit_span_google').click(function(){
+				$('.btn_span_google').click(function(){
 					$('.nsm7Bb-HzV7m-LgbsSe-BPrWId').trigger('click');
 				});
 				
@@ -248,27 +335,8 @@
 		});
 	</script>
 	
-	<script type="text/javascript">
-		// 비밀번호 유효성 검사
-    	function checkPw() {
- 	  		var nPw = document.getElementById('newPw').value;
-       		var cnPw = document.getElementById('checkNewPw').value;
-                		
-       		if(nPw.length < 8){
-   				alert('비밀번호 설정은 8글자 이상부터 가능합니다.');
-                			
-       			return false;
-       		}
-       		else if( nPw != cnPw ){
-                alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-                			
-                return false;
-            }
-       		return true;
-      	}
-    </script>
     <script type="text/javascript">
-    	$('#edit_span_naver').click(function(){
+    	$('.btn_span_naver').click(function(){
     		console.log('네이버 클릭 확인');
     		
     		$("#naver_id_login_anchor").get(0).click();

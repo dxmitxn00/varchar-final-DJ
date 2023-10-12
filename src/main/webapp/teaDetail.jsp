@@ -109,6 +109,7 @@
 	     });
     </script>
     <style type="text/css">
+    
  	#cartform{
  		text-align: start;
  	}
@@ -172,6 +173,9 @@
 	   	text-overflow: ellipsis;
 	   	white-space: nowrap;
     }
+    .primary-btn {
+    	margin-left: 14px; 
+    }
     </style>
   </head>
   <body class="goto-here">
@@ -183,7 +187,7 @@
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
           	<p class="breadcrumbs"><span class="mr-2"><a href="main.do">Home</a></span> <span class="mr-2"><a href="main.do">Product</a></span> <span>Product Single</span></p>
-            <h1 class="mb-0 bread">Product Single</h1>
+            <h1 class="mb-0 bread">상품 상세</h1>
           </div>
         </div>
       </div>
@@ -197,23 +201,12 @@
     			</div>
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
     				<h3>${ teaData.teaName }</h3>
-    				<div class="rating d-flex">
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2">5.0</a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-							</p>
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">별점</span></a>
-							</p>
-							<p class="text-left">
-								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">판매량</span></a>
-							</p>
-						</div>
-    				<p class="price"><span>${ teaData.teaPrice } 원</span></p>
+    				<c:if test="${ teaData.teaStatus eq 0 }">
+	    				<p class="price"><span>${ teaData.teaPrice } 원</span></p>
+    				</c:if>
+    				<c:if test="${ teaData.teaStatus eq 1 }">
+	    				<p class="price"><span>판매 중단</span></p>
+    				</c:if>
     				<p>${ teaData.teaContent }</p>
     					<div class="tag-widget post-tag-container mb-5 mt-5">
 							<div class="tagcloud">
@@ -240,11 +233,13 @@
 	             	</span>
 	             	</div>
 	          	<div class="w-100"></div>
-	          	<div class="text">
-	          		<p style="color: #000;">600 kg available</p> <!-- 판매 상태하면 될듯? 아마동?? -->
-	          	</div>
 			<p>
-          		<button type="submit" class="primary-btn">Add to Cart</button> <!-- 카트 추가 버튼 -->
+				<c:if test="${ teaData.teaStatus eq 0 }">
+	          		<button type="submit" class="primary-btn">Add to Cart</button> <!-- 카트 추가 버튼 -->
+    			</c:if>
+    			<c:if test="${ teaData.teaStatus eq 1 }">
+	    			<button type="submit" class="primary-btn edit_bg_disabled" style="background: #9d9ca6 !important;" disabled>Add to Cart</button> <!-- 카트 추가 버튼 -->
+    			</c:if>
           		
           		<c:if test="${ not empty sessionMemberId }">
 				<button id="fcBtn" type="button" class="btn-secondary like-review"> <!-- 찜 좋아요 버튼 -->
@@ -277,9 +272,9 @@
     	<div class="container">
 				<div class="row justify-content-center mb-3 pb-3">
           <div class="col-md-12 heading-section text-center ftco-animate">
-          	<span class="subheading">Products</span>
-            <h2 class="mb-4">Related Products</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+          	<span class="subheading">Reviews</span>
+            <h2 class="mb-4">Related Reviews</h2>
+            <p>해당 상품과 관련된 후기 목록입니다</p>
           </div>
         </div>   		
     	</div>
@@ -349,21 +344,13 @@
 			                        </script>
 		    						<div class="d-flex">
 		    							<div class="pricing">
-				    						<p class="price"><span>$120.00</span></p>
+				    						<p class="price"><span>${ reviewData.memberName }</span></p>
 				    					</div>
 			    					</div>
-		    						<div class="bottom-area d-flex px-3">
-			    						<div class="m-auto d-flex">
-			    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-			    								<span><i class="ion-ios-menu"></i></span>
-			    							</a>
-			    							<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-			    								<span><i class="ion-ios-cart"></i></span>
-			    							</a>
-			    							<a href="#" class="heart d-flex justify-content-center align-items-center ">
-			    								<span><i class="ion-ios-heart"></i></span>
-			    							</a>
-		    							</div>
+			    					<div class="bottom-area d-flex px-3">
+			    						<div class="pricing">
+					    					<p class="price"><span>${ reviewData.memberName }</span></p>
+					    				</div>
 		    						</div>
 		    					</div>
 		    				</div>

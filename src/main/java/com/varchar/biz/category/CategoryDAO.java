@@ -19,16 +19,21 @@ public class CategoryDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	static final private String SQL_SELECTALL = "SELECT CATEGORY_NUM, CATEGORY_NAME FROM CATEGORY ";
+	static final private String SQL_SELECTALL_CHART = "SELECT c.CATEGORY_NUM, NVL(SUM(bd.BUY_CNT), 0) AS BUY_CNT, MAX(c.CATEGORY_NAME) AS CATEGORY_NAME "
+			+ "FROM BUY_DETAIL bd JOIN TEA t ON bd.TEA_NUM = t.TEA_NUM "
+			+ "FULL OUTER JOIN CATEGORY c ON c.CATEGORY_NUM = t.CATEGORY_NUM "
+			+ "GROUP BY c.CATEGORY_NUM "
+			+ "ORDER BY c.CATEGORY_NUM ";
 	static final private String SQL_SELECTONE = "SELECT CATEGORY_NUM, CATEGORY_NAME FROM CATEGORY WHERE CATEGORY_NUM =? ";
 	static final private String SQL_INSERT = "INSERT INTO CATEGORY(CATEGORY_NUM, CATEGORY_NAME) "
-											+ "VALUES ((SELECT NVL(MAX(CATEGORY_NUM), O) + 1 FROM CATEGORY), ?)";
+											+ "VALUES ((SELECT NVL(MAX(CATEGORY_NUM), 0) + 1 FROM CATEGORY), ?)";
 	static final private String SQL_UPDATE = "UPDATE CATEGORY SET CATEGORY_NAME = ? WHERE CATEGORY_NUM = ? ";
 	static final private String SQL_DELETE = "DELETE FROM CATEGORY WHERE CATEGORY_NUM = ? ";
 	
 	
 	public List<CategoryVO> selectAll(CategoryVO categoryVO) {		
 		Object[] args = { };
-		return jdbcTemplate.query(SQL_SELECTALL, args, new CategoryRowMapper());
+		return jdbcTemplate.query(SQL_SELECTALL_CHART, args, new CategoryChartRowMapper());
 	}
 	
 	public CategoryVO selectOne(CategoryVO categoryVO) {
@@ -84,6 +89,19 @@ class CategoryRowMapper implements RowMapper<CategoryVO> {
 		CategoryVO data = new CategoryVO();
 		data.setCategoryNum(rs.getInt("CATEGORY_NUM"));
 		data.setCategoryName(rs.getString("CATEGORY_NAME"));
+		return data;
+	}
+}
+//[ selectAll CHART ]
+class CategoryChartRowMapper implements RowMapper<CategoryVO> { 
+	
+	@Override
+	public CategoryVO mapRow(ResultSet rs, int rowNum) throws SQLException { 
+		
+		CategoryVO data = new CategoryVO();
+		data.setCategoryNum(rs.getInt("CATEGORY_NUM"));
+		data.setCategoryName(rs.getString("CATEGORY_NAME"));
+		data.setBuyCnt(rs.getInt("BUY_CNT"));
 		return data;
 	}
 }

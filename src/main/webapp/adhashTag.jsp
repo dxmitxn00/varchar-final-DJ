@@ -24,8 +24,9 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="Ad/css/vertical-layout-light/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="Ad/images/favicon.png" />
-<style type="text/css">
+  <!-- 파비콘 태그 -->
+  <try:favicon/>
+  <style type="text/css">
 
   a {
   	text-decoration: none;
@@ -77,10 +78,9 @@
                   <div class="col-md-6">
                     <div class="card-body">
                       <h4 class="card-title">상품 해시태그 추가/삭제/수정</h4>
-                      <p class="card-description">Add class <code>.btn-{color}</code> for buttons in theme colors</p>
                       <div class="template-demo">
 									  <div class="form-group">
-										<h5><strong>상품 카테고리 선택 [1) 카테고리를 먼저 지정한다.]</strong></h5>
+										<h5><strong>상품 카테고리 선택</strong></h5>
 										<select class="form-control" id="selectCategory">
 										<option value="선택하세요" id="none" disabled selected hidden>카테고리 선택</option>
 										<c:forEach var="categoryData" items="${categoryDatas}">
@@ -89,26 +89,18 @@
 										</select>
 									</div>
 										<div class="form-group">
-										<h5><strong>상품 선택 [2) 위에서 나눈 카테고리 별로 상품이 출력되게 한다.]</strong></h5>
+										<h5><strong>상품 선택</strong></h5>
 										<select class="form-control" id="selectTea"></select> <br>
 										<button type="button" id="selectbutton" class="btn btn-outline-info">조회</button>
 									</div>
                     	<form id="hashTagForm" method="post" action="adminHashtagTea.do" onsubmit="return false;">
                     	<div id="hashTagContainer" class="template-demo">
-                         </div> <br>
+                         </div>
+                         <div id="buttonContainer" class="template-demo"></div>
+                        <div id="saveContainer" class="template-demo">
                         <button type="button" class="btn btn-primary" id="btnSave" >저장(Save)</button>
+                        </div>
                         </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="card-body">
-                      <h4 class="card-title">해시태그 입력란</h4>
-                      <p class="card-description">Add class <code>.btn-rounded</code></p>
-                      <div class="template-demo">
-                    	<div id="hashTagMaker" class="template-demo">
-                        <button type="button" id="addHashTag" class="btn btn-dark btn-rounded btn-fw">직접 입력</button>
-                         </div> 
                       </div>
                     </div>
                   </div>
@@ -161,6 +153,17 @@ $("#selectCategory").change(function() {
 			 console.log(result);
 	         $('#selectTea').empty();
 			   var teaInfo = result;
+			   var hashtagContainer = $("#hashTagContainer");
+			   var buttonContainer = $("#buttonContainer");
+			   var saveContainer = $("#saveContainer");
+			   if(teaInfo.length == 0){
+				   alert("해당 카테고리에 상품이 존재하지 않습니다.");
+				   $('#selectTea').empty();
+				   hashtagContainer.empty(); // hashtagContainer 비우기
+				   buttonContainer.empty(); // buttonContainer 비우기
+				   saveContainer.css("display", "none");
+				   return;
+			   }
 			   var firstItem = result[0];
 			    $('#teaNum').attr("value",firstItem.teaNum);
 			    $('#teaName').attr("value",firstItem.teaName);
@@ -168,15 +171,16 @@ $("#selectCategory").change(function() {
 			   var optteaNum=teaInfo[i].teaNum;
 			   var optteaName = teaInfo[i].teaName;
 			   console.log(optteaName);
-	                var optionElement = $('<option>' + optteaName + '</option>')
-	                    .attr('value', optteaNum)
-	                    .attr('data-tea-name', optteaName)
+	           var optionElement = $('<option>' + optteaName + '</option>')
+	           .attr('value', optteaNum)
+	           .attr('data-tea-name', optteaName)
 
-	                $('#selectTea').append(optionElement);
-			      }		   
+	           $('#selectTea').append(optionElement);
+			  }		   
 		   },
 		
 		error: function(error){
+			
 		    console.log(error);
 	    }
 	});
@@ -195,7 +199,11 @@ $("#selectbutton").click(function () {
 	    success: function (result) {
 	      console.log(result);
 	      var hashtagContainer = $("#hashTagContainer");
+	      var buttonContainer = $("#buttonContainer");
+	      var saveContainer = $("#saveContainer");
 	      hashtagContainer.empty();
+	      buttonContainer.empty();
+	      saveContainer.css("display", "block");
 	      var hashtags = result;
 
 	      if (hashtags.length > 0) {
@@ -205,11 +213,10 @@ $("#selectbutton").click(function () {
 	          name: "teaHashtagContent",
 	          value: firstTag
 	        });
-
 	        var randomStyle = getRandomStyle(); // 랜덤한 스타일을 얻는 도우미 함수
 	        hashTagElement.addClass("btn " + randomStyle);
 	        hashtagContainer.append(hashTagElement);
-
+			
 	        for (var i = 1; i < hashtags.length; i++) {
 	          var hashtag = hashtags[i].teaHashtagContent;
 	          randomStyle = getRandomStyle();
@@ -218,8 +225,19 @@ $("#selectbutton").click(function () {
 	            .css("display", "block");
 	          hashtagContainer.append(tagElement);
 	        }
+	        var buttonElement = $("<button type='button' id='addHashTag' class='btn btn-outline-dark'>")
+	        .text("직접 입력")
+	        .css("display", "block");
+
+	    buttonContainer.append(buttonElement);
+
 	      } else {
 	        console.log("선택된 상품에 대한 해시태그가 없습니다.");
+	        var buttonElement = $("<button type='button' id='addHashTag' class='btn btn-outline-dark'>")
+	        .text("직접 입력")
+	        .css("display", "block");
+
+	    buttonContainer.append(buttonElement);
 	      }
 	    },
 	    error: function (error) {
@@ -227,33 +245,82 @@ $("#selectbutton").click(function () {
 	    }
 	  });
 	});
+	
+$("#selectCategory").on("change", function() {
+	   $("#hashTagContainer").empty();
+	   $("#buttonContainer").empty();
+	   $("#saveContainer").hide();
+	});
 
+$("#selectTea").on("change", function() {
+		   $("#hashTagContainer").empty();
+		   $("#buttonContainer").empty();
+		   $("#saveContainer").hide();
+	});
+	
+	
 	// 랜덤한 버튼 스타일을 얻는 도우미 함수
 	function getRandomStyle() {
 	  var buttonStyles = ["btn-success", "btn-warning", "btn-info", "btn-dark"];
 	  return buttonStyles[Math.floor(Math.random() * buttonStyles.length)];
 	}
-</script>
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function () {
-	  const hashTagMaker = document.getElementById("hashTagMaker");
-
-	  // 페이지 로드 시 "hashTagMaker" <div> 영역 숨기기
-	  hashTagMaker.style.display = "none";
-	  
-	  const selectCategory = document.getElementById("selectCategory");
-	  
-	  // "카테고리 선택" 옵션이 변경될 때 이벤트 리스너를 추가
-	  selectCategory.addEventListener("change", function () {
-	    if (selectCategory.value === "선택하세요") {
-	      // "카테고리 선택"이 선택되었을 때 "hashTagMaker" <div> 영역 숨기기
-	      hashTagMaker.style.display = "none";
-	    } else {
-	      // 다른 카테고리가 선택되었을 때 "hashTagMaker" 표시
-	      hashTagMaker.style.display = "block";
+	var classNames = ["btn-success", "btn-warning","btn-info", "btn-dark"];
+	$(document).ready(function() {
+		$(document).on("click", "#addHashTag", function(){
+		// 해시태그 입력란을 찾기
+	    var hashTagContainer = document.getElementById("hashTagContainer");
+	    
+	    // 해시태그 입력란 안의 모든 <input> 요소를 찾기
+	    var inputElements = hashTagContainer.querySelectorAll("input[type='button']");
+	    
+	    // 현재의 해시태그 개수를 확인
+	    var currentHashTagCount = inputElements.length;
+	    
+	    // 만약 3개를 초과한다면 경고 메시지를 표시 및 입력 방지
+	    if (currentHashTagCount >= 3) {
+	        alert("한 상품당 해시태그는 최대 3개까지입니다.");
+	        return;
 	    }
-	  });
-	});
+		// 조회되는 상품이 없다면 입력 막기
+
+	    var newHashTag = prompt("추가할 해시태그를 입력하세요:");
+	    
+	    // 새로운 해시태그 중복 검사
+	    if (hashZungBok(newHashTag, inputElements)) {
+	        alert("입력하신 해시태그가 이미 존재합니다.");
+	        return;
+	    }
+	    
+	    if (newHashTag) {
+	        var hashTagElement = document.createElement("input");
+	    	// <>를 input으로 설정해준다.
+	        hashTagElement.type = "button";
+	    	// 타입은 버튼으로 설정
+	        hashTagElement.style.display = "block";
+	    	// 디자인은 블록으로 + 랜덤으로 버튼 클래스 (버튼 디자인) 선택
+	        var randomIndex = Math.floor(Math.random() * classNames.length);
+	        hashTagElement.className = "btn " + classNames[randomIndex];
+	        // 상단에 설정해둔 var classNames 배열의 인덱스 값중 하나가 랜덤으로 선택됨
+	        hashTagElement.setAttribute('name','teaHashtagContent')
+	        // name의 인자를 M이 설정해둔 인자명과 동일하게 설정해서 보내주기 위한 메서드 (setAttribute)
+	        hashTagElement.value = newHashTag;
+	        // 해시태그에 특수 문자나 숫자 막기      
+	        if (/[\d!@#$%^&*()_+{}\[\]:;<>,.?~\\|'"`=\/\-]/.test(newHashTag)) {
+	            alert("특수 문자나 숫자는 허용되지 않습니다.");
+	            return;
+	        }
+	        else if(newHashTag.length > 15){
+	        	alert("해시태그는 총 15자까지만 가능합니다.");
+	        	return;	
+	        }
+	        else if(newHashTag === null || newHashTag.trim() === ''){
+	        	alert("공백은 허용하지 않습니다.");
+	        	return;
+	        }
+	        document.getElementById("hashTagContainer").appendChild(hashTagElement);
+	    }
+	 });  
+	});	
 </script>
 <script>
         // 예비 스크립트
@@ -309,13 +376,13 @@ hashTagContainer.addEventListener("click", function(event) {
                } else if (Validation.isMaxLengthExceeded(fixTag, 15)) { // 이미 해시태그를 입력해서 추가하는 곳에 유사한 유효성 검사식이 작성되었기 때문
                 alert("해시태그는 총 15자까지만 가능합니다.");
                 return;
-               } else if (Validation.isNullOrWhitespace(fixTag)) { // js파일 임포트하는거 몰라서... ㅎㅎ ㅈㅅ
+               } else if (Validation.isNullOrWhitespace(fixTag)) { 
                 alert("공백은 허용하지 않습니다.");
                 return; // 여기까지가 해시태그를 입력해서 추가했을 때의 유효성 검사식 모듈화
                 
                //======================== 여기서 부터 해시태그 수정 자체 유효성 검사식 ===============================
             	   
-               } else if (fixTag === clickedElement.value){ // 나중에 js 너무 길어진다 싶으면 저희 webapp 폴더 내 js 폴더에 넣어서 가독성 높이고 임포트/익스포트 하는 방향으로 고려하겠음
+               } else if (fixTag === clickedElement.value){ 
             	alert("기존의 해시태그와 다른 해시태그를 입력해주세요.");
             	return;
                } else if (hashZungBok(fixTag, inputElements)){ // 위에서 선언한 inputElements 사용 -> 이렇게 안하면 일일히 js에서 for문 돌려야ㅐ한다
@@ -343,67 +410,11 @@ hashTagContainer.addEventListener("click", function(event) {
                  return true;
                  
              });
-     }
- });
+           }
+       });
 
 // 기존 관리자 페이지에서 제공하는 버튼 디자인 배열 : 후에 해시태그 입력시 밑 배열 디자인 중 하나가 랜덤으로 배정
-var classNames = ["btn-success", "btn-warning","btn-info", "btn-dark"];
-document.getElementById("addHashTag").addEventListener("click", function() {
-	// 해시태그 입력란을 찾기
-    var hashTagContainer = document.getElementById("hashTagContainer");
-    
-    // 해시태그 입력란 안의 모든 <input> 요소를 찾기
-    var inputElements = hashTagContainer.querySelectorAll("input[type='button']");
-    
-    // 현재의 해시태그 개수를 확인
-    var currentHashTagCount = inputElements.length;
-    
-    // 만약 3개를 초과한다면 경고 메시지를 표시 및 빠꾸시키기
-    if (currentHashTagCount >= 3) {
-        alert("한 상품당 해시태그는 최대 3개까지입니다.");
-        return;
-    }
-	// 조회되는 상품이 없다면 입력 막기
 
-    var newHashTag = prompt("추가할 해시태그를 입력하세요:");
-    
-    // 새로운 해시태그 중복 검사
-    if (hashZungBok(newHashTag, inputElements)) {
-        alert("입력하신 해시태그가 이미 존재합니다.");
-        return;
-    }
-    
-    if (newHashTag) {
-    	// form에 담겨서 C에게 제출해야 하므로 <input>태그를 만드는 과정
-        var hashTagElement = document.createElement("input");
-    	// <>를 input으로 설정해준다.
-        hashTagElement.type = "button";
-    	// 타입은 버튼으로 설정
-        hashTagElement.style.display = "block";
-    	// 디자인은 블록으로
-        // 랜덤으로 버튼 클래스 (버튼 디자인) 선택
-        var randomIndex = Math.floor(Math.random() * classNames.length);
-        hashTagElement.className = "btn " + classNames[randomIndex];
-        // 상단에 설정해둔 var classNames 배열의 인덱스 값중 하나가 랜덤으로 선택됨
-        hashTagElement.setAttribute('name','teaHashtagContent')
-        // 실제로 Form 영역에 담아서 제출해야 하므로, name의 인자를 M이 설정해둔 인자명과 동일하게 설정해서 보내주기 위한 메서드 (setAttribute)
-        hashTagElement.value = newHashTag;
-        // 해시태그에 특수 문자나 숫자 막기      
-        if (/[\d!@#$%^&*()_+{}\[\]:;<>,.?~\\|'"`=\/\-]/.test(newHashTag)) {
-            alert("특수 문자나 숫자는 허용되지 않습니다.");
-            return;
-        }
-        else if(newHashTag.length > 15){
-        	alert("해시태그는 총 15자까지만 가능합니다.");
-        	return;	
-        }
-        else if(newHashTag === null || newHashTag.trim() === ''){
-        	alert("공백은 허용하지 않습니다.");
-        	return;
-        }
-        document.getElementById("hashTagContainer").appendChild(hashTagElement);
-    }
-});
 
 function hashZungBok(newHashTag, inputElements) {
     // Set을 사용하여 중복된 해시태그를 확인
@@ -471,7 +482,7 @@ $('#btnSave').on("click", function(){
         type: 'POST',
         data: hashTags,
         success: function(fresult){
-            //console.log('favorResult [' + favorResult + ']');
+        	alert('해시태그 저장 완료!');
           	
         },
         error: function(error){
@@ -487,6 +498,16 @@ $('#btnSave').on("click", function(){
 
 
 
+
+</script>
+<script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded", function () {
+	  const saveContainer = document.getElementById("saveContainer");
+
+	  // 페이지 로드 시 "저장(Save)" <div> 영역 숨기기
+	  saveContainer.style.display = "none";
+	});
 
 </script>
 </body>

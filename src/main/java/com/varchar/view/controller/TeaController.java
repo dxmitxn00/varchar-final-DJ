@@ -49,14 +49,7 @@ public class TeaController {
 		teaVO.setTeaSearchWord(teaSearchWord == null ? "" : teaSearchWord);
 		teaVO.setTeaHashtagContent(teaHashtagContent);
 
-		System.out.println(categoryNum);
-		System.out.println(categoryName);
-		System.out.println(teaSearchWord);
-		System.out.println(teaHashtagContent);
-
-		// ** 상품 NULL일때(아무 상품도 없을때) NPE 근데 아마 우리가 샘플 무조건 넣어서 괜찮긴 함 ---> 유효성 추가 필요 */
 		List<TeaVO> teaDatasTotal = teaService.selectAll(teaVO); // 총 상품 개수
-		System.out.println("상품리스트 로그 reviewDatasTotal: " + teaDatasTotal);
 
 		pagingVO.setPageSize(pageSize);
 		pagingVO.setTotalCnt(teaDatasTotal.size());
@@ -65,20 +58,16 @@ public class TeaController {
 		// 페이지네이션 모듈화
 		pagingVO = Paging.paging(pagingVO);
 
-		//
 		pagingVO.setTeaSearchWord(teaSearchWord);
 		pagingVO.setCategoryNum(categoryNum);
 		pagingVO.setCategoryName(categoryName);
 		model.addAttribute("page", pagingVO);
 
-		//
 		teaVO.setTeaCondition(teaHashtagContent == null || teaHashtagContent.equals("") ? "페이징" : "해시태그 페이징");
 		teaVO.setStartRnum(pagingVO.getStartRnum());
 		teaVO.setEndRnum(pagingVO.getEndRnum());
 		teaVO.setMemberId((String) session.getAttribute("sessionMemberId"));
 
-		System.out.println(teaHashtagVO.getTeaHashtagContent());
-		System.out.println(teaHashtagVO.getTeaHashtagCondition());
 		// 전체 목록 출력
 		List<TeaVO> teaDatas = teaService.selectAll(teaVO);
 

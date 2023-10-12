@@ -2,6 +2,8 @@ package com.varchar.biz.tea;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.varchar.biz.hashtag.TeaHashtagVO;
 
 public class TeaVO {
@@ -30,6 +32,9 @@ public class TeaVO {
 	
 	private List<TeaHashtagVO> teaHashtags;
 	
+	private List<MultipartFile> fileUpload;
+	private String fileName;
+	
 	public TeaVO() {
 		this(0, 0, "", 0, 0, "", 0);
 	}
@@ -42,6 +47,7 @@ public class TeaVO {
 		this.teaCnt = teaCnt;
 		this.teaContent = teaContent;
 		this.teaStatus = teaStatus;
+		this.teaCondition = "상품 조회";
 	}
 	
 	public int getTeaStatus() {
@@ -204,6 +210,22 @@ public class TeaVO {
 		this.teaHashtags = teaHashtags;
 	}
 
+	public List<MultipartFile> getFileUpload() {
+		return fileUpload;
+	}
+
+	public void setFileUpload(List<MultipartFile> fileUpload) {
+		this.fileUpload = fileUpload;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	@Override
 	public String toString() {
 		return "TeaVO [teaNum=" + teaNum + ", categoryNum=" + categoryNum + ", teaName=" + teaName + ", teaPrice="
@@ -212,6 +234,6 @@ public class TeaVO {
 				+ ", startRnum=" + startRnum + ", memberId=" + memberId + ", teaTotal=" + teaTotal + ", teaCheckCnt="
 				+ teaCheckCnt + ", count=" + count + ", endRnum=" + endRnum + ", favorResult=" + favorResult
 				+ ", categoryName=" + categoryName + ", teaHashtagContent=" + teaHashtagContent + ", teaHashtags="
-				+ teaHashtags + "]";
+				+ teaHashtags + ", fileUpload=" + fileUpload + ", fileName=" + fileName + "]";
 	}
 }

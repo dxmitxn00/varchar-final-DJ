@@ -12,8 +12,8 @@
 	<!-- DataSource 객체 생성 -->
 	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
-		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
-		<property name="username" value="Tan"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521/xe"></property>
+		<property name="username" value="tan"></property>
 		<property name="password" value="1234"></property>
 	</bean>
 

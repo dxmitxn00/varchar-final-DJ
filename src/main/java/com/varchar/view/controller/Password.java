@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 import java.security.MessageDigest;
 
 public class Password {
-    // 특정 길이의 임의의 영숫자 비밀번호를 생성하는 메소드
+    // 특정 길이의 임의의 영숫자 비밀번호를 생성하는 메서드
     public static String generateRandomPassword(int len){
         // ASCII 범위 – 영숫자(0-9, a-z, A-Z)
         final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -13,8 +13,8 @@ public class Password {
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder();
  
-        // 루프의 각 반복은 주어진 문자에서 무작위로 문자를 선택합니다.
-        // ASCII 범위를 `StringBuilder` 인스턴스에 추가합니다.
+        // 루프의 각 반복은 주어진 문자에서 무작위로 문자 선택
+        // ASCII 범위를 `StringBuilder` 인스턴스에 추가
  
         for (int i = 0; i < len; i++)
         {
@@ -25,7 +25,8 @@ public class Password {
         return sb.toString();
     }
  
-    public static String main(String[] args){
+    // 10자리 랜덤수 메서드 실행
+    public static String randomPassword(String[] args){
         int len = 10;
         return generateRandomPassword(len);
     }

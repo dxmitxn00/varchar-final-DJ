@@ -8,10 +8,16 @@
     <title>Var茶 | 홈</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- 파비콘 태그 -->
     <try:favicon/>
     <!-- 링크 부분 태그 -->
     <try:link/>
+    <style type="text/css">
+    	.icon:hover {
+    		cursor: pointer;
+    	}
+    </style>
   </head>
   <body class="goto-here">
      <!-- 헤더 부분 태그 -->
@@ -25,9 +31,9 @@
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-md-12 ftco-animate text-center">
-				  <h1>Healing and Fresh with  <span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="varchar:var茶" data-colors="green"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
-	              <h1 class="mb-2">We serve Fresh Vegestables &amp; Fruits</h1>
-	              <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
+				  <h1>Healing and Fresh with <span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="varchar:var茶" data-colors="#4A55A2"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
+	              <!-- <h1 class="mb-2">the finest teas of the world</h1> -->
+	              <h2 class="subheading mb-4">Welcome to varchar</h2>
 	              <p><a href="teaListPage.do" class="btn btn-primary">Feel Healing</a></p>
 	            </div>
 
@@ -41,9 +47,9 @@
 	          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
 	            <div class="col-sm-12 ftco-animate text-center">
-				  <h1>Healing and Fresh with  <span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="varchar:var茶" data-colors="green"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
-				  <h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
-	              <h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
+				  <h1>Healing and Fresh with <span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="varchar:var茶" data-colors="#4A55A2"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
+				  <!-- <h1 class="mb-2">the finest teas of the world</h1> -->
+	              <h2 class="subheading mb-4">Welcome to varchar</h2>
 	              <p><a href="teaListPage.do" class="btn btn-primary">Feel Healing</a></p>
 	            </div>
 
@@ -63,8 +69,8 @@
 				<div class="row no-gutters ftco-services">
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
-              <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
-            		<span class="flaticon-shipped"></span>
+              <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2" onclick="window.open('https://www.notion.so/TryCatchers-dedc520b97da420fb20ad5c32ad8287b', '_blank', '')">
+            		<span class="fa-solid fa-mug-hot"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">var茶에 대해</h3>
@@ -74,8 +80,8 @@
           </div>
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
-              <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
-            		<span class="flaticon-diet"></span>
+              <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2" onclick="window.open('https://instagram.com/varchar_official?igshid=OGQ5ZDc2ODk2ZA%3D%3D&utm_source=qr', '_blank', '')">
+            		<span class="fa-brands fa-instagram"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">Instagram</h3>
@@ -85,8 +91,8 @@
           </div>
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
-              <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
-            		<span class="flaticon-award"></span>
+              <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2" onclick="window.open('https://www.youtube.com/embed/WeUNf3Hsj_o', 'window_name', 'width=1000,height=560,location=no,status=no,scrollbars=yes')">
+            		<span class="fa-brands fa-youtube"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">Youtube</h3>
@@ -97,8 +103,8 @@
           </div>
           <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services mb-md-0 mb-4">
-              <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
-            		<span class="flaticon-customer-service"></span>
+              <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2" onclick="window.open('https://github.com/TryCatchers/varChar_FinalProject', '_blank', '')">
+            		<span class="fa-solid fa-cake-candles"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">var茶 탄생기</h3>
@@ -167,7 +173,7 @@
           	<span class="subheading">Best Price For You</span>
             <h2 class="mb-4">Deal of the day</h2>
             <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-            <h3><a href="#">Spinach</a></h3>
+            <h3><a href="#">Since 07 June 2023</a></h3>
             <span class="price">$10 <a href="#">now $5 only</a></span>
             <div id="timer" class="d-flex mt-5">
 						  <div class="time" id="days"></div>
@@ -198,33 +204,32 @@
             <div class="carousel-testimony owl-carousel">
               <div class="item">
                 <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)"></div>
-                  <div class="text text-center">
-					<p class="name">테아닌</p>
-					<span class="position">천연진정제, 테아닌</span><br><br>
-                    <p class="mb-5 pl-4 line">차를 마시면 긴장이 완화되고 기분이 느긋해지며 침착해지는 것을 느낄 수 있는데, 이는 테아닌이 뇌신경 전달물질을 조절하고 신경계를 안정시켜 긴장을 이완시키기 때문입니다.</p>
-                  </div>
-                </div>
-              </div>
-
-			  <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)"></div>
-                  <div class="text text-center">
-					<p class="name">카테킨</p>
-					<span class="position">다이어트에 효과적인 카테킨</span><br><br>
-                    <p class="mb-5 pl-4 line">카테킨은 혈액중의 포도당, 지방산, 콜레스테롤의 농도를 감소시켜 지방합성을 억제하고 지방분해를 촉진해 줍니다.</p>
-                  </div>
-                </div>
-              </div>
-
-			  <div class="item">
-                <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)"></div>
+                  <div class="user-img mb-5" style="background-image: url(images/banner-1.jpg)"></div>
                   <div class="text text-center">
 					<p class="name">카페인</p>
 					<span class="position">사랑의 묘약, 카페인</span><br><br>
-                    <p class="mb-5 pl-4 line">사랑의 묘약, 카페인</p>
+                    <p class="mb-5 pl-4 line">대부분의 차에는 카페인이 함유되어 있습니다. 카페인은 중추 신경 체계를 자극하며 활기를 불어넣고 집중력을 증가시키는데 도움을 줍니다.</p>
+                  </div>
+                </div>
+              </div>
+
+			  <div class="item">
+                <div class="testimony-wrap p-4 pb-5">
+                  <div class="user-img mb-5" style="background-image: url(images/banner-2.jpg)"></div>
+                  <div class="text text-center">
+					<p class="name">폴리페놀</p>
+					<span class="position">노화 지연, 폴리페놀</span><br><br>
+                    <p class="mb-5 pl-4 line">차에는 폴리페놀이 풍부하게 함유되어 있습니다. 이들은 강력한 항산화제로 작용하여 자유 라디칼로부터 세포를 보호하고 노화를 지연시킬 수 있습니다.</p>
+                  </div>
+                </div>
+              </div>
+
+			  <div class="item">
+                <div class="testimony-wrap p-4 pb-5">
+                  <div class="user-img mb-5" style="background-image: url(images/banner-3.jpg)"></div>
+                  <div class="text text-center">
+					<p class="name">카테킨</p>
+					<span class="position">풍부한 항산화, 카테킨</span><br><br>
 					<p class="mb-5 pl-4 line">카페인을 적당히 복용하면 중추신경계를 흥분시켜 정신이 맑아지고 졸음이 없어지며 사고력이 향상됩니다.</p>
                   </div>
                 </div>
@@ -232,22 +237,22 @@
 
 			  <div class="item">
                 <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)"></div>
+                  <div class="user-img mb-5" style="background-image: url(images/banner-4.jpg)"></div>
                   <div class="text text-center">
 					<p class="name">테아닌</p>
 					<span class="position">천연진정제, 테아닌</span><br><br>
-                    <p class="mb-5 pl-4 line">차를 마시면 긴장이 완화되고 기분이 느긋해지며 침착해지는 것을 느낄 수 있는데, 이는 테아닌이 뇌신경 전달물질을 조절하고 신경계를 안정시켜 긴장을 이완시키기 때문입니다.</p>
+                    <p class="mb-5 pl-4 line">테아닌은 차에 함유된 아미노산으로, 스트레스 감소와 집중력 향상을 돕는 효과가 있으며, 차를 마실 때 느끼는 안정감과 편안함을 제공합니다.</p>
                   </div>
                 </div>
               </div>
 
 			  <div class="item">
                 <div class="testimony-wrap p-4 pb-5">
-                  <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)"></div>
+                  <div class="user-img mb-5" style="background-image: url(images/banner-5.jpg)"></div>
                   <div class="text text-center">
-					<p class="name">테아닌</p>
-					<span class="position">천연진정제, 테아닌</span><br><br>
-                    <p class="mb-5 pl-4 line">차를 마시면 긴장이 완화되고 기분이 느긋해지며 침착해지는 것을 느낄 수 있는데, 이는 테아닌이 뇌신경 전달물질을 조절하고 신경계를 안정시켜 긴장을 이완시키기 때문입니다.</p>
+					<p class="name">비타민과 미네랄</p>
+					<span class="position">건강 유지, 비타민 미네랄</span><br><br>
+                    <p class="mb-5 pl-4 line">차에는 비타민 C, 비타민 B, 칼슘, 칼륨, 마그네슘 등의 미네랄과 비타민이 함유되어 있습니다. 이들은 전반적인 건강을 유지하는 데 필요합니다.</p>
                   </div>
                 </div>
               </div>
@@ -281,7 +286,7 @@
 					  </span>
 					</div>
 					<div class="text text-center">
-					  <p class="mb-5 pl-4 line">쥰나 하기 싫다<br>집가고 싶다<br>에효 이거 줄 수<br>맞춰야되네<br>그지같은 거<br>뷰 화이팅</p>
+					  <p class="mb-5 pl-4 line"> 최종 프로젝트를 준비하면서 소통의 중요성을 많이 느꼈습니다. 소통이 이뤄지지 않아 발생하는 이슈들을 해결하기 위해 더 많은 소통이 필요했습니다. 이번 계기로 협업을 위한 소통이 무엇인지 깨달았고, 작은 움직임이 결과적으로 큰 변화를 준다는 것을 몸소 느꼈습니다. 앞으로 진행될 프로젝트에서는 더 나은 모습의 과정과 결과를 만들겠습니다.</p>
 					  <p class="name">탄 다 미</p>
 					  <span class="position">팀원 &nbsp;:&nbsp; Controller</span>
 					</div>
@@ -289,13 +294,13 @@
 				</div>
 				<div class="item">
 				  <div class="testimony-wrap p-4 pb-5">
-					<div class="user-img mb-5" style="background-image: url(images/person_2.jpg)">
+					<div class="user-img mb-5" style="background-image: url(images/person_3.jpg)">
 					  <span class="quote d-flex align-items-center justify-content-center">
 						<i class="icon-quote-left"></i>
 					  </span>
 					</div>
 					<div class="text text-center">
-					  <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					  <p class="mb-5 pl-4 line"> 최종 프로젝트를 통해 협업과 커뮤니케이션의 중요성을 느꼈습니다. 개발 과정에서 원활하고 많은 의사소통이 필요하다는 것을 깨달았습니다. 또한 팀원들과 함께 문제를 분석하고 해결책을 찾아내는 과정에서 상호간의 지식 공유로 어려운 문제에 대처하는 능력을 키울 수 있었습니다. 앞으로도 이러한 요소들에 대한 중요성을 잊지 않고 좋은 결과를 만들어내겠습니다.</p>
 					  <p class="name">박 준 현</p>
 					  <span class="position">팀장 &nbsp;:&nbsp; View</span>
 					</div>
@@ -309,7 +314,7 @@
 					  </span>
 					</div>
 					<div class="text text-center">
-					  <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					  <p class="mb-5 pl-4 line"> 크고 작은 프로젝트를 진행하면서 협업의 중요성과 설계 흐름을 파악할 수 있었습니다. 이와 연결되어 프로젝트 설계 시 추상적으로만 보이던 것이 구체화되어 실현되는 것에 흥미를 느낄 수 있었습니다. 단순히 구현에 집중하는 개발자가 아닌 설계와 구조를 중시하며 여러 분야의 협업과 연결에 중점을 두는 개발자가 될 것입니다.</p>
 					  <p class="name">권 지 현</p>
 					  <span class="position">팀원 &nbsp;:&nbsp; Controller</span>
 					</div>
@@ -317,13 +322,13 @@
 				</div>
 				<div class="item">
 				  <div class="testimony-wrap p-4 pb-5">
-					<div class="user-img mb-5" style="background-image: url(images/person_1.jpg)">
+					<div class="user-img mb-5" style="background-image: url(images/person_4.jpg)">
 					  <span class="quote d-flex align-items-center justify-content-center">
 						<i class="icon-quote-left"></i>
 					  </span>
 					</div>
 					<div class="text text-center">
-					  <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					  <p class="mb-5 pl-4 line"> 프로젝트를 통해 웹 개발에 대한 실전 경험을 쌓을 수 있었고, 팀원들의 지원과 협력 덕분에 만족스러운 결과물을 도출할 수 있었습니다. 이 경험을 통해 개발 역량과 문제 해결 능력이 크게 성장한 것 같고, 함께 일하며 배운 것들은 앞으로의 개발자로서의 성장과 발전에 큰 도움이 될 같습니다.</p>
 					  <p class="name">김 지 훈</p>
 					  <span class="position">팀원 &nbsp;:&nbsp; Model</span>
 					</div>
@@ -331,13 +336,13 @@
 				</div>
 				<div class="item">
 				  <div class="testimony-wrap p-4 pb-5">
-					<div class="user-img mb-5" style="background-image: url(images/person_1.jpg)">
+					<div class="user-img mb-5" style="background-image: url(images/person_5.jpg)">
 					  <span class="quote d-flex align-items-center justify-content-center">
 						<i class="icon-quote-left"></i>
 					  </span>
 					</div>
 					<div class="text text-center">
-					  <p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					  <p class="mb-5 pl-4 line"> 이번 프로젝트를 통해 협업의 중요성을 깨닫게 되었습니다. 서로 다른 생각과 의견으로 인해 소통의 부재가 오류를 야기하는 경우가 많았습니다. 하지만 이러한 문제들을 해결하기 위해 팀원들과의 협력이 필수적임을 깨달았습니다. 이 경험은 제 실력 향상에 큰 도움이 되었고, 앞으로의 프로젝트에서도 더 나은 협업과 소통을 추구하게 되었습니다.</p>
 					  <p class="name">류 준 원</p>
 					  <span class="position">팀원 &nbsp;:&nbsp; Model</span>
 					</div>
@@ -345,13 +350,13 @@
 				</div>
 				<div class="item">
 					<div class="testimony-wrap p-4 pb-5">
-					  <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)">
+					  <div class="user-img mb-5" style="background-image: url(images/person_6.jpg)">
 						<span class="quote d-flex align-items-center justify-content-center">
 						  <i class="icon-quote-left"></i>
 						</span>
 					  </div>
 					  <div class="text text-center">
-						<p class="mb-5 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+						<p class="mb-5 pl-4 line"> 6달간의 훈련과정을 요약하는 최종 프로젝트인만큼, 많은 긴장감을 가지고 있었습니다. 하지만 팀원들간의 꾸준한 회의와 협력이 양질의 프로젝트는 물론, 저의 실력 향상에도 큰 도움을 주었습니다. 다시 한번 저희 팀원들에게 감사의 말씀을 전해드리고 싶습니다.</p>
 						<p class="name">정 윤 구</p>
 						<span class="position">팀원 &nbsp;:&nbsp; View</span>
 					  </div>
@@ -367,23 +372,54 @@
     <hr>
 
 	<!-- 개발 툴 로고 섹션 -->
-		<section class="ftco-section ftco-partner">
+	<section class="ftco-section ftco-partner">
     	<div class="container">
     		<div class="row">
     			<div class="col-sm ftco-animate">
     				<a href="#" class="partner"><img src="images/partner-1.png" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
     			<div class="col-sm ftco-animate">
-    				<a href="#" class="partner"><img src="images/partner-2.png" class="img-fluid" alt="Colorlib Template"></a>
+    				<a href="#" class="partner"><img src="images/partner-3.png" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
     			<div class="col-sm ftco-animate">
-    				<a href="#" class="partner"><img src="images/partner-3.png" class="img-fluid" alt="Colorlib Template"></a>
+    				<a href="#" class="partner"><img src="images/naver.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/kakao.png" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
     			<div class="col-sm ftco-animate">
     				<a href="#" class="partner"><img src="images/partner-4.png" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
+    		</div>
+    	</div>
+    	<div class="container">
+    		<div class="row">
     			<div class="col-sm ftco-animate">
-    				<a href="#" class="partner"><img src="images/partner-5.png" class="img-fluid" alt="Colorlib Template"></a>
+    				<a href="#" class="partner"><img src="images/html-5.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/css3.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/javascript.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/git.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/github.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/spring-boot.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/visual-studio.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/figma.png" class="img-fluid" alt="Colorlib Template"></a>
+    			</div>
+    			<div class="col-sm ftco-animate">
+    				<a href="#" class="partner"><img src="images/google-drive.png" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
     		</div>
     	</div>

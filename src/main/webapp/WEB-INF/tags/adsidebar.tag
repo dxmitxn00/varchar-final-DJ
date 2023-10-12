@@ -29,7 +29,7 @@
             </a>
             <div class="collapse" id="charts">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="adminHashtagReview.do">후기 Htg 추가/삭제/수정</a></li>
+                <li class="nav-item"> <a class="nav-link" href="adminHashtagReview.do">후기 Htg 삭제</a></li>
               </ul>
             </div>
           </li>

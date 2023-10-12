@@ -92,7 +92,7 @@ p{
 	<p style="color:#8a8a8a; font-size:17px; margin-top: 30px;">또 다른 에러를 찾으며 다양한 게임을 플레이해보세요 \^0^/</p>
 	
 	<div style="margin-bottom: 80px; text-align:center;">
-  		<input type="button" class="btn" value="  메인으로 갈까여?ㅜ  " onclick = "location.href = 'main.do' " >
+  		<input type="button" class="btn" value="  메인으로 갈까여?ㅜ  " onclick = "location.href = '../main.do' " >
 	</div>
 	
 	<script type="text/javascript">

@@ -93,38 +93,47 @@
 					</div>
 				</div>
 			</div>
-    		</div>
+			<!-- 정보 start -->
+			
 			<div class="container">
 				<div class="row">
-    			<div class="col-md-12 ftco-animate">
-					<p id="orderName"></p>
-					<p id="totalAmount"></p>
-					<p id="approvedAt"></p>
-					<p id="method"></p>
-					<p id="provider"></p>
-					<script	type="text/javascript">
-						let json = ${ data };
-						console.log(json.orderName);
-						console.log(json.totalAmount);
-						console.log(json.approvedAt);
-						console.log(json.method);
-						console.log(json.easyPay.provider);
-						document.getElementById("orderName").innerHTML = "주문자 : " + json.orderName;
-						document.getElementById("totalAmount").innerHTML = "총 가격 : " + json.totalAmount;
-						document.getElementById("approvedAt").innerHTML = "결제시간 : " + json.approvedAt;
-						document.getElementById("method").innerHTML = "결제수단 : " + json.method;
-						document.getElementById("provider").innerHTML = "결제방법 : " + json.easyPay.provider;
-					</script>
-						
-					<!--  
-					<h1>결제 실패</h1>
-					<p></p>
-					<span>에러코드: </span>
-					-->
-    			</div>
-    		</div>
-			<a href="main.do" class="btn btn-primary py-3 px-4">메인으로</a>
+					<div class="col-md-12 mt-5 cart-wrap ftco-animate fadeInUp ftco-animated">
+						<div class="cart-total mb-3">
+							<h3>결제 정보</h3>
+							<p class="d-flex">
+								<span>주문자</span> <span id="orderName"></span>
+							</p>
+							<p class="d-flex">
+								<span>총 가격</span> <span id="totalAmount"></span>
+							</p>
+							<p class="d-flex">
+								<span>결제시간</span> <span id="approvedAt"></span>
+							</p>
+							<p class="d-flex">
+								<span>결제수단</span> <span id="method"></span>
+							</p>
+							<p class="d-flex">
+								<span>결제방법</span> <span id="provider"></span>
+							</p>
+						</div>
+					</div>
+				</div>
+				
+				<script	type="text/javascript">
+					let json = ${ data };
+					document.getElementById("orderName").innerHTML = json.orderName;
+					document.getElementById("totalAmount").innerHTML = json.totalAmount + " 원";
+					document.getElementById("approvedAt").innerHTML = json.approvedAt;
+					document.getElementById("method").innerHTML = json.method;
+					document.getElementById("provider").innerHTML = json.easyPay.provider;
+				</script>
+				<div style="margin:auto; text-align:center;">
+					<p><a href="main.do" class="btn btn-primary py-3 px-4" style="vertical-align:middle; display:inline-block;">메인으로</a></p>
+				</div>
 			</div>
+			
+			<!-- 정보 end -->			
+    		</div>
 		</section>
 
 		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">

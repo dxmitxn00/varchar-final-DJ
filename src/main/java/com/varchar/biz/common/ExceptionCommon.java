@@ -35,6 +35,22 @@ public class ExceptionCommon extends Exception {
 	public void selectTeaException() {
 		System.out.println("존재하지 않는 상품입니다");
 	}
+	// ------------------ category ------------------
+	public void insertCategoryException() {
+		System.out.println("카테고리 추가 실패!");
+	}
+	
+	public void updateCategoryException() {
+		System.out.println("카테고리 변경 실패!");
+	}
+	
+	public void deleteCategoryException() {
+		System.out.println("카테고리 삭제 실패!");
+	}
+	
+	public void selectCategoryException() {
+		System.out.println("존재하지 않는 카테고리입니다");
+	}
 	
 	// ------------------ buy ------------------
 	public void buyException() {
@@ -95,6 +111,8 @@ public class ExceptionCommon extends Exception {
 	
 	// ------------------ cart ------------------
 	// 장바구니는 서비스류가 아니라(DB 사용 안함) AOP 결합 불가
+	
+	// ------------------ hashtag ------------------
 	
 	
 	

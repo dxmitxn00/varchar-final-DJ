@@ -29,7 +29,7 @@
 			<div class="media block-6 services mb-md-0 mb-4">
 				<div id="edit_signSns" class="icon d-flex justify-content-center align-items-center mb-2">
 					<c:if test="${ memberData.memberPlatform eq 'kakao' }">
-						<h3>카카오톡 계정 회원가입</h3>
+						<h3>카카오 계정 회원가입</h3>
 					</c:if>
 					<c:if test="${ memberData.memberPlatform eq 'naver' }">
 						<h3>네이버 계정 회원가입</h3>

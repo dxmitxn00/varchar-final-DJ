@@ -19,6 +19,8 @@ public class MemberDAO {
 	//	static final private String SQL_SELECTONE="SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL "
 	//			+ "FROM MEMBER "
 	//			+ "WHERE MEMBER_ID = ?";
+	
+	static final private String SQL_SELECTALL = "SELECT COUNT(MEMBER_ID) AS MEMBER_GRADE, MEMBER_PLATFORM FROM MEMBER GROUP BY MEMBER_PLATFORM";
 
 	static final private String SQL_SELECTONE = "SELECT MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE, MEMBER_EMAIL, MEMBER_GRADE, MEMBER_PLATFORM, MEMBER_SALT "
 			+ "FROM MEMBER "
@@ -50,7 +52,8 @@ public class MemberDAO {
 	//static final private String SQL_DELETE="DELETE FROM MEMBER WHERE MID=?";
 
 	public List<MemberVO> selectAll(MemberVO memberVO){
-		return null;	
+		Object[] args = { };
+		return jdbcTemplate.query(SQL_SELECTALL, args, new MemberChartRowMapper());
 	}
 
 	public MemberVO selectOne(MemberVO memberVO){
@@ -148,4 +151,17 @@ class MemberSaltRowMapper implements RowMapper<MemberVO> {
 		return data;
 
 	}   
+}
+
+//[ selectAll 통계 ]
+class MemberChartRowMapper implements RowMapper<MemberVO> { 
+
+	@Override
+	public MemberVO mapRow(ResultSet rs, int rowNum) throws SQLException { 
+
+		MemberVO data = new MemberVO();
+		data.setMemberGrade(rs.getInt("MEMBER_GRADE"));
+		data.setMemberPlatform(rs.getString("MEMBER_PLATFORM"));
+		return data;
+	}
 }

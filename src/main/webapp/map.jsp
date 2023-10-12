@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Var茶 | 오시는 길</title>
+    <title>Var茶 | 지점 위치</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- 파비콘 태그 -->
@@ -22,7 +22,7 @@
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
           	<p class="breadcrumbs"><span class="mr-2"><a href="main.do">Home</a></span> <span>Contact us</span></p>
-            <h1 class="mb-0 bread">오시는 길</h1>
+            <h1 class="mb-0 bread">지점 위치</h1>
           </div>
         </div>
       </div>
@@ -34,28 +34,28 @@
           <div class="w-100"></div>
           <div class="col-md-3 d-flex">
           	<div class="info bg-white p-4">
-	            <p><span>주소:</span> 198 West 21th Street, Suite 721 New York NY 10016</p>
+	            <p><h5>주소</h5>서울특별시 강남구 테헤란로 26길 12 제일비전타워 13층</p>
 	          </div>
           </div>
           <div class="col-md-3 d-flex">
           	<div class="info bg-white p-4">
-	            <p><span>번호:</span> <a href="tel://1234567920">+ 1235 2355 98</a></p>
+	            <p><h5>번호</h5>02-538-0021</p>
 	          </div>
           </div>
           <div class="col-md-3 d-flex">
           	<div class="info bg-white p-4">
-	            <p><span>이메일:</span> <a href="mailto:info@yoursite.com">info@yoursite.com</a></p>
+	            <p><h5>이메일</h5>varchar@gmail.com</p>
 	          </div>
           </div>
           <div class="col-md-3 d-flex">
           	<div class="info bg-white p-4">
-	            <p><span>웹사이트</span> <a href="#">yoursite.com</a></p>
+	            <p><h5>웹사이트</h5>www.varchar.com</p>
 	          </div>
           </div>
         </div>
         <!-- Map Begin -->
-        <div class="map">
-          <iframe
+        <div class="map" id="edit_map">
+         <!--  <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.3595716986933!2d127.03327467563624!3d37.49943667205608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca3fe1f1d901b%3A0x41f4e65cc8389abe!2z7ISc7Jq47Yq567OE7IucIOqwleuCqOq1rCDthYztl6TrnoDroZwyNuq4uCAxMg!5e0!3m2!1sko!2skr!4v1689230881220!5m2!1sko!2skr"
               height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
           <div class="map-inside">
@@ -67,8 +67,84 @@
                       <li>서울 강남구 테헤란로 146</li>
                   </ul>
               </div>
-          </div>
+          </div> -->
         </div>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0019d78e8bf70fb84979b12d8d60ee64"></script>
+		<script>
+		var mapContainer = document.getElementById('edit_map'), // 지도를 표시할 div  
+		    mapOption = { 
+		        center: new kakao.maps.LatLng(36.35106360000046, 127.37133367903712), // 지도의 중심좌표
+		        level: 13 // 지도의 확대 레벨
+		    };
+		
+		var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+		 
+		// 마커를 표시할 위치와 title 객체 배열입니다 
+		var positions = [
+		    {
+		        title: '강남점', 
+		        latlng: new kakao.maps.LatLng(37.500022499999325, 127.03132005393762)
+		    },
+		    {
+		        title: '신촌점', 
+		        latlng: new kakao.maps.LatLng(37.554154285659564, 126.93285762121194)
+		    },
+		    {
+		        title: '인천점', 
+		        latlng: new kakao.maps.LatLng(37.49220000000072, 126.715640579039)
+		    },
+		    {
+		        title: '노원점',
+		        latlng: new kakao.maps.LatLng(37.65754729999988, 127.05344077903595)
+		    },
+		    {
+		        title: '대전점',
+		        latlng: new kakao.maps.LatLng(36.35106360000046, 127.37133367903712)
+		    },
+		    {
+		        title: '부산점',
+		        latlng: new kakao.maps.LatLng(35.15242059999862, 129.05123727903722)
+		    },
+		    {
+		        title: '대구점',
+		        latlng: new kakao.maps.LatLng(35.866108599999265, 128.58544407903443)
+		    }
+		];
+		
+		// 마커 이미지의 이미지 주소입니다
+		var imageSrc = "images/local.png"; 
+		//var imageSrc = "img/pin.png"; 
+		
+		    
+		for (var i = 0; i < positions.length; i ++) {
+		    
+		    // 마커 이미지의 이미지 크기 입니다
+		    var imageSize = new kakao.maps.Size(50, 50); 
+		    
+		    // 마커 이미지를 생성합니다    
+		    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+		    
+		    // 마커를 생성합니다
+		    const marker = new kakao.maps.Marker({
+		        map: map, // 마커를 표시할 지도
+		        position: positions[i].latlng, // 마커를 표시할 위치
+		        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+		        image : markerImage // 마커 이미지 
+		    });
+		    
+		    console.log(marker.getTitle());
+		    console.log(marker.getPosition().getLat());
+		    console.log(marker.getPosition().getLng());
+		    
+		    kakao.maps.event.addListener(marker, 'click', function() {
+		    	var searchAdd = "https://map.kakao.com/link/to/"+ marker.getTitle() +","+ marker.getPosition().getLat()+","+ marker.getPosition().getLng();
+		    	window.open(searchAdd, '길찾기', 'width=1000, height=750');
+		  	});
+		
+		
+		
+		}
+		</script>
         <!-- Map End -->
       </div>
     </section>

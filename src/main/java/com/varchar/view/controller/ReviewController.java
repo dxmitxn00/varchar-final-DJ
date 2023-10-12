@@ -17,10 +17,10 @@ import com.varchar.biz.hashtag.HashtagDetailService;
 import com.varchar.biz.hashtag.HashtagDetailVO;
 import com.varchar.biz.hashtag.ReviewHashtagService;
 import com.varchar.biz.hashtag.ReviewHashtagVO;
+import com.varchar.biz.image.ImageService;
+import com.varchar.biz.image.ImageVO;
 import com.varchar.biz.review.ReviewService;
 import com.varchar.biz.review.ReviewVO;
-import com.varchar.biz.tea.ImageService;
-import com.varchar.biz.tea.ImageVO;
 import com.varchar.biz.tea.TeaService;
 import com.varchar.biz.tea.TeaVO;
 
@@ -88,8 +88,14 @@ public class ReviewController {
 			reviewHashtagVO.setItemNum(reviewData.getReviewNum()); // 리뷰별 reviewNum set해줌
 			reviewData.setReviewHashtags(reviewHashtagService.selectAll(reviewHashtagVO));// 각 리뷰 해시태그값들을 Set해줌
 		}
-		model.addAttribute("reviewDatas", reviewDatas);
 
+		// 태그 클라우드에 들어갈 해시태그 랭크
+		reviewHashtagVO.setHashTagSearchCondition("RANK");
+		List<ReviewHashtagVO> tagCloud = reviewHashtagService.selectAll(reviewHashtagVO);
+
+		model.addAttribute("reviewDatas", reviewDatas);
+		model.addAttribute("tagCloud", tagCloud);
+		System.out.println(tagCloud);
 		System.out.println(reviewDatas);
 
 		return "reviewList.jsp";
@@ -117,7 +123,14 @@ public class ReviewController {
 
 			model.addAttribute("reviewData", reviewVO);
 		}
+		
+		// 태그 클라우드에 들어갈 해시태그 랭크
+		reviewHashtagVO.setHashTagSearchCondition("RANK");
+		List<ReviewHashtagVO> tagCloud = reviewHashtagService.selectAll(reviewHashtagVO);
+
+		model.addAttribute("tagCloud", tagCloud);
 		System.out.println(reviewVO);
+		System.out.println(tagCloud);
 		return "reviewDetail.jsp";
 	}
 
@@ -162,31 +175,36 @@ public class ReviewController {
 		reviewHashtagVO.setItemNum(reviewNum); // reviewHashtagVO에 리뷰번호 set 
 
 		imageVO.setTeaReviewNum(reviewNum);
-		for (int i = 0; i < reviewVO.getReviewImage().length; i++) {
-			String imageUrl = reviewVO.getReviewImage()[i];
-			System.out.println(imageUrl);
-			imageVO.setImageUrl(imageUrl);
-			imageVO.setImageDivision(i + 1);
-			imageService.insert(imageVO);
+
+		if(reviewVO.getReviewImage() != null) {
+			for (int i = 0; i < reviewVO.getReviewImage().length; i++) {
+				String imageUrl = reviewVO.getReviewImage()[i];
+				System.out.println(imageUrl);
+				imageVO.setImageUrl(imageUrl);
+				imageVO.setImageDivision(i + 1);
+				imageService.insert(imageVO);
+			}
 		}
 
-		for (int i = 0; i < reviewVO.getReviewHashtag().length; i++) { // 리뷰해시태그 길이만큼 for문 돌림
-			String content = reviewVO.getReviewHashtag()[i]; // content 변수에 해시태그값 저장
-			reviewHashtagVO.setReviewHashtagContent(content); // reviewHashtagVO에 content 값 저장
+		if(reviewVO.getReviewHashtag() != null) {
+			for (int i = 0; i < reviewVO.getReviewHashtag().length; i++) { // 리뷰해시태그 길이만큼 for문 돌림
+				String content = reviewVO.getReviewHashtag()[i]; // content 변수에 해시태그값 저장
+				reviewHashtagVO.setReviewHashtagContent(content); // reviewHashtagVO에 content 값 저장
 
-			System.out.println("로그: 해시태그[" + i + "]: " + content);
+				System.out.println("로그: 해시태그[" + i + "]: " + content);
 
-			// 새로운 해시태그 값이면 추가
-			if (reviewHashtagService.selectOne(reviewHashtagVO) == null) {
-				reviewHashtagService.insert(reviewHashtagVO);
+				// 새로운 해시태그 값이면 추가
+				if (reviewHashtagService.selectOne(reviewHashtagVO) == null) {
+					reviewHashtagService.insert(reviewHashtagVO);
+				}
+
+				reviewHashtagVO = reviewHashtagService.selectOne(reviewHashtagVO);
+
+				// 해시태그 상세 추가
+				hashtagDetailVO.setItemNum(reviewNum);
+				hashtagDetailVO.setHashtagNum(reviewHashtagVO.getReviewHashtagNum());
+				hashtagDetailService.insert(hashtagDetailVO);
 			}
-
-			reviewHashtagVO = reviewHashtagService.selectOne(reviewHashtagVO);
-
-			// 해시태그 상세 추가
-			hashtagDetailVO.setItemNum(reviewNum);
-			hashtagDetailVO.setHashtagNum(reviewHashtagVO.getReviewHashtagNum());
-			hashtagDetailService.insert(hashtagDetailVO);
 		}
 
 		return "alertTrue.jsp";
@@ -201,7 +219,7 @@ public class ReviewController {
 		int reviewNum = reviewVO.getReviewNum(); // 리뷰번호
 		reviewHashtagVO.setItemNum(reviewNum); // reviewHashtagVO에 리뷰번호 set
 		hashtagDetailVO.setItemNum(reviewNum); // hashtagDetailVO에 리뷰번호 set
-		imageVO.setImageNum(reviewNum); // imageVO에 리뷰번호 set
+		imageVO.setTeaReviewNum(reviewNum); // imageVO에 리뷰번호 set
 
 		reviewService.update(reviewVO); // 리뷰 내용 업데이트
 		hashtagDetailService.delete(hashtagDetailVO); // hashtagDetail 삭제
@@ -229,19 +247,19 @@ public class ReviewController {
 				hashtagDetailVO.setHashtagNum(reviewHashtagVO.getReviewHashtagNum());
 				hashtagDetailService.insert(hashtagDetailVO);
 			}
-			// 후기수정페이지에 해시태그 기능 나오면 확인해야함
-			reviewHashtagVO.setHashTagSearchCondition("후기번호검색");
-			List<ReviewHashtagVO> reviewHashtags = reviewHashtagService.selectAll(reviewHashtagVO);
-			model.addAttribute("reviewHashtags", reviewHashtags);
 		}
 
-		///** 리뷰 이미지 업데이트 ---> 유효성 추가 필요 */
-		if(imageService.delete(imageVO)) {
-			for (int i = 0; i < reviewVO.getReviewImage().length; i++) {
+		// 리뷰 이미지 업데이트
+		if(imageService.delete(imageVO)) { // 리뷰 이미지 전체 삭제
+			System.out.println("imageService.delete(imageVO) true 진입");
+		}
+		
+		if(reviewVO.getReviewImage() != null) { // 받아온 이미지가 있는 경우
+			for (int i = 0; i < reviewVO.getReviewImage().length; i++) { // 이미지 길이만큼 for문
 				String imageUrl = reviewVO.getReviewImage()[i];
 				System.out.println(imageUrl);
-				imageVO.setImageUrl(imageUrl);
-				imageVO.setImageDivision(i + 1);
+				imageVO.setImageUrl(imageUrl); // 배열에서 꺼낸 이미지 set
+				imageVO.setImageDivision(i + 1); // 이미지 번호 증가
 				imageService.insert(imageVO);
 			}
 		}
@@ -255,7 +273,7 @@ public class ReviewController {
 		//** 해당 후기 없을시 ---> 유효성 추가 필요 */
 		reviewVO.setReviewSearch("리뷰상세");
 		reviewVO = reviewService.selectOne(reviewVO);
-		System.out.println("로그: UrpAction: " + reviewVO); // 로그 줄임말 실화?
+		System.out.println("로그: UrpAction: " + reviewVO);
 
 		if (reviewVO != null) {
 			// 리뷰 해시태그 selectAll
@@ -352,9 +370,14 @@ public class ReviewController {
 			reviewData.setReviewHashtags(reviewHashtagService.selectAll(reviewHashtagVO)); // 각 리뷰별 해시태그값들 set
 		}
 
+		// 태그 클라우드에 들어갈 해시태그 랭크
+		reviewHashtagVO.setHashTagSearchCondition("RANK");
+		List<ReviewHashtagVO> tagCloud = reviewHashtagService.selectAll(reviewHashtagVO);
+
 		System.out.println("마이페이지 리뷰 로그3 reviewDatas " + reviewDatas);
 		System.out.println("마이페이지 리뷰 로그4 memberId " + memberId);
 		model.addAttribute("reviewDatas", reviewDatas);
+		model.addAttribute("tagCloud", tagCloud);
 
 		return "reviewList.jsp";
 	}

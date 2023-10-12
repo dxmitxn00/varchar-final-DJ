@@ -9,10 +9,28 @@
     <title>Var茶 | <spring:message code='updateInfo.title' /></title> <!-- updateInfo.title -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
     <!-- 파비콘 태그 -->
     <try:favicon/>
     <!-- 링크 부분 태그 -->
     <try:link/>
+    <style type="text/css">
+  		.edit-d-f {
+  			display: flex;
+  		}
+  		.edit-btn {
+  			width: 83px;
+  			border-radius: 3px;
+  			background: none;
+  			border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  		}
+  		.edit-red {
+  			color: red;
+  		}
+  	</style>
   </head>   
   <!-- 상단, 하단은 커스텀 태그로 넣어주셈 -->
   <body class="goto-here">
@@ -43,28 +61,160 @@
         <div class="row justify-content-center">
           <div class="col-xl-7 ftco-animate">
           	<!-- 비번 변경 폼 태그 -->
-			<form action="updatePw.do" method="post" class="billing-form" onsubmit="return checkPw();">
+			<form id="updatePwForm" action="updatePw.do" method="post" class="billing-form">
 				<h3 class="mb-4 billing-heading" style="padding-bottom: 15px; border-bottom: 1px solid #e1e1e1"><spring:message code='updatePw.form.title' /> <a href="updatePw.do?lang=en">EN</a> | <a href="updatePw.do?lang=ko">KO</a></h3> <!-- updateInfo.form.title -->
-				<input type="hidden" name="memberId" value="${ sessionMemberId }">
-	          	<div class="row align-items-end">
-	          		<div class="col-md-6" style="margin-top: 30px;">
-	                <div class="form-group">
-	                	<label for="firstname" ><spring:message code='updatePw.form.newPw' /></label> <!-- updateInfo.form.newPw -->
-	                  <input type="password" name="memberPw" id="newPw" class="form-control" placeholder="<spring:message code='updatePw.form.newPw.placeholder' />" required style="width: 210%;">
-	                </div>
-	              </div>
-                <div class="w-100" style="margin-bottom: 20px;"></div>
-	          		<div class="col-md-6">
-	                <div class="form-group">
-	                	<label for="firstname" ><spring:message code='updatePw.form.checkPw' /></label> <!-- updateInfo.form.checkPw -->
-	                  <input type="password" id="checkNewPw" class="form-control" placeholder="<spring:message code='updatePw.form.checkPw.placeholder' />"required style="width: 210%; margin-bottom: 100px;"> <!-- updateInfo.form.checkPw.placeholder -->
-	                </div>
-	              </div>
-	            </div>
-				<div style="margin:auto; text-align:center;">
-					<p><input type="submit" class="btn btn-primary py-3 px-4" value="  <spring:message code='updatePw.form.submit' />  "style="vertical-align:middle; display:inline-block;"></p>
-				</div>
+				<c:if test="${ sessionMemberPlatform ne 'varChar' }">
+					<h3 class="heading text-center">소셜 계정으로 로그인한 회원은 비밀번호를 변경할 수 없습니다.</h3>
+				</c:if>
+				<c:if test="${ sessionMemberPlatform eq 'varChar' }">
+					<input type="hidden" name="memberId" value="${ sessionMemberId }">
+		          	<div class="row align-items-end">
+		          		<div class="col-md-12">
+							<label for="password"><spring:message code='updatePw.form.newPw' /><span id="spanPassword1" class="edit-red"> *</span></label>
+							<div class="form-group edit-d-f">
+								<input type="password" id="inputPassword1" name="memberPw" class="form-control" placeholder="<spring:message code='updatePw.form.newPw.placeholder' />" required>
+								<button type="button" id="inputBtnPassword1" class="edit-btn"><i class="fa-solid fa-eye-slash"></i></button>
+							</div>
+						</div>
+						<div class="w-100"></div>
+						<div class="col-md-12">
+							<label for="passwordre"><spring:message code='updatePw.form.checkPw' /><span id="spanPassword2" class="edit-red"> *</span></label>
+							<div class="form-group edit-d-f">
+								<input type="password" id="inputPassword2" class="form-control" placeholder="<spring:message code='updatePw.form.checkPw.placeholder' />" required>
+								<button type="button" id="inputBtnPassword2" class="edit-btn"><i class="fa-solid fa-eye-slash"></i></button>
+							</div>
+						</div>
+						<div class="w-100"></div>
+		            </div>
+		            <script>
+	                      	$(document).ready(function(){
+	                      		$("#inputBtnPassword1").on("click", function(){
+	                      			$("#inputPassword1").toggleClass("eye");
+	                      			if ($("#inputPassword1").hasClass("eye")) {
+	                      				$(this).find("i").attr("class", "fa-solid fa-eye");
+	                      				$("#inputPassword1").attr("type", "text");
+	                      			} else {
+	                      				$(this).find("i").attr("class", "fa-solid fa-eye-slash");
+	                      				$("#inputPassword1").attr("type", "password");
+	                      			}
+	                      		});
+	                      		$("#inputBtnPassword2").on("click", function(){
+	                      			$("#inputPassword2").toggleClass("eye");
+	                      			if ($("#inputPassword2").hasClass("eye")) {
+	                      				$(this).find("i").attr("class", "fa-solid fa-eye");
+	                      				$("#inputPassword2").attr("type", "text");
+	                      			} else {
+	                      				$(this).find("i").attr("class", "fa-solid fa-eye-slash");
+	                      				$("#inputPassword2").attr("type", "password");
+	                      			}
+	                      		});
+	                      	});
+	                  </script>
+	                <div style="margin:auto; text-align:center;">
+						<p><input id="inputSubmit" type="button" class="btn btn-primary py-3 px-4" value="<spring:message code='updatePw.form.submit' />"style="vertical-align:middle; display:inline-block;" onclick='return check_recaptcha();'></p>
+					</div>
+				</c:if>
 	          </form>
+                  <script type="text/javascript">
+						var inputPassword1 = null;
+						var inputPassword2 = null;
+					
+						var flagPassword1 = false;
+						var flagPassword2 = false;
+						
+						// 비밀번호 입력
+						$("#inputPassword1").on("input", function(){
+							checkInputPassword1();
+						})
+						
+						// 비밀번호 함수
+						function checkInputPassword1(){
+							var regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+							inputPassword1 = $("#inputPassword1").val();
+							inputPassword2 = $("#inputPassword2").val();
+							
+							if (!regexPassword.test(inputPassword1)) {
+								if (inputPassword1 == '') {
+									$("#spanPassword1").html(' <i class="fa-solid fa-x"></i> 필수 정보입니다.');
+								} else {
+									$("#spanPassword1").html(' <i class="fa-solid fa-x"></i> 8 ~ 20자의 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+								}
+								$("#spanPassword1").css("color", "red");
+								flagPassword1 = false;
+							} else {
+								$("#spanPassword1").html(' <i class="fa-solid fa-check"></i>');
+								$("#spanPassword1").css("color", "green");
+								flagPassword1 = true;
+							}
+							
+							if (inputPassword1 != inputPassword2) {
+								$("#spanPassword2").html(' <i class="fa-solid fa-x"></i> 비밀번호가 일치하지 않습니다.');
+								$("#spanPassword2").css("color", "red");
+								flagPassword2 = false;
+							} else {
+								$("#spanPassword2").html(' <i class="fa-solid fa-check"></i>');
+								$("#spanPassword2").css("color", "green");
+								flagPassword2 = true;
+							}
+							console.log(flagPassword1);
+							console.log(flagPassword2);
+						}
+						
+						// 비밀번호 확인 입력
+						$("#inputPassword2").on("input", function(){
+							checkInputPassword2();
+						})
+						
+						// 비밀번호 확인 함수
+						function checkInputPassword2(){
+							inputPassword1 = $("#inputPassword1").val();
+							inputPassword2 = $("#inputPassword2").val();
+							
+							if (inputPassword1 != inputPassword2) {
+								$("#spanPassword2").html(' <i class="fa-solid fa-x"></i> 비밀번호가 일치하지 않습니다.');
+								$("#spanPassword2").css("color", "red");
+								flagPassword2 = false;
+							} else {
+								$("#spanPassword2").html(' <i class="fa-solid fa-check"></i>');
+								$("#spanPassword2").css("color", "green");
+								flagPassword2 = true;
+							}
+							console.log(flagPassword2);
+						}
+						
+						// Submit 유효성 검사
+				    	$("#inputSubmit").on("click", function(){
+					    	if (!flagPassword1) {
+					    		checkInputPassword1();
+					    		$("#inputPassword1").focus();
+					    	} else if (!flagPassword2) {
+					    		checkInputPassword2();
+					    		$("#inputPassword2").focus();
+					    	} else {
+					    		
+					    		// alert 시작
+					    		Swal.fire({
+					    			title: '회원비밀번호변경', // 제목 text
+					    			text: '변경하시겠습니까?', // 내용 text
+					    			icon: 'question', // warning, success, info, error, question
+					    			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+					    			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+					    			showCancelButton: true, // cancle 버튼 보이기
+					    			confirmButtonText: '확인', // confirm 버튼 text
+					    			cancelButtonText: '취소' // cancel 버튼 text
+					    		}).then((result) => {
+					    			if (result.isConfirmed) {
+					    				$("#updatePwForm").submit();                			
+					    			}
+					    			else {
+					    				//history.go(-1);
+					    			}
+					    		});
+					    		// alert 끝
+			              		             			
+					    	}
+				    	});
+				</script>
 	          <!-- 비번 변경 폼 태그 끝 -->
 			</div>
           </div> <!-- .col-md-8 -->

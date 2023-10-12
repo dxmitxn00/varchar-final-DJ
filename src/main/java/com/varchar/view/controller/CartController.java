@@ -27,7 +27,7 @@ public class CartController {
 	// --------------------------------- 장바구니 페이지 이동 ---------------------------------
 	@RequestMapping(value = "/cartPage.do")
 	public String cartPage() {
-		return "redirect:cart.jsp";
+		return "cart.jsp";
 	}
 
 	// --------------------------------- 장바구니 추가 ---------------------------------

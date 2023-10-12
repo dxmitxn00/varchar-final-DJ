@@ -25,7 +25,8 @@ public class ReviewHashtagDAO {
 													+ "FROM HASHTAG_DETAIL hd "
 													+ "JOIN REVIEW_HASHTAG rh ON rh.REVIEW_HASHTAG_NUM = hd.HASHTAG_NUM "
 													+ "WHERE hd.ITEM_NUM >= 2000 "
-													+ "GROUP BY hd.HASHTAG_NUM";
+													+ "GROUP BY hd.HASHTAG_NUM "
+													+ "ORDER BY USAGE_COUNT DESC";
 	
 	static final private String SQL_SELECTONE = "SELECT REVIEW_HASHTAG_NUM, REVIEW_HASHTAG_CONTENT FROM REVIEW_HASHTAG WHERE REVIEW_HASHTAG_CONTENT = ? ";
 	

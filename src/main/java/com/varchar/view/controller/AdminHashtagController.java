@@ -103,8 +103,8 @@ public class AdminHashtagController {
 		System.out.println("로그: hashTagForm 제출");
 		System.out.println("로그 hashTags: "+ hashTags);
 
-		int teaNum = Integer.parseInt(String.valueOf(hashTags.get("itemNum")));
-		hashtagDetailVO.setItemNum(teaNum);
+		int reviewNum = Integer.parseInt(String.valueOf(hashTags.get("itemNum")));
+		hashtagDetailVO.setItemNum(reviewNum);
 		hashtagDetailService.delete(hashtagDetailVO); // 트리거 추가시 없앨 예정
 		
 		for(int i = 1; i<hashTags.size(); i++) {

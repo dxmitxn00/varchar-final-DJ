@@ -83,15 +83,22 @@ public class TeaDAO {
 				+ "JOIN CATEGORY c ON t.CATEGORY_NUM = c.CATEGORY_NUM "
 				+ "WHERE i.IMAGE_DIVISION = 1 "
 				+ "AND t.TEA_NUM = ? ";
-
+		
+		static final private String SQL_SELECTONE_MAX =
+				"SELECT t.TEA_NUM, t.TEA_NAME, t.TEA_PRICE, t.TEA_CNT, t.TEA_CONTENT, c.CATEGORY_NAME, t.TEA_STATUS, NULL AS IMAGE_URL "
+				+ "FROM TEA t JOIN CATEGORY c ON t.CATEGORY_NUM = c.CATEGORY_NUM "
+				+ "WHERE t.TEA_NUM = (SELECT MAX(TEA_NUM) FROM TEA)";
+		
 		static final private String SQL_UPDATE = "UPDATE TEA SET TEA_CNT = (TEA_CNT - ?) "
 												+ "WHERE TEA_NUM = ? ";
 		
 		static final private String SQL_UPDATE_TEA = "UPDATE TEA SET TEA_STATUS = ? WHERE TEA_NUM = ?";
 		
-		static final private String SQL_UPDATE_ADMIN = "UPDATE TEA SET TEA_PRICE = ?, TEA_CNT = ? WHERE TEA_NUM = ? ";
+		static final private String SQL_UPDATE_ADMIN = "UPDATE TEA SET TEA_PRICE = ?, TEA_CNT = ?, TEA_NAME = ?, TEA_CONTENT = ?, TEA_STATUS= ?, CATEGORY_NUM= ? WHERE TEA_NUM = ? ";
 		
 		static final private String SQL_UPDATE_CATEGORY = "UPDATE TEA SET CATEGORY_NUM = 0 WHERE CATEGORY_NUM = ? ";
+		
+		static final private String SQL_UPDATE_CATEGORY_CHANGE = "UPDATE TEA SET CATEGORY_NUM = ? WHERE TEA_NUM = ? ";
 		
 		static final private String SQL_INSERT = "INSERT INTO TEA(TEA_NUM, CATEGORY_NUM, TEA_NAME, TEA_PRICE, TEA_CNT, TEA_CONTENT) "
 													+ "VALUES((SELECT NVL(MAX(TEA_NUM),1000)+1 FROM TEA), ?, ?, ?, ?, ?)";
@@ -126,8 +133,13 @@ public class TeaDAO {
 
 	public TeaVO selectOne(TeaVO teaVO) {
 		try {
-			Object[] args = { teaVO.getTeaNum() };
-			return jdbcTemplate.queryForObject(SQL_SELECTONE, args, new TeaSelectRowMapper());
+			if (teaVO.getTeaCondition().equals("마지막 상품")) {
+				return jdbcTemplate.queryForObject(SQL_SELECTONE_MAX, new TeaSelectRowMapper());
+			}
+			else {
+				Object[] args = { teaVO.getTeaNum() };
+				return jdbcTemplate.queryForObject(SQL_SELECTONE, args, new TeaSelectRowMapper());				
+			}
 		}
 		catch (EmptyResultDataAccessException e) {
 			return null;
@@ -153,10 +165,13 @@ public class TeaDAO {
 			result = jdbcTemplate.update(SQL_UPDATE, teaVO.getTeaCnt(), teaVO.getTeaNum());
 		}
 		else if(teaVO.getTeaCondition().equals("상품변경")) { // 관리자 상품 정보 변경
-			result = jdbcTemplate.update(SQL_UPDATE_ADMIN, teaVO.getTeaPrice(), teaVO.getTeaCnt(), teaVO.getTeaNum());
+			result = jdbcTemplate.update(SQL_UPDATE_ADMIN, teaVO.getTeaPrice(), teaVO.getTeaCnt(), teaVO.getTeaName(), teaVO.getTeaContent(), teaVO.getTeaStatus(), teaVO.getCategoryNum(), teaVO.getTeaNum());
 		}
 		else if(teaVO.getTeaCondition().equals("카테고리변경")) { // 관리자 상품 정보 변경
 			result = jdbcTemplate.update(SQL_UPDATE_CATEGORY, teaVO.getCategoryNum());
+		}
+		else if(teaVO.getTeaCondition().equals("카테고리일괄변경")) { // 관리자 상품 정보 변경
+			result = jdbcTemplate.update(SQL_UPDATE_CATEGORY_CHANGE, teaVO.getCategoryNum(),teaVO.getTeaNum());
 		}
 		else { // 판매중단된 상품
 			result = jdbcTemplate.update(SQL_UPDATE_TEA, teaVO.getTeaStatus(), teaVO.getTeaNum());
@@ -175,7 +190,7 @@ public class TeaDAO {
 		if(result <= 0) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 }
 
@@ -214,6 +229,7 @@ class TeaSelectRowMapper implements RowMapper<TeaVO> {
 		data.setTeaPrice(rs.getInt("TEA_PRICE"));
 		data.setTeaCnt(rs.getInt("TEA_CNT"));
 		data.setTeaContent(rs.getString("TEA_CONTENT"));
+		data.setTeaStatus(rs.getInt("TEA_STATUS"));
 		data.setCategoryName(rs.getString("CATEGORY_NAME"));
 		data.setImageUrl(rs.getString("IMAGE_URL"));
 		return data;

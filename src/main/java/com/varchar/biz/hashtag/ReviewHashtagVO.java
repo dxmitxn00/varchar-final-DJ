@@ -1,6 +1,7 @@
 package com.varchar.biz.hashtag;
 
 import java.sql.Date;
+import java.util.List;
 
 public class ReviewHashtagVO {
 	private int reviewHashtagNum;
@@ -17,6 +18,8 @@ public class ReviewHashtagVO {
 	private String imageUrl;
 	private int hashtagNum;
 	private int usageCount;
+	
+	List<ReviewHashtagVO> tagCloud;
 
 	public ReviewHashtagVO() {
 		this(0,"");

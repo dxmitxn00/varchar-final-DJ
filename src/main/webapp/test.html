@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<script type="module">
+    import * as LR from "https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-regular.min.js";
+
+    LR.registerBlocks(LR);
+</script>
+<style>
+    .my-config {
+    --darkmode: 0;
+    --h-accent: 223;
+    --s-accent: 100%;
+    --l-accent: 61%;
+    }
+</style>
+</head>
+<body>
+    <lr-config
+        ctx-name="my-uploader"
+        pubkey="86c01c87f383d8c2191c"
+        max-local-file-size-bytes="10000000"
+        multiple-max="10"
+        img-only="true"
+        source-list="local"
+    ></lr-config>
+    <lr-file-uploader-regular
+    css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.25.0/web/lr-file-uploader-regular.min.css"
+    ctx-name="my-uploader"
+    class="my-config"
+>
+<script>
+    var i = 1;
+    $("lr-config").attr("multiple-max", i);
+</script>
+</lr-file-uploader-regular>
+</body>
+</html>
